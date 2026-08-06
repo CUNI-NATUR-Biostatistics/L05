@@ -1,5 +1,6 @@
 ---
-format: 
+lang: cs
+format:
   revealjs:
     slide-number: true
     theme: [default, ../theme/presentation_theme.scss, ../theme/presentation_components.scss]
@@ -9,6 +10,7 @@ format:
     output-ext: "html"
     highlight-style: github-light
     include-in-header: "../theme/fonts-include.html"
+    css: "l05_presentation.css"
 filters:
   - ../theme/rn-shorthand.lua
   - ../_extensions/EmilHvitfeldt/roughnotation/rough.lua
@@ -25,49 +27,27 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 
-if (!require("here")) install.packages("here")
-
-library(here)
-
 here::i_am("Presentation/presentation.qmd")
+source(here::here("R", "set_r_theme.R"))
 
-if (!require("tidyverse")) install.packages("tidyverse")
-if (!require("ggbeeswarm")) install.packages("ggbeeswarm")
-if (!require("ggview")) install.packages("ggview")
-if (!require("magick")) install.packages("magick")
-if (!require("cowplot")) install.packages("cowplot")
-if (!require("remotes")) install.packages("remotes")
-if (!require("waffle")) remotes::install_github("hrbrmstr/waffle")
-
-library(tidyverse)
-library(ggbeeswarm)
-library(ggview)
-library(magick)
-library(cowplot)
-library(waffle)
-
-path_materials <-
-  "Presentation/Materials"
+path_materials <- "Presentation/Materials"
 
 include_local_figure <- function(data_source) {
   knitr::include_graphics(
-    path = here::here(
-      path_materials,
-      data_source
-    ),
+    path = here::here(path_materials, data_source),
     error = TRUE
   )
 }
 ```
 
 ```{r}
-#| label: dynamic link generation
+#| label: dynamic-link-generation
 #| include: false
 project_name <-
   basename(here::here())
 
 display_name <-
-  paste("Biostatistika", "-", project_name)
+  paste0("Biostatistika - ", project_name)
 
 github_url <-
   paste0(
@@ -78,15 +58,16 @@ github_url <-
 slides_url <-
   paste0(
     "https://CUNI-NATUR-Biostatistics.github.io/",
-    project_name, "/"
+    project_name,
+    "/"
   )
 ```
 
-## Název přednášky
+## Co nám statistický test dovoluje tvrdit?
 
 <br>
 
-::: {.text-color-white .text-font-heading .text-size-heading .text-bold}
+::: {.text-color-indigo_velvet .text-font-heading .text-size-heading1 .text-bold}
 `r display_name`
 :::
 
@@ -96,1064 +77,2606 @@ slides_url <-
 
 [Moodle](https://dl2.cuni.cz/course/view.php?id=106)
 
-## Výsledky učení
-
-Po absolvování této přednášky budete schopni:
-
-- TODO: výsledek učení 1
-- TODO: výsledek učení 2
-- TODO: výsledek učení 3
-
-# Obsah přednášky
-
-## Snímek 1
-
-TODO: obsah snímku
+## Měsíc je celý ze sýra! {.text-center}
 
 ```{r}
-#| label: demo-plot
-#| echo: true
-# TODO: ukázka kódu v R
+#| label: zobrazit-mesic-ze-syra
+#| echo: false
+#| fig-cap: "Ilustrační obraz vytvořen AI."
+include_local_figure("mesic_ze_syra.png")
 ```
 
-## Shrnutí
+## Co by mohlo změnit váš závěr? {.balance-moon-question}
 
-- TODO: klíčové body přednášky
+::::: {.layout-stack .layout-center-y style="--layout-center-min-height: 520px;"}
+:::: {.columns .align-center}
 
-# Slide Creator's Guide {.center}
-
-[Slides in this section are intended for lecture authors, not students. Delete this section and the `# Tools Overview` section before using as an actual lecture.]{.text-size-smaller .text-color-grey_olive}
-
-# Golden Rules {.center}
-
-## Rule 1 — Data story first {.bg-parchment}
-
-::: columns
-::: {.column width="48%"}
-::: {.card-warning}
-[Wrong]{.card-title}
-**Pearson correlation**
-
-Pearson's correlation coefficient measures the strength of the linear relationship between two variables...
-
-[formula]
-:::
-:::
-::: {.column width="48%"}
-::: {.card-insight}
-[Right]{.card-title}
-**How do we turn the shape of a cloud into a number?**
-
-[scatter plot the students have seen for several slides already]
-
-*What properties would such a number need to have?*
-
-→ **Correlation coefficient** [the name arrives as the answer]{.text-size-smaller .text-color-grey_olive}
-:::
-:::
-:::
-
-[A statistical term never opens a concept as a heading. Data first → observation → question → only then the name.]{.text-size-smaller .text-color-grey_olive}
-
-## Rule 2 — One idea per slide
-
-**Every slide communicates one thing.**
-
-If you need to say two things, use two slides.
-
-If you need to say three things, add an interaction between them.
-
-::: {.takeaway-strip}
-**One message. One slide. Contribute to understanding — not to overload.**
-:::
-
-[Test: cover the heading — is the main idea of the slide still clear from the visual or a single sentence?]{.text-size-smaller .text-color-grey_olive}
-
-## Rule 3 — Interaction every 10–15 minutes
-
-::: {.panel-note}
-[Six interaction types]{.panel-title}
-
-| Type | When to use |
-|---|---|
-| Prediction question | Before revealing a result, graph, or test output |
-| Conceptual MCQ | To surface a common misconception; ideally with a polling tool |
-| Think–Pair–Share | After a new concept; 30 s thinking + 1–2 min pair discussion |
-| Silent write | Before discussion or reveal; each student writes one sentence |
-| Interpretation task | After showing a graph, model output, or table |
-| Data exploration | To open a topic — what patterns / hypotheses do you see? |
-:::
-
-::: {.panel-question}
-[Example — prediction question]{.panel-title}
-
-*How does the confidence interval change if we double the sample size?*
-
-**A)** Narrows   **B)** Stays the same   **C)** Widens
-:::
-
-## Rule 4 — Always frame biologically
-
-Every statistical method must be grounded in a concrete biological question.
-
-::: {.blockquote}
-**Four steps of the biological frame:**
-
-1. **Biological question** — "we want to find out whether…"
-2. **Data** — description, type, source
-3. **Statistical method** — what and why
-4. **Interpretation in biological context** — what the result says about the world, not about numbers
-:::
-
-[Never start with "today we'll learn the t-test". Always start with "we want to know whether…"]{.text-size-smaller .text-color-grey_olive}
-
-## Rule 5 — Alternate visual patterns (3-of-5 rule)
-
-**At most 3 of 5 consecutive slides may use a named component as the primary visual element.**
-
-A plain slide — a bold question on an empty background, a full-width graph, a single prominent number — carries more weight precisely because the surrounding slides are more structured.
-
-::: {.strip-orange}
-**3 of 5 — the law of slide visual contrast** · review the block before finalising
-:::
-
-[Components: `.card-*`, `.panel-*`, `.blockquote`, `.takeaway-strip`. If you reach 4+ in a row, convert one slide to a plain visual or an unframed question.]{.text-size-smaller .text-color-grey_olive}
-
-# Five Slide Families {.center}
-
-## Five slide families
-
-::: columns
 ::: {.column width="62%"}
 
-| Family | Goal | Typical component |
-|---|---|---|
-| **Interaction** | Prediction / MCQ / TPS | bold question, `.panel-question` |
-| **Data reveal** | New data or output | full-width graph, plain slide |
-| **Interpretation** | Read the result | `.panel-result`, `.takeaway-strip` |
-| **Rule / warning** | Heuristic, error | `.card-warning`, `.panel-warning` |
-| **Transition / summary** | Reset, conclusion | `.blockquote` in two columns |
-
-:::
-::: {.column width="35%"}
-::: {.card-olive}
-[Variety of families]{.card-title}
-In one lecture, cycle through all five families.
-
-No block of 5+ slides should belong to only one family.
-:::
-:::
-:::
-
-[Students should be able to recognise the role of a slide before reading the text — from the colour key, layout, or position in the structure.]{.text-size-smaller .text-color-grey_olive}
-
-# Tools Overview {.center}
-
-## `.box-*` aliases — when to use what
-
-| Alias | Maps to | Weight | Colour | When to use |
-|-------|-----------|------|-------|------------|
-| `.box-question` | `.panel-question` | panel (lighter) | orange left border | MCQ, reflection question |
-| `.box-result` | `.panel-result` | panel (lighter) | indigo left border | main conclusion, analysis result |
-| `.box-data` | `.panel-data` | panel (lighter) | olive left border | dataset description, data context |
-| `.box-rule` | `.card-rule` | card (heavier) | amethyst top strip + shadow | rule, heuristic |
-| `.box-warning` | `.card-warning` | card (heavier) | red top strip + shadow | methodological warning |
-
-[Panel aliases (lighter): coloured left border, no shadow. Card aliases (heavier): coloured top strip + shadow. Inner heading: `[text]{.panel-title}` for panels · `[text]{.card-title}` for cards.]{.text-size-smaller .text-color-grey_olive}
-
-## `.box-question` — interaction, MCQ
-
-::: columns
-::: {.column width="55%"}
-::: {.box-question}
-[Question for reflection]{.panel-title}
-
-What percentage of penguin body-mass variability is explained by bill length?
-
-**A)** less than 30 % &nbsp;&nbsp; **B)** 30–60 % &nbsp;&nbsp; **C)** more than 60 %
-:::
-:::
-::: {.column width="42%"}
-```markdown
-::: {.box-question}
-[Question for reflection]{.panel-title}
-
-Question text + choices A / B / C.
-:::
-```
-
-[= `.panel-question` · orange left border · heading `{.panel-title}`]{.text-size-smaller .text-color-grey_olive}
-:::
-:::
-
-## `.box-result` — main result
-
-::: columns
-::: {.column width="55%"}
-::: {.box-result}
-[What we see]{.panel-title}
-
-Each millimetre of bill length corresponds on average to **+8.7 g** body mass
-(95% CI: 6.2–11.2 g). The model explains 45 % of body-mass variability.
-:::
-:::
-::: {.column width="42%"}
-```markdown
-::: {.box-result}
-[What we see]{.panel-title}
-
-Main conclusion or analysis result.
-:::
-```
-
-[= `.panel-result` · indigo left border · heading `{.panel-title}` or `{.panel-lead}`]{.text-size-smaller .text-color-grey_olive}
-:::
-:::
-
-## `.box-data` — dataset description
-
-::: columns
-::: {.column width="55%"}
-::: {.box-data}
-[Palmer Penguins]{.panel-title}
-
-344 penguins from three islands · 3 species *(Adelie, Chinstrap, Gentoo)*
-
-Variables: bill length and depth (mm), flipper length (mm), body mass (g), sex, year
-:::
-:::
-::: {.column width="42%"}
-```markdown
-::: {.box-data}
-[Dataset name]{.panel-title}
-
-Brief description: number of
-observations, variables, source.
-:::
-```
-
-[= `.panel-data` · olive left border · heading `{.panel-title}`]{.text-size-smaller .text-color-grey_olive}
-:::
-:::
-
-## `.box-warning` — methodological warning
-
-::: columns
-::: {.column width="55%"}
-::: {.box-warning}
-[Caution — correlation ≠ causation]{.card-title}
-
-A longer bill does not imply that *the bill causes* greater body mass — both traits
-may reflect overall body size.
-:::
-:::
-::: {.column width="42%"}
-```markdown
-::: {.box-warning}
-[Warning heading]{.card-title}
-
-Methodological error, misinterpretation,
-data limitation.
-:::
-```
-
-[= `.card-warning` · **card** · red top strip + shadow · heading `{.card-title}`]{.text-size-smaller .text-color-grey_olive}
-:::
-:::
-
-## `.box-rule` — rule, heuristic
-
-::: columns
-::: {.column width="55%"}
-::: {.box-rule}
-[Mean or median?]{.card-title}
-
-If the data are symmetric → mean.
-
-If the data are skewed or contain outliers → median.
-:::
-:::
-::: {.column width="42%"}
-```markdown
-::: {.box-rule}
-[Rule heading]{.card-title}
-
-Condition → recommendation.
-Or a verbal heuristic.
-:::
-```
-
-[= `.card-rule` · **card** · amethyst top strip + shadow · heading `{.card-title}`]{.text-size-smaller .text-color-grey_olive}
-:::
-:::
-
-## Combination: `.box-question` + `.takeaway-strip`
-
-::: columns
-::: {.column width="55%"}
-::: {.box-question}
-[Question for reflection]{.panel-title}
-
-Why does bill length differ between penguin species and within a single species?
-:::
-
-::: {.takeaway-strip}
-**Morphology as adaptation.** Bill length reflects life strategy — Gentoo penguins forage differently from Adelie.
-:::
-:::
-::: {.column width="42%"}
-```markdown
-::: {.box-question}
-[Question]{.panel-title}
-Question...
-:::
-
-::: {.takeaway-strip}
-**Conclusion.** Closing the conclusion.
-:::
-```
-
-[`.takeaway-strip` after `.box-question` closes a slide sequence. One slide = one question + one conclusion.]{.text-size-smaller .text-color-grey_olive}
-:::
-:::
-
-## Fragment: incremental reveal of `.box-result`
-
-::: columns
-::: {.column width="55%"}
-Let's look at the linear model output.
-
-::: {.fragment}
-::: {.box-result}
-[Result]{.panel-title}
-
-Bill length coefficient: **+8.7 g/mm** (95% CI: 6.2–11.2 g).
-The effect is statistically and biologically significant.
-:::
-:::
-:::
-::: {.column width="42%"}
-```markdown
-Sentence before the pause.
-
-::: {.fragment}
-::: {.box-result}
-[Result]{.panel-title}
-Text that is revealed.
-:::
-:::
-```
-
-[`::: {.fragment}` wraps any `.box-*` block. Students see the sentence → click → result.]{.text-size-smaller .text-color-grey_olive}
-:::
-:::
-
-## Tool: plain question without a frame {.center}
-
 <br>
 
-::: {.text-center .text-size-large .text-bold}
-How does the confidence interval change if we double the sample size?
+::: {.box-question .text-center .text-size-larger}
+Jaké pozorování by vás přimělo tvrzení o sýrovém Měsíci vyvrátit?
 :::
 
-<br>
-
-::: {.text-center}
-**A)** Narrows &nbsp;&nbsp;&nbsp; **B)** Stays the same &nbsp;&nbsp;&nbsp; **C)** Widens
 :::
 
-<br>
-
-[Plain slide: bold question + choices without a frame. Maximum visual contrast against slides with `.box-*` components.]{.text-size-smaller .text-color-grey_olive}
-
-## Roughnotation — use sparingly
-
-Each millimetre of penguin bill length corresponds on average to
-[+8.7 g body mass]{.rn-underline-indigo} — the effect is
-[biologically significant]{.rn-box-orange}.
-
-<br>
-
-::: columns
-::: {.column width="48%"}
-```markdown
-[text]{.rn-underline-indigo}
-[text]{.rn-box-orange}
-[text]{.rn-circle-amethyst}
-[text]{.rn-bracket-indigo}
+::: {.column width="34%" .moon-question}
+```{r}
+#| label: zobrazit-maly-mesic-ze-syra
+#| echo: false
+include_local_figure("mesic_ze_syra.png")
 ```
 :::
-::: {.column width="48%"}
-```markdown
-[text]{.rn-highlight-orange}
-[text]{.rn-cross-graphite}
-```
 
-Colours: `indigo`, `orange`, `amethyst`,
-`olive`, `graphite`, `red`
-:::
-:::
+::::
+:::::
 
-[**Sparingly:** max 1–2 effects per slide, 3–5 per lecture. Types: `underline`, `box`, `circle`, `bracket`, `highlight`, `cross`. Not as decoration — only for one key moment in a concept.]{.text-size-smaller .text-color-grey_olive}
+## Výsledky učení {.balance-outcomes}
 
-# Reference Slides: SCSS Components {.center}
-
-# Cards {.center}
-
-## Card: basic structure
-
-::: {.card-indigo}
-[Card heading]{.card-title}
-
-Card body — one or two short paragraphs. The font is intentionally smaller than the base
-slide size (0.82 em) to fit more content.
-
-- Cards can also contain a list
-- Each item on its own line
-:::
-
-[Syntax: `::: {.card-indigo}` + `[text]{.card-title}` for the coloured top strip — without the old `.slide-card` + variant combination.]{.text-size-smaller .text-color-grey_olive}
-
-## Card: .card-title
-
-::: columns
-::: {.column width="60%"}
-::: {.card-insight}
-[This is .card-title]{.card-title}
-
-`[text]{.card-title}` must be the **first thing** inside the card — it creates the coloured top strip.
-:::
-:::
-
-::: {.column width="38%"}
-```markdown
-::: {.card-insight}
-[Section name]{.card-title}
-
-Card body.
-:::
-```
-:::
-:::
-
-## Card: compact variant
-
-::: columns
-::: {.column width="48%"}
-::: {.card-orange}
-[Standard]{.card-title}
-
-`.card-orange` — padding `0.7rem 1rem`. Suitable for longer content.
-:::
-:::
-
-::: {.column width="48%"}
-::: {.card-orange .card-compact}
-[Compact]{.card-title}
-
-`.card-orange .card-compact` — reduced padding (`0.45rem 0.75rem`). For denser layouts.
-:::
-:::
-:::
-
-## Card: overview of variants
-
-::: columns
-::: {.column width="18%"}
-::: {.card-indigo}
-[indigo]{.card-title}
-`.card-indigo`
-:::
-:::
-::: {.column width="18%"}
-::: {.card-orange}
-[orange]{.card-title}
-`.card-orange`
-:::
-:::
-::: {.column width="18%"}
-::: {.card-amethyst}
-[amethyst]{.card-title}
-`.card-amethyst`
-:::
-:::
-::: {.column width="18%"}
-::: {.card-olive}
-[olive]{.card-title}
-`.card-olive`
-:::
-:::
-::: {.column width="18%"}
-::: {.card-red}
-[red]{.card-title}
-`.card-red`
-:::
-:::
-:::
-
-::: columns
-::: {.column width="16%"}
-::: {.card-question}
-[question]{.card-title}
-`.card-question`
-:::
-:::
-::: {.column width="16%"}
-::: {.card-insight}
-[insight]{.card-title}
-`.card-insight`
-:::
-:::
-::: {.column width="16%"}
-::: {.card-warning}
-[warning]{.card-title}
-`.card-warning`
-:::
-:::
-::: {.column width="16%"}
-::: {.card-data}
-[data]{.card-title}
-`.card-data`
-:::
-:::
-::: {.column width="16%"}
-::: {.card-result}
-[result]{.card-title}
-`.card-result`
-:::
-:::
-::: {.column width="16%"}
-::: {.card-rule}
-[rule]{.card-title}
-`.card-rule`
-:::
-:::
-:::
-
-[Semantic variants are aliases: `.card-question` = orange, `.card-insight` = `.card-result` = indigo, `.card-warning` = red, `.card-data` = olive, `.card-rule` = amethyst. Shorthand: `.box-question`, `.box-result`, `.box-data`, `.box-warning`, `.box-rule`.]{.text-size-smaller .text-color-grey_olive}
-
-# Panels {.center}
-
-## Panel: `.panel-result`
-
-::: columns
-::: {.column width="55%"}
-::: {.panel-result}
-[Key insight]{.panel-title}
-
-Purple left border. For the main message of a block — conclusion, analysis result, or key number.
-:::
-:::
-::: {.column width="42%"}
-```markdown
-::: {.panel-result}
-[Heading]{.panel-title}
-Panel text.
-:::
-```
-
-[`.panel-title` is `display: block`; gives the heading h3 appearance without `###`.]{.text-size-smaller .text-color-grey_olive}
-:::
-:::
-
-## Panel: `.panel-question`
-
-::: columns
-::: {.column width="55%"}
-::: {.panel-question}
-[Conclusion or option]{.panel-title}
-
-Orange left border. For conclusions, comparison results, or offering multiple answer choices.
-:::
-:::
-::: {.column width="42%"}
-```markdown
-::: {.panel-question}
-[Conclusion or option]{.panel-title}
-Panel text.
-:::
-```
-:::
-:::
-
-## Panel: `.panel-question` + `.panel-lead`
-
-::: columns
-::: {.column width="55%"}
-::: {.panel-question}
-[Computation result]{.panel-lead}
-
-Large highlighted result — replaces the old `.answer-title`. Use at most once per slide.
-:::
-:::
-::: {.column width="42%"}
-```markdown
-::: {.panel-question}
-[Computation result]{.panel-lead}
-
-Text below the result.
-:::
-```
-
-[`.panel-lead` is large and bold. Suitable for a key number or conclusion.]{.text-size-smaller .text-color-grey_olive}
-:::
-:::
-
-## Panel: `.panel-note` and `.panel-warning`
-
-::: columns
-::: {.column width="48%"}
-::: {.panel-note}
-[Instructions or output]{.panel-title}
-
-Neutral olive border. For instructions, workflow steps, or model output.
-:::
-:::
-::: {.column width="48%"}
-::: {.panel-warning}
-[Caution!]{.panel-title}
-
-Red left border. For warnings, common errors, or deliberate alerts.
-:::
-:::
-:::
-
-## Panel: overview of colour variants
-
-::: columns
-::: {.column width="18%"}
-::: {.panel-indigo}
-[indigo]{.panel-title}
-`.panel-indigo`
-:::
-:::
-::: {.column width="18%"}
-::: {.panel-orange}
-[orange]{.panel-title}
-`.panel-orange`
-:::
-:::
-::: {.column width="18%"}
-::: {.panel-amethyst}
-[amethyst]{.panel-title}
-`.panel-amethyst`
-:::
-:::
-::: {.column width="18%"}
-::: {.panel-olive}
-[olive]{.panel-title}
-`.panel-olive`
-:::
-:::
-::: {.column width="18%"}
-::: {.panel-red}
-[red]{.panel-title}
-`.panel-red`
-:::
-:::
-:::
-
-[Semantic variants are aliases: `.panel-result` = indigo, `.panel-question` = orange, `.panel-warning` = red, `.panel-note` = amethyst, `.panel-data` = olive. Shorthand (`.box-*`) wraps the matching panel.]{.text-size-smaller .text-color-grey_olive}
-
-# Takeaway strip {.center}
-
-## Takeaway strip: standard
-
-Sentence that leads into the conclusion — contextual paragraph above the strip.
-
-::: {.takeaway-strip}
-**Main slide conclusion.** `.takeaway-strip` — indigo-to-orange gradient background,
-indigo left border. One per slide, placed at the bottom.
-:::
-
-[`::: {.takeaway-strip}` — the gradient is built in, no extra class needed.]{.text-size-smaller .text-color-grey_olive}
-
-## Takeaway strip: compact variant
-
-Sentence above the strip as usual.
-
-::: {.takeaway-strip}
-Main conclusion — standard strip.
-:::
-
-::: {.takeaway-strip .strip-compact}
-Supplementary conclusion — `.strip-compact` reduces `margin-top`. Useful for two conclusions together.
-:::
-
-## Strip: colour variants
-
-::: columns
-::: {.column width="18%"}
-::: {.strip-indigo}
-`.strip-indigo`
-:::
-:::
-::: {.column width="18%"}
-::: {.strip-orange}
-`.strip-orange`
-:::
-:::
-::: {.column width="18%"}
-::: {.strip-amethyst}
-`.strip-amethyst`
-:::
-:::
-::: {.column width="18%"}
-::: {.strip-olive}
-`.strip-olive`
-:::
-:::
-::: {.column width="18%"}
-::: {.strip-red}
-`.strip-red`
-:::
-:::
-:::
-
-# Blockquote {.center}
-
-## Blockquote div: `.blockquote`
-
-::: {.blockquote}
-**Definition or quotation.** `.blockquote` — light purple background, indigo left border (6px),
-rounded corners. Font 0.82 em.
-
-- Can contain a list
-- Each item on its own line
-:::
-
-[Use `::: {.blockquote}`, not Markdown `>`. The div variant gets correct styling;
-Markdown blockquote gets different styles from `presentation_theme.scss`.]{.text-size-smaller .text-color-grey_olive}
-
-# Slide backgrounds {.center}
-
-## Backgrounds: dark variants {.bg-indigo}
-
-This slide has the class `{.bg-indigo}`. Text and headings are automatically white.
-
-::: columns
-::: {.column width="48%"}
-Syntax — add the class to the slide heading:
-
-```markdown
-## Slide title {.bg-indigo}
-```
-:::
-::: {.column width="48%"}
-Available dark variants:
-
-- `{.bg-indigo}` — primary indigo
-- `{.bg-amethyst}` — lighter purple
-- `{.bg-olive}` — grey-green
-- `{.bg-red}` — red
-- `{.bg-graphite}` — dark grey
-:::
-:::
-
-## Backgrounds: light variants {.bg-parchment}
-
-This slide has the class `{.bg-parchment}`. Text is automatically graphite.
-
-::: columns
-::: {.column width="48%"}
-Available light variants:
-
-- `{.bg-orange}` — orange
-- `{.bg-parchment}` — cream
-- `{.bg-white}` — pure white
-:::
-::: {.column width="48%"}
-Text and heading colour adapts automatically — no need to add `.text-color-*`.
-:::
-:::
-
-# Inline highlights {.center}
-
-## Inline highlight: `.text-hgl-{color}`
-
-The model intercept is −153.4 and the length coefficient is
-[4.05 g/mm]{.text-hgl-indigo_velvet} — each millimetre of length corresponds on average
-to four grams of body mass.
-
-Caution — this procedure works [only when the normality assumption is met]{.text-hgl-orange}.
-
-[Syntax: `[text]{.text-hgl-indigo_velvet}` — coloured chip with contrasting text. Available colours: `indigo_velvet`, `orange`, `amethyst`, `grey_olive`, `graphite`, `white`, `light_gray`, `parchment`.]{.text-size-smaller .text-color-grey_olive}
-
-## Inline highlight: `.text-bg-{color}` and `.text-color-{color}`
-
-::: columns
-::: {.column width="48%"}
-[`.text-hgl-indigo_velvet`]{.text-hgl-indigo_velvet} — chip with contrasting text
-
-[`.text-bg-indigo_velvet`]{.text-bg-indigo_velvet} — chip without text colour change
-
-[`.text-color-indigo_velvet`]{.text-color-indigo_velvet} — text colour only
-
-[`.text-color-indigo_velvet .text-bold`]{.text-color-indigo_velvet .text-bold} — colour + bold
-:::
-::: {.column width="48%"}
-```markdown
-[text]{.text-hgl-indigo_velvet}
-[text]{.text-bg-indigo_velvet}
-[text]{.text-color-indigo_velvet}
-[text]{.text-color-indigo_velvet .text-bold}
-```
-:::
-:::
-
-# Roughnotation {.center}
-
-## Roughnotation: shorthand syntax
-
-Shorthand `{.rn-{type}-{colour}}` expands via `rn-shorthand.lua`:
-
-::: columns
-::: {.column width="48%"}
-**Short form (new):**
-
-Each millimetre of length corresponds to approximately
-[four grams of body mass]{.rn-underline-indigo}.
-
-```markdown
-[text]{.rn-underline-indigo}
-```
-:::
-::: {.column width="48%"}
-**Long form (still functional):**
-
-```markdown
-[text]{.rn-fragment rn-type=underline
-  rn-color="#5D2890"}
-```
-:::
-:::
-
-[Available types: `underline`, `box`, `circle`, `highlight`, `cross`, `bracket`. Colours: `indigo`, `orange`, `amethyst`, `olive`, `graphite`, `red`.]{.text-size-smaller .text-color-grey_olive}
-
-## Roughnotation: `box`, `circle`, `bracket`
-
-::: columns
-::: {.column width="32%"}
-**box**
-
-**R² = [0.76]{.rn-box-indigo}**
-
-```markdown
-[0.76]{.rn-box-indigo}
-```
-:::
-::: {.column width="32%"}
-**circle**
-
-The relationship is [strong]{.rn-circle-orange}.
-
-```markdown
-[strong]{.rn-circle-orange}
-```
-:::
-::: {.column width="32%"}
-**bracket**
-
-**ŷ = β₀ + [β₁x]{.rn-bracket-indigo}**
-
-```markdown
-[β₁x]{.rn-bracket-indigo}
-```
-:::
-:::
-
-[Animation fires on fragment arrival. Do not use both colours on the same slide.]{.text-size-smaller .text-color-grey_olive}
-
-# Fragments and progressive disclosure {.center}
-
-## Fragment: `.fragment` block
-
-A sentence that is on the slide from the start.
-
-::: {.fragment}
-::: {.panel-result}
-[Conclusion arrives after pause]{.panel-title}
-
-This entire block appears as a single fragment — the student sees the sentence above
-and only after clicking does the panel with the conclusion reveal itself.
-:::
-:::
-
-[Syntax: `::: {.fragment}` wraps any block. Works with panels, blockquotes, strips, and cards.]{.text-size-smaller .text-color-grey_olive}
-
-## Fragment: `.incremental` list
-
-Which properties must a good correlation coefficient satisfy?
+:::: {.outcomes-stack}
+Po dnešní přednášce budete schopni:
 
 ::: {.incremental}
-- It must be symmetric: correlation of X with Y = correlation of Y with X.
-- It must be dimensionless: independent of the scale of variables.
-- It must be in the interval −1 to +1.
-- +1 = perfect positive dependence, −1 = perfect negative dependence.
+- rozlišit [biologickou realitu]{.text-hgl-indigo_velvet} od toho, co zachytila konkrétní studie
+- interpretovat pozorovaný [efekt a jeho nejistotu]{.text-hgl-orange}
+- vysvětlit, co vyjadřuje [p-hodnota]{.text-hgl-indigo_velvet}
+- rozlišit chybu I. a II. stupně a jejich důsledky
+- napsat vědecký závěr
 :::
+::::
 
-[Each item appears on click.]{.text-size-smaller .text-color-grey_olive}
+## Která tvrzení mohou pozorování změnit? {.balance-claims}
 
-# Typography {.center}
+:::: {.claim-grid-4}
 
-## Typography: sizes
-
-::: columns
-::: {.column width="55%"}
-[`.text-size-heading` — 140 % of base]{.text-size-heading}
-
-[`.text-size-large` — 130 % of base]{.text-size-large}
-
-Normal text (100 %, base 30 px)
-
-[`.text-size-smaller` — 82 % of base]{.text-size-smaller}
-
-[`.text-size-tiny` — 65 % of base]{.text-size-tiny}
-:::
-::: {.column width="42%"}
-```markdown
-[text]{.text-size-heading}
-[text]{.text-size-large}
-[text]{.text-size-smaller}
-[text]{.text-size-tiny}
+::: {.claim-item .fragment}
+```{r}
+#| label: zobrazit-tvrzeni-labute
+#| echo: false
+include_local_figure("tvrzeni_labute.png")
 ```
 
-[`.text-size-body` = 100 % (explicit reset). Old `.text-larger`/`.text-smaller`/`.text-tiny` are removed.]{.text-size-smaller .text-color-grey_olive}
+::: {.claim-copy}
+Všechny labutě jsou bílé.
 :::
 :::
 
-## Typography: weight, alignment, font
+::: {.claim-item .fragment}
+```{r}
+#| label: zobrazit-tvrzeni-holub
+#| echo: false
+include_local_figure("tvrzeni_holub_stehovavy.png")
+```
 
-::: {.text-center}
-`.text-center` — horizontal centre
+::: {.claim-copy}
+Holub stěhovavý vyhynul.
+:::
 :::
 
-::: {.text-right}
-`.text-right` — right alignment
+::: {.claim-item .fragment}
+```{r}
+#| label: zobrazit-tvrzeni-mesic
+#| echo: false
+include_local_figure("mesic_ze_syra.png")
+```
+
+::: {.claim-copy}
+Měsíc je celý ze sýra.
+:::
+:::
+
+::: {.claim-item .fragment}
+```{r}
+#| label: zobrazit-tvrzeni-krasa
+#| echo: false
+include_local_figure("tvrzeni_nejkrasnejsi_ptak.png")
+```
+
+::: {.claim-copy}
+Tento pták je nejkrásnější.
+:::
+:::
+
+::::
+
+::: {.box-question .text-center .fragment}
+Která tvrzení může změnit nové pozorování? U kterého to nedává smysl?
+:::
+
+::: {.fragment .takeaway-strip}
+[Testovatelné]{.text-hgl-indigo_velvet} neznamená pravděpodobné ani pravdivé. Pozorování jsou naše omezené informace o světě.
+:::
+
+# Co z reality skutečně pozorujeme?
+
+## Seznamte se: krab houslista
+
+:::: {.columns .align-center}
+
+::: {.column width="62%"}
+```{r}
+#| label: zobrazit-kraba-houslistu
+#| echo: false
+include_local_figure("krab_houslista.jpg")
+```
+:::
+
+::: {.column width="36%"}
+
+<br>
+
+::: {.text-size-heading2 .text-bold}
+*Minuca pugnax*
 :::
 
 <br>
 
-[`.text-font-heading` — Source Sans 3, heading weight]{.text-font-heading}
+Samec nese jedno nápadně zvětšené klepeto.
 
-[`.text-font-monospace` — JetBrains Mono]{.text-font-monospace}
+<br>
 
-[`.text-bold` — bold]{.text-bold}
+Žije ve slaniscích podél Atlantiku.
+:::
 
-# Colour utilities {.center}
+::::
 
-## Colours: indigo_velvet and amethyst
+::: {.footer}
+Foto: Natalia Agudelo / Smithsonian Environmental Research Center, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Uca_pugnax_(I0443)_(14451829642).jpg), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/).
+:::
 
-::: columns
+## 13 slanisek podél Atlantiku
+
+```{r}
+#| label: pripravit-mapu-lokalit
+#| echo: false
+#| message: false
+#| warning: false
+data_lokality <-
+  readr::read_csv(
+    file = here::here("data", "pie_crab_site_means.csv"),
+    show_col_types = FALSE
+  )
+
+data_souradnice <-
+  data.frame(
+    kod_lokality = c(
+      "GTM", "SI", "NIB", "ZI", "RC", "VCR", "DB",
+      "JC", "CT", "NB", "CC", "BC", "PIE"
+    ),
+    zemepisna_delka = c(
+      -81.327, -81.364, -79.205, -77.944, -76.676,
+      -75.942, -75.437, -74.342, -71.981, -71.326,
+      -70.068, -70.927, -70.849
+    )
+  )
+
+data_mapa_lokality <-
+  merge(
+    x = data_lokality,
+    y = data_souradnice,
+    by = "kod_lokality"
+  )
+
+data_mapa_staty <-
+  ggplot2::map_data("state") |>
+  dplyr::filter(
+    region %in% c(
+      "florida", "georgia", "south carolina",
+      "north carolina", "virginia", "maryland",
+      "delaware", "new jersey", "new york",
+      "connecticut", "rhode island", "massachusetts"
+    )
+  )
+
+plot_mapa_lokalit <-
+  ggplot2::ggplot() +
+  ggplot2::geom_polygon(
+    data = data_mapa_staty,
+    mapping = ggplot2::aes(
+      x = long,
+      y = lat,
+      group = group
+    ),
+    fill = biostat_cols[["amethyst"]],
+    alpha = 0.16,
+    color = biostat_cols[["grey_olive"]],
+    linewidth = 0.45
+  ) +
+  ggplot2::geom_point(
+    data = data_mapa_lokality,
+    mapping = ggplot2::aes(
+      x = zemepisna_delka,
+      y = zemepisna_sirka
+    ),
+    shape = 21,
+    fill = biostat_cols[["orange"]],
+    color = biostat_cols[["indigo_velvet"]],
+    size = 5,
+    stroke = 0.9
+  ) +
+  ggplot2::coord_quickmap(
+    xlim = c(-82.5, -68.5),
+    ylim = c(29, 44),
+    expand = FALSE
+  ) +
+  ggplot2::labs(
+    x = "Zeměpisná délka",
+    y = "Zeměpisná šířka"
+  ) +
+  theme_biostat(base_size = 16) +
+  ggplot2::theme(
+    plot.margin = ggplot2::margin(12, 18, 12, 24)
+  ) +
+  ggview::canvas(
+    width = 900,
+    height = 900,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_mapa_lokalit,
+  file = here::here(path_materials, "mapa_lokalit.png")
+)
+```
+
+:::: {.columns .align-center}
+
+::: {.column width="57%"}
+```{r}
+#| label: zobrazit-mapu-lokalit
+#| echo: false
+#| out-width: "88%"
+include_local_figure("mapa_lokalit.png")
+```
+:::
+
+::: {.column width="41%"}
+
+<br>
+
+::: {.box-data}
+[Co budeme pozorovat]{.panel-title}
+
+- 13 slanisek od Floridy po Massachusetts
+- jeden bod = průměrná šířka krunýře na jedné lokalitě
+- zeměpisná šířka a velikost v milimetrech
+:::
+
+<br>
+
+::: {.box-question}
+Jak se průměrná velikost mění směrem na sever?
+:::
+:::
+
+::::
+
+::: {.footer}
+Data: [LTER `pie_crab`](https://lter.github.io/lterdatasampler/articles/pie_crab_vignette.html), CC0; souřadnice: [Johnson et al. 2019](https://doi.org/10.1002/ece3.5883).
+:::
+
+## Kterou proměnnou chceme vysvětlit? {.balance-variables}
+
+:::: {.layout-grid-2 style="--layout-gap: 1rem;"}
+
+::: {.panel-olive .variable-card}
+[Zeměpisná šířka]{.panel-title}
+
+Poloha slaniska ve stupních severní šířky
+:::
+
+::: {.panel-olive .variable-card}
+[Průměrná šířka krunýře]{.panel-title}
+
+Velikost samců na lokalitě v milimetrech
+:::
+
+::::
+
+<br>
+<br>
+
+::: {.box-question .text-center .fragment}
+Která proměnná je **prediktor** a která **odezva**?
+:::
+
+## Bergmannovo pravidlo {.balance-bergmann}
+
+:::: {.columns .align-center}
+
+::: {.column width="45%" .fragment}
+::: {.blockquote}
+Organismy bývají v chladnějších oblastech větší.
+:::
+
+<br>
+
+U krabů to nemusí platit. Je to biologická předpověď, kterou teprve porovnáme s daty.
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="50%" .fragment}
+::: {.box-question .text-center}
+Pokud by byli krabi na severu větší, jaký směr vztahu bychom očekávali?
+:::
+
+<br>
+<div class="layout-grid-2" style="--layout-gap: 0.8rem;">
+
+::: {.panel-olive .text-center}
+Klesající
+:::
+::: {.panel-olive .text-center}
+Rostoucí
+:::
+</div>
+:::
+
+::::
+
+## Co ukazují data?
+
+```{r}
+#| label: pripravit-graf-pozorovanych-dat
+#| echo: false
+#| message: false
+#| warning: false
+plot_body <-
+  ggplot2::ggplot(
+    data = data_lokality,
+    mapping = ggplot2::aes(
+      x = zemepisna_sirka,
+      y = prumerna_sirka_mm
+    )
+  ) +
+  ggplot2::geom_point(
+    color = biostat_cols[["grey_olive"]],
+    size = 5
+  ) +
+  ggplot2::labs(
+    x = "Zeměpisná šířka (° s. š.)",
+    y = "Šířka krunýře (mm)"
+  ) +
+  theme_biostat(base_size = 17) +
+  ggplot2::theme(
+    plot.margin = ggplot2::margin(12, 18, 12, 30)
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 850,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_body,
+  file = here::here(path_materials, "prumery_bez_primky.png")
+)
+```
+
+```{r}
+#| label: zobrazit-prumery-bez-primky
+#| echo: false
+#| out-width: "92%"
+include_local_figure("prumery_bez_primky.png")
+```
+
+::: {.takeaway-strip .fragment}
+Nejprve jen popište směr a rozptyl bodů. Co je na obrazu přesvědčivé a co vás zneklidňuje?
+:::
+
+## Lineární model
+
+```{r}
+#| label: fitovat-model-a-pripravit-primku
+#| echo: false
+#| message: false
+#| warning: false
+mod_krabi <-
+  lm(
+    formula = prumerna_sirka_mm ~ zemepisna_sirka,
+    data = data_lokality
+  )
+
+odhad_interceptu <-
+  coef(mod_krabi)[["(Intercept)"]]
+
+odhad_sklonu <-
+  coef(mod_krabi)[["zemepisna_sirka"]]
+
+plot_body_model <-
+  plot_body +
+  ggplot2::geom_abline(
+    intercept = odhad_interceptu,
+    slope = odhad_sklonu,
+    color = biostat_cols[["indigo_velvet"]],
+    linewidth = 1.6
+  )
+
+ggview::save_ggplot(
+  plot = plot_body_model,
+  file = here::here(path_materials, "prumery_s_primkou.png")
+)
+```
+
+:::: {.columns .align-center}
+
+::: {.column width="50%"}
+```{r}
+#| label: zobrazit-prumery-s-primkou
+#| echo: false
+include_local_figure("prumery_s_primkou.png")
+```
+:::
+
+::: {.column width="50%"}
+
+<br>
+
+```{r}
+#| label: ukazat-model-krabu
+#| echo: true
+#| eval: false
+mod_krabi <-
+  lm(
+    formula = prumerna_sirka_mm ~
+      zemepisna_sirka,
+    data = data_lokality
+  )
+```
+
+:::
+
+::::
+
+## `summary()` {.balance-summary-output}
+
+:::: {.columns .align-center}
+
+::: {.column width="58%"}
+```{r}
+#| label: pripomenout-summary
+#| echo: true
+#| eval: false
+summary(mod_krabi)
+```
+
+<br>
+
+::: {.summary-table}
+```{r}
+#| label: zobrazit-koeficienty-modelu
+#| echo: false
+tabulka_summary <-
+  summary(mod_krabi)$coefficients
+
+stupne_volnosti_summary <-
+  df.residual(mod_krabi)
+
+colnames(tabulka_summary) <-
+  c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
+
+knitr::kable(
+  x = tabulka_summary,
+  digits = c(3, 3, 2, 6),
+  row.names = TRUE
+)
+```
+:::
+
+::: {.panel-result}
+[Odhadnutý model]{.panel-title}
+
+Průměrná šířka = `r formatC(odhad_interceptu, format = "f", digits = 3, decimal.mark = ",")` + `r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")` × zeměpisná šířka + residuum
+:::
+
+:::
+
+::: {.column width="38%" .summary-side}
+
+::: {.panel-data}
+[Z minulé lekce]{.panel-title}
+
+**Estimate** = intercept a sklon; **Std. Error** = nejistota odhadu.
+:::
+
+<br>
+
+::: {.fragment .panel-question}
+**Co znamenají `t value` a `Pr(>|t|)`?**
+:::
+:::
+
+::::
+
+## Je naměřený vztah realita?
+
+:::: {.columns .align-center}
+
+::: {.column width="64%"}
+
+<br>
+
+```{r}
+#| label: znovu-zobrazit-kotevni-graf
+#| echo: false
+include_local_figure("prumery_s_primkou.png")
+```
+:::
+
+::: {.column width="33%"}
+::: {.box-question}
+Je fialová přímka skutečný vztah v přírodě, nebo odhad z této studie?
+:::
+
+<br>
+
+::: {.fragment .panel-question}
+Jak často by podobně silný vztah vznikl prostou náhodou ve světě bez systematického trendu?
+:::
+:::
+
+::::
+
+##
+
+<br>
+
+:::: {.columns .align-center}
+
+::: {.column width="35%"}
+<div class="reality-card">
+<div class="text-size-heading2 text-bold">REALITA</div>
+<div class="reality-question">?</div>
+<div>Skutečný vztah ve všech možných lokalitách přímo nevidíme.</div>
+</div>
+:::
+
+::: {.column width="15%"}
+<div class="observation-arrow">→</div>
+
+<div class="text-center text-size-small">výběr<br>měření<br>místní rozdíly</div>
+:::
+
+::: {.column width="50%"}
+
+<br>
+
+<div class="study-window">
+
+```{r}
+#| label: zobrazit-okno-studie
+#| echo: false
+include_local_figure("prumery_s_primkou.png")
+```
+
+</div>
+
+::: {.text-center .text-bold}
+NAŠE POZOROVÁNÍ: 13 lokalit
+:::
+:::
+
+::::
+
+## Stejná realita, jiné pozorování
+
+```{r}
+#| label: pripravit-opakovane-pohledy
+#| echo: false
+#| message: false
+#| warning: false
+set.seed(900723)
+
+rezidualni_sd_opakovane <-
+  sigma(mod_krabi)
+
+data_opakovane_kandidati <-
+  purrr::map(
+    .x = seq_len(200),
+    .f = ~ {
+      data_opakovany_pohled <-
+        data.frame(
+          studie = .x,
+          zemepisna_sirka = data_lokality$zemepisna_sirka,
+          simulovana_sirka =
+            fitted(mod_krabi) +
+            rnorm(
+              n = nrow(data_lokality),
+              mean = 0,
+              sd = rezidualni_sd_opakovane
+            )
+        )
+
+      mod_opakovany_pohled <-
+        lm(
+          formula = simulovana_sirka ~ zemepisna_sirka,
+          data = data_opakovany_pohled
+        )
+
+      data_opakovany_pohled |>
+        dplyr::mutate(
+          intercept = coef(mod_opakovany_pohled)[["(Intercept)"]],
+          sklon = coef(mod_opakovany_pohled)[["zemepisna_sirka"]]
+        )
+    }
+  ) |>
+  purrr::list_rbind()
+
+vec_vybrane_studie <-
+  data_opakovane_kandidati |>
+  dplyr::distinct(studie, sklon) |>
+  dplyr::arrange(sklon) |>
+  dplyr::slice(c(5, 100, 195)) |>
+  dplyr::pull(studie)
+
+data_opakovane_pohledy <-
+  data_opakovane_kandidati |>
+  dplyr::filter(studie %in% vec_vybrane_studie) |>
+  dplyr::mutate(
+    studie = factor(
+      studie,
+      levels = vec_vybrane_studie,
+      labels = c(1, 2, 3)
+    )
+  )
+
+list_opakovane_pohledy <-
+  data_opakovane_pohledy |>
+  dplyr::group_split(studie) |>
+  purrr::map2(
+    .y = c("Studie A", "Studie B", "Studie C"),
+    .f = ~ ggplot2::ggplot(
+      data = .x,
+      mapping = ggplot2::aes(
+        x = zemepisna_sirka,
+        y = simulovana_sirka
+      )
+    ) +
+      ggplot2::geom_abline(
+        intercept = coef(mod_krabi)[["(Intercept)"]],
+        slope = odhad_sklonu,
+        color = biostat_cols[["indigo_velvet"]],
+        linetype = "dashed",
+        linewidth = 1.1
+      ) +
+      ggplot2::geom_point(
+        color = biostat_cols[["grey_olive"]],
+        size = 3.1
+      ) +
+      ggplot2::geom_smooth(
+        method = "lm",
+        formula = y ~ x,
+        se = FALSE,
+        color = biostat_cols[["orange"]],
+        linewidth = 1.2
+      ) +
+      ggplot2::coord_cartesian(
+        xlim = range(data_lokality$zemepisna_sirka),
+        ylim = range(data_opakovane_pohledy$simulovana_sirka)
+      ) +
+      ggplot2::labs(
+        title = .y,
+        x = "Zeměpisná šířka",
+        y = "Průměrná velikost (mm)"
+      ) +
+      theme_biostat(base_size = 13) +
+      ggplot2::theme(
+        plot.margin = ggplot2::margin(10, 12, 10, 18)
+      ) +
+      ggview::canvas(
+        width = 720,
+        height = 650,
+        units = "px"
+      )
+  )
+
+vec_soubory_pohledu <-
+  c(
+    "pozorovani_a.png",
+    "pozorovani_b.png",
+    "pozorovani_c.png"
+  )
+
+purrr::walk2(
+  .x = list_opakovane_pohledy,
+  .y = vec_soubory_pohledu,
+  .f = ~ ggview::save_ggplot(
+    plot = .x,
+    file = here::here(path_materials, .y)
+  )
+)
+```
+
+:::: {.columns .align-center}
+
+<br>
+
+::: {.column width="32%"}
+```{r}
+#| label: zobrazit-prvni-pohled
+#| echo: false
+include_local_figure("pozorovani_a.png")
+```
+:::
+
+::: {.column width="32%" .study-reveal}
+<div class="study-placeholder">Další možné pozorování</div>
+
+::: {.fragment}
+```{r}
+#| label: zobrazit-druhy-pohled
+#| echo: false
+include_local_figure("pozorovani_b.png")
+```
+:::
+:::
+
+::: {.column width="32%" .study-reveal}
+<div class="study-placeholder">Další možné pozorování</div>
+
+::: {.fragment}
+```{r}
+#| label: zobrazit-treti-pohled
+#| echo: false
+include_local_figure("pozorovani_c.png")
+```
+:::
+:::
+
+::::
+
+::: {.fragment .takeaway-strip}
+Výsledek se změnil, protože se změnila [pozorování]{.text-hgl-orange}; předpokládaný biologický vztah zůstal stejný.
+:::
+
+::: {.footer}
+Pro názornost jsou z 200 simulací vybrány pohledy s nízkým, středním a vysokým odhadnutým sklonem.
+:::
+
+## Jak široké je naše okno do reality? {.balance-window}
+
+```{r}
+#| label: pripravit-interval-sklonu
+#| echo: false
+#| message: false
+#| warning: false
+interval_sklonu <-
+  confint(mod_krabi)[
+    "zemepisna_sirka",
+  ]
+
+data_interval <-
+  data.frame(
+    odhad = odhad_sklonu,
+    dolni = interval_sklonu[[1]],
+    horni = interval_sklonu[[2]],
+    radek = 1
+  )
+
+plot_interval <-
+  ggplot2::ggplot(
+    data = data_interval,
+    mapping = ggplot2::aes(
+      x = odhad,
+      y = radek
+    )
+  ) +
+  ggplot2::geom_segment(
+    mapping = ggplot2::aes(
+      x = dolni,
+      xend = horni,
+      yend = radek
+    ),
+    color = biostat_cols[["indigo_velvet"]],
+    linewidth = 3
+  ) +
+  ggplot2::geom_point(
+    color = biostat_cols[["orange"]],
+    size = 6
+  ) +
+  ggplot2::annotate(
+    geom = "text",
+    x = odhad_sklonu,
+    y = 1.12,
+    label = paste0(
+      "odhad ",
+      formatC(
+        odhad_sklonu,
+        format = "f",
+        digits = 3,
+        decimal.mark = ","
+      )
+    ),
+    color = biostat_cols[["orange"]],
+    size = 5,
+    fontface = "bold"
+  ) +
+  ggplot2::scale_y_continuous(
+    limits = c(0.72, 1.28),
+    breaks = NULL
+  ) +
+  ggplot2::labs(
+    x = "Sklon (mm na 1° severněji)",
+    y = NULL
+  ) +
+  theme_biostat(base_size = 17)
+
+plot_interval_velky <-
+  plot_interval +
+  ggview::canvas(
+    width = 1600,
+    height = 650,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_interval_velky,
+  file = here::here(path_materials, "interval_sklonu_velky.png")
+)
+
+```
+
+:::: {.columns .align-center}
+
+::: {.column width="68%"}
+
+<br>
+
+::: {.text-size-heading3 .text-bold .text-color-indigo_velvet .text-center}
+Odhad a 95% interval spolehlivosti
+:::
+
+<br>
+
+```{r}
+#| label: zobrazit-kartu-nejistoty
+#| echo: false
+include_local_figure("interval_sklonu_velky.png")
+```
+:::
+
+::: {.column width="30%"}
+
+<br>
+
+
+::: {.panel-result .fragment}
+[Co odhadujeme]{.panel-title}
+
+Sklon: **`r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")` mm/°**
+:::
+
+<br>
+
+::: {.panel-question .fragment}
+[Jak přesně]{.panel-title}
+
+95% CI: **[`r formatC(interval_sklonu[[1]], format = "f", digits = 3, decimal.mark = ",")`; `r formatC(interval_sklonu[[2]], format = "f", digits = 3, decimal.mark = ",")`] mm/°**
+:::
+
+<br>
+
+::: {.panel-warning .fragment}
+Pouze 13 lokalit a jednoduchý observační model.
+:::
+:::
+
+::::
+
+## Rychlá kontrola modelu
+
+```{r}
+#| label: pripravit-diagnostiku-modelu
+#| echo: false
+#| message: false
+#| warning: false
+data_diagnostika <-
+  data_lokality |>
+  dplyr::mutate(
+    odhadnuta_hodnota = fitted(mod_krabi),
+    residuum = resid(mod_krabi)
+  )
+
+plot_hustota_residui <-
+  ggplot2::ggplot(
+    data = data_diagnostika,
+    mapping = ggplot2::aes(x = residuum)
+  ) +
+  ggplot2::geom_density(
+    fill = biostat_cols[["amethyst"]],
+    color = biostat_cols[["indigo_velvet"]],
+    alpha = 0.45,
+    linewidth = 1
+  ) +
+  ggplot2::geom_vline(
+    xintercept = 0,
+    color = biostat_cols[["graphite"]],
+    linetype = "dashed"
+  ) +
+  ggplot2::labs(
+    title = "Rozdělení residuí",
+    x = "Residuum (mm)",
+    y = NULL
+  ) +
+  theme_biostat(base_size = 12)
+
+plot_residua_odhad <-
+  ggplot2::ggplot(
+    data = data_diagnostika,
+    mapping = ggplot2::aes(
+      x = odhadnuta_hodnota,
+      y = residuum
+    )
+  ) +
+  ggplot2::geom_hline(
+    yintercept = 0,
+    color = biostat_cols[["graphite"]],
+    linetype = "dashed"
+  ) +
+  ggplot2::geom_point(
+    color = biostat_cols[["grey_olive"]],
+    size = 2.7
+  ) +
+  ggplot2::labs(
+    title = "Residua vs. odhady",
+    x = "Odhad modelu (mm)",
+    y = "Residuum (mm)"
+  ) +
+  theme_biostat(base_size = 12)
+
+plot_diagnostika_mala <-
+  cowplot::plot_grid(
+    plot_hustota_residui,
+    plot_residua_odhad,
+    ncol = 2
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 720,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_diagnostika_mala,
+  file = here::here(path_materials, "diagnostika_modelu.png")
+)
+```
+
+```{r}
+#| label: zobrazit-diagnostiku-modelu
+#| echo: false
+#| out-width: "88%"
+include_local_figure("diagnostika_modelu.png")
+```
+
+::: {.takeaway-strip .text-center}
+V residuích nevidíme nápadný problém, který by jednoduchý lineární model okamžitě zpochybnil.
+:::
+
+## Co už víme — a co stále nevidíme? {.balance-comparison}
+
+::::: {.comparison-stack}
+:::: {.columns .align-top}
+
 ::: {.column width="48%"}
-::: {.bg-indigo_velvet style="padding:0.55rem 0.8rem;border-radius:10px;margin-bottom:0.5rem;"}
-[`.bg-indigo_velvet` — primary indigo]{.text-color-white}
-:::
-[`.text-color-indigo_velvet`]{.text-color-indigo_velvet}
+::: {.panel-result}
+[Co zachytila studie]{.panel-title}
 
-[`.text-hgl-indigo_velvet`]{.text-hgl-indigo_velvet}
+**Kladný pozorovaný sklon**
+
+::: {.incremental}
+- jeho velikost v mm/°
+- interval slučitelných efektů
+- žádný nápadný problém v základní diagnostice
 :::
+:::
+:::
+
 ::: {.column width="48%"}
-::: {.bg-amethyst style="padding:0.55rem 0.8rem;border-radius:10px;margin-bottom:0.5rem;"}
-[`.bg-amethyst` — lighter purple]{.text-color-white}
-:::
-[`.text-color-amethyst`]{.text-color-amethyst}
+::: {.panel-question .fragment .incremental}
+[Co nevidíme přímo]{.panel-title}
 
-[`.text-hgl-amethyst`]{.text-hgl-amethyst}
+- skutečný populační sklon
+- výsledek jiné možné studie
+- příčinný biologický mechanismus
+- zda by pozorovaný vztah nemohl vzniknout prostou náhodou
 :::
 :::
 
-## Colours: orange and graphite
+::::
+:::::
 
-::: columns
+# Co kdyby žádný trend nebyl?
+
+## Co bychom pozorovali bez trendu? {.safe-title}
+
+:::: {.columns .align-center}
+
+::: {.column width="44%"}
+::: {.reality-card}
+::: {.text-size-heading2 .text-bold}
+HYPOTETICKÁ REALITA
+:::
+
+Skutečný systematický sklon je **přesně 0 mm/°**.
+
+Lokality se přesto biologicky liší.
+:::
+:::
+
+::: {.column width="52%" .fragment}
+
+<br>
+
+::: {.box-question}
+Musí být odhadnutý sklon v každé pozorované studii také přesně nulový?
+:::
+
+<br>
+
+::: {.panel-olive}
+**A)** Ano, všechny přímky budou vodorovné.
+:::
+
+::: {.panel-olive .rn-circle-orange}
+**B)** Ne, sklony se budou náhodně lišit kolem nuly.
+:::
+
+::: {.panel-olive}
+**C)** Ne, všechny budou kladné.
+:::
+
+:::
+
+::::
+
+## Jak náhoda vytvoří nenulový sklon?
+
+```{r}
+#| label: pripravit-nulovy-svet-s-residui
+#| echo: false
+#| message: false
+#| warning: false
+set.seed(900723)
+
+prumer_nuloveho_modelu <-
+  mean(data_lokality$prumerna_sirka_mm)
+
+rezidualni_sd_nulovy_svet <-
+  sigma(mod_krabi)
+
+data_nulova_prvni <-
+  data.frame(
+    zemepisna_sirka = data_lokality$zemepisna_sirka,
+    simulovana_sirka =
+      prumer_nuloveho_modelu +
+      rnorm(
+        n = nrow(data_lokality),
+        mean = 0,
+        sd = rezidualni_sd_nulovy_svet
+      )
+  )
+
+plot_nulova_residua <-
+  ggplot2::ggplot(
+    data = data_nulova_prvni,
+    mapping = ggplot2::aes(
+      x = zemepisna_sirka,
+      y = simulovana_sirka
+    )
+  ) +
+  ggplot2::geom_hline(
+    yintercept = prumer_nuloveho_modelu,
+    color = biostat_cols[["indigo_velvet"]],
+    linewidth = 1.5
+  ) +
+  ggplot2::geom_segment(
+    mapping = ggplot2::aes(
+      xend = zemepisna_sirka,
+      y = prumer_nuloveho_modelu,
+      yend = simulovana_sirka
+    ),
+    color = biostat_cols[["orange"]],
+    linewidth = 0.9,
+    alpha = 0.8
+  ) +
+  ggplot2::geom_point(
+    color = biostat_cols[["grey_olive"]],
+    size = 4.1
+  ) +
+  ggplot2::labs(
+    x = "Zeměpisná šířka",
+    y = "Šířka (mm)"
+  ) +
+  theme_biostat(base_size = 14) +
+  ggplot2::theme(
+    plot.margin = ggplot2::margin(10, 16, 10, 18)
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 680,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_nulova_residua,
+  file = here::here(path_materials, "nulovy_svet_residua.png")
+)
+```
+
+::: {.text-size-heading2 .text-bold .text-center}
+[pozorovaná velikost]{.text-hgl-graphite} = [základní úroveň + 0 × zeměpisná šířka]{.text-hgl-indigo_velvet} + [náhodné residuum]{.text-hgl-orange}
+:::
+
+```{r}
+#| label: zobrazit-nulovy-svet-s-residui
+#| echo: false
+#| out-width: "88%"
+include_local_figure("nulovy_svet_residua.png")
+```
+
+::: {.takeaway-strip .text-center}
+Systematický sklon zůstává nulový. Náhodná residua posouvají jednotlivé body nad a pod vodorovnou přímku.
+:::
+
+## Nulový trend, různé odhadnuté přímky
+
+```{r}
+#| label: pripravit-nulove-studie-male-nasobky
+#| echo: false
+#| message: false
+#| warning: false
+set.seed(900723)
+
+data_nulove_ukazky <-
+  purrr::map(
+    .x = seq_len(12),
+    .f = ~ {
+      data_nulova_studie <-
+        data.frame(
+          simulace = factor(.x),
+          zemepisna_sirka = data_lokality$zemepisna_sirka,
+          simulovana_sirka =
+            prumer_nuloveho_modelu +
+            rnorm(
+              n = nrow(data_lokality),
+              mean = 0,
+              sd = rezidualni_sd_nulovy_svet
+            )
+        )
+
+      mod_nulova_studie <-
+        lm(
+          formula = simulovana_sirka ~ zemepisna_sirka,
+          data = data_nulova_studie
+        )
+
+      data_nulova_studie |>
+        dplyr::mutate(
+          intercept = coef(mod_nulova_studie)[["(Intercept)"]],
+          sklon = coef(mod_nulova_studie)[["zemepisna_sirka"]]
+        )
+    }
+  ) |>
+  purrr::list_rbind()
+
+plot_nulove_studie <-
+  ggplot2::ggplot(
+    data = data_nulove_ukazky,
+    mapping = ggplot2::aes(
+      x = zemepisna_sirka,
+      y = simulovana_sirka
+    )
+  ) +
+  ggplot2::geom_hline(
+    yintercept = prumer_nuloveho_modelu,
+    color = biostat_cols[["amethyst"]],
+    linetype = "dashed",
+    linewidth = 0.7
+  ) +
+  ggplot2::geom_point(
+    color = biostat_cols[["grey_olive"]],
+    size = 1.7,
+    alpha = 0.82
+  ) +
+  ggplot2::geom_abline(
+    data = data_nulove_ukazky |>
+      dplyr::distinct(simulace, intercept, sklon),
+    mapping = ggplot2::aes(
+      intercept = intercept,
+      slope = sklon
+    ),
+    inherit.aes = FALSE,
+    color = biostat_cols[["indigo_velvet"]],
+    linewidth = 0.9
+  ) +
+  ggplot2::facet_wrap(
+    facets = ggplot2::vars(simulace),
+    ncol = 4
+  ) +
+  ggplot2::labs(
+    x = "Zeměpisná šířka",
+    y = "Šířka (mm)"
+  ) +
+  theme_biostat(base_size = 12) +
+  ggplot2::theme(
+    plot.margin = ggplot2::margin(8, 12, 8, 16)
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 900,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_nulove_studie,
+  file = here::here(path_materials, "nulove_studie_male_nasobky.png")
+)
+```
+
+```{r}
+#| label: zobrazit-nulove-studie-male-nasobky
+#| echo: false
+#| out-width: "94%"
+include_local_figure("nulove_studie_male_nasobky.png")
+```
+
+::: {.takeaway-strip .text-center}
+Nulová realita zůstala stejná. Měnila se pozorování, a proto se měnily i odhadnuté sklony.
+:::
+
+## Sledujte cestu jednoho náhodného sklonu
+
+```{r}
+#| label: simulovat-nulove-studie-pro-animaci
+#| echo: false
+#| message: false
+#| warning: false
+set.seed(900723)
+
+pocet_nulovych_studii_animace <- 500
+
+data_nulove_animace <-
+  purrr::map(
+    .x = seq_len(pocet_nulovych_studii_animace),
+    .f = ~ {
+      data_nulova_studie <-
+        data.frame(
+          simulace = .x,
+          zemepisna_sirka = data_lokality$zemepisna_sirka,
+          simulovana_sirka =
+            prumer_nuloveho_modelu +
+            rnorm(
+              n = nrow(data_lokality),
+              mean = 0,
+              sd = rezidualni_sd_nulovy_svet
+            )
+        )
+
+      mod_nulova_studie <-
+        lm(
+          formula = simulovana_sirka ~ zemepisna_sirka,
+          data = data_nulova_studie
+        )
+
+      data_nulova_studie |>
+        dplyr::mutate(
+          intercept = coef(mod_nulova_studie)[["(Intercept)"]],
+          sklon = coef(mod_nulova_studie)[["zemepisna_sirka"]]
+        )
+    }
+  ) |>
+  purrr::list_rbind()
+
+data_sklony_animace <-
+  data_nulove_animace |>
+  dplyr::distinct(simulace, intercept, sklon)
+
+vec_meze_histogramu <-
+  seq(
+    from = floor(min(data_sklony_animace$sklon) * 100) / 100,
+    to = ceiling(max(data_sklony_animace$sklon) * 100) / 100,
+    length.out = 25
+  )
+
+max_cetnost_animace <-
+  max(
+    hist(
+      x = data_sklony_animace$sklon,
+      breaks = vec_meze_histogramu,
+      plot = FALSE
+    )$counts
+  )
+
+vec_indexy_snimku <-
+  unique(
+    round(
+      seq(
+        from = 1,
+        to = pocet_nulovych_studii_animace,
+        length.out = 125
+      )
+    )
+  )
+```
+
+```{r}
+#| label: vytvorit-snimky-animace-nulovych-sklonu
+#| echo: false
+#| message: false
+#| warning: false
+path_frames_nulove <-
+  here::here("Temp", "nulovy_svet_frames_500")
+
+fs::dir_create(path_frames_nulove)
+
+vec_frame_paths_nulove <-
+  vec_indexy_snimku |>
+  purrr::map_chr(
+    .f = ~ {
+      data_frame_studie <-
+        data_nulove_animace |>
+        dplyr::filter(simulace == .x)
+
+      data_frame_sklony <-
+        data_sklony_animace |>
+        dplyr::filter(simulace <= .x)
+
+      aktualni_sklon <-
+        data_frame_studie |>
+        dplyr::distinct(sklon) |>
+        dplyr::pull(sklon)
+
+      aktualni_intercept <-
+        data_frame_studie |>
+        dplyr::distinct(intercept) |>
+        dplyr::pull(intercept)
+
+      plot_frame_studie <-
+        ggplot2::ggplot(
+          data = data_frame_studie,
+          mapping = ggplot2::aes(
+            x = zemepisna_sirka,
+            y = simulovana_sirka
+          )
+        ) +
+        ggplot2::geom_hline(
+          yintercept = prumer_nuloveho_modelu,
+          color = biostat_cols[["amethyst"]],
+          linetype = "dashed",
+          linewidth = 1
+        ) +
+        ggplot2::geom_point(
+          color = biostat_cols[["grey_olive"]],
+          size = 2.6
+        ) +
+        ggplot2::geom_abline(
+          intercept = aktualni_intercept,
+          slope = aktualni_sklon,
+          color = biostat_cols[["orange"]],
+          linewidth = 1.2
+        ) +
+        ggplot2::coord_cartesian(
+          xlim = range(data_lokality$zemepisna_sirka),
+          ylim = range(data_nulove_animace$simulovana_sirka)
+        ) +
+        ggplot2::labs(
+          title = paste0("Studie ", .x, "/", pocet_nulovych_studii_animace),
+          subtitle = paste0(
+            "odhad sklonu = ",
+            formatC(
+              aktualni_sklon,
+              format = "f",
+              digits = 3,
+              decimal.mark = ","
+            )
+          ),
+          x = "Zeměpisná šířka",
+          y = NULL
+        ) +
+        theme_biostat(base_size = 8) +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 10),
+          plot.subtitle = ggplot2::element_text(size = 8),
+          axis.title = ggplot2::element_text(size = 8),
+          axis.text = ggplot2::element_text(size = 7),
+          plot.margin = ggplot2::margin(8, 10, 12, 30)
+        )
+
+      plot_frame_histogram <-
+        ggplot2::ggplot(
+          data = data_frame_sklony,
+          mapping = ggplot2::aes(x = sklon)
+        ) +
+        ggplot2::geom_histogram(
+          breaks = vec_meze_histogramu,
+          fill = biostat_cols[["amethyst"]],
+          color = "white",
+          alpha = 0.8
+        ) +
+        ggplot2::geom_vline(
+          xintercept = aktualni_sklon,
+          color = biostat_cols[["orange"]],
+          linewidth = 1.2
+        ) +
+        ggplot2::coord_cartesian(
+          xlim = range(vec_meze_histogramu),
+          ylim = c(0, max_cetnost_animace + 1)
+        ) +
+        ggplot2::labs(
+          title = paste0("Sklony ", .x, "/", pocet_nulovych_studii_animace),
+          subtitle = "histogram se postupně plní",
+          x = "Odhadnutý sklon (mm/°)",
+          y = "Počet"
+        ) +
+        theme_biostat(base_size = 8) +
+        ggplot2::theme(
+          plot.title = ggplot2::element_text(size = 10),
+          plot.subtitle = ggplot2::element_text(size = 8),
+          axis.title = ggplot2::element_text(size = 8),
+          axis.text = ggplot2::element_text(size = 7),
+          plot.margin = ggplot2::margin(8, 14, 12, 10)
+        )
+
+      plot_frame_nulovy <-
+        cowplot::plot_grid(
+          plot_frame_studie,
+          plot_frame_histogram,
+          ncol = 2,
+          rel_widths = c(1, 1)
+        )
+
+      path_frame_nulovy <-
+        fs::path(
+          path_frames_nulove,
+          paste0(
+            "frame_",
+            formatC(.x, width = 3, flag = "0"),
+            ".png"
+          )
+        )
+
+      ggplot2::ggsave(
+        filename = path_frame_nulovy,
+        plot = plot_frame_nulovy,
+        width = 14,
+        height = 7,
+        units = "in",
+        dpi = 90,
+        bg = biostat_cols[["parchment"]]
+      )
+
+      path_frame_nulovy
+    }
+  )
+```
+
+```{r}
+#| label: slozit-animaci-nulovych-sklonu
+#| echo: false
+#| message: false
+#| warning: false
+vec_animacni_soubory_nulove <-
+  c(
+    rep(vec_frame_paths_nulove[[1]], times = 8),
+    vec_frame_paths_nulove,
+    rep(vec_frame_paths_nulove[[length(vec_frame_paths_nulove)]], times = 16)
+  )
+
+image_animace_nulove <-
+  vec_animacni_soubory_nulove |>
+  magick::image_read() |>
+  magick::image_animate(
+    fps = 10,
+    loop = 0
+  )
+
+magick::image_write(
+  image = image_animace_nulove,
+  path = here::here(path_materials, "nulovy_sklon_do_histogramu.gif"),
+  format = "gif"
+)
+
+fs::file_copy(
+  path = vec_frame_paths_nulove[[length(vec_frame_paths_nulove)]],
+  new_path = here::here(path_materials, "nulovy_sklon_histogram_final.png"),
+  overwrite = TRUE
+)
+```
+
+```{r}
+#| label: zobrazit-animaci-nulovych-sklonu
+#| echo: false
+include_local_figure("nulovy_sklon_do_histogramu.gif")
+```
+
+::: {.strip-amethyst .text-center}
+Nová náhodná residua → nový soubor bodů → nový sklon → další část histogramu.
+:::
+
+## Po 500 nulových studiích
+
+```{r}
+#| label: zobrazit-finalni-histogram-nulovych-sklonu
+#| echo: false
+include_local_figure("nulovy_sklon_histogram_final.png")
+```
+
+::: {.box-question .text-center .fragment}
+Kolem které hodnoty se sklony shlukují? Kam byste umístili náš pozorovaný sklon?
+:::
+
+## Stejný nulový svět, ale s naším pozorováním
+
+```{r}
+#| label: pripravit-pozorovani-proti-nulovym-sklonum
+#| echo: false
+#| message: false
+#| warning: false
+set.seed(900723)
+
+vec_nulove_sklony <-
+  purrr::map_dbl(
+    .x = seq_len(5000),
+    .f = ~ {
+      data_nulovy_vyber <-
+        data_lokality |>
+        dplyr::mutate(
+          simulovana_sirka =
+            prumer_nuloveho_modelu +
+            rnorm(
+              n = nrow(data_lokality),
+              mean = 0,
+              sd = rezidualni_sd_nulovy_svet
+            )
+        )
+
+      mod_nulovy <-
+        lm(
+          formula = simulovana_sirka ~ zemepisna_sirka,
+          data = data_nulovy_vyber
+        )
+
+      coef(mod_nulovy)[["zemepisna_sirka"]]
+    }
+  )
+
+data_nulove_sklony <-
+  data.frame(sklon = vec_nulove_sklony)
+
+plot_nulove_sklony <-
+  ggplot2::ggplot(
+    data = data_nulove_sklony,
+    mapping = ggplot2::aes(x = sklon)
+  ) +
+  ggplot2::geom_histogram(
+    bins = 55,
+    fill = biostat_cols[["grey_olive"]],
+    color = "white",
+    linewidth = 0.2
+  ) +
+  ggplot2::geom_vline(
+    xintercept = 0,
+    color = biostat_cols[["indigo_velvet"]],
+    linewidth = 1.2
+  ) +
+  ggplot2::geom_vline(
+    xintercept = odhad_sklonu,
+    color = biostat_cols[["orange"]],
+    linewidth = 1.7
+  ) +
+  ggplot2::annotate(
+    geom = "text",
+    x = odhad_sklonu,
+    y = Inf,
+    label = "náš sklon",
+    vjust = 1.6,
+    hjust = 1.05,
+    color = biostat_cols[["orange"]],
+    size = 4.2,
+    fontface = "bold"
+  ) +
+  ggplot2::coord_cartesian(
+    xlim = c(
+      min(data_nulove_sklony$sklon),
+      odhad_sklonu + 0.07
+    )
+  ) +
+  ggplot2::labs(
+    title = "5 000 nulových studií",
+    x = "Odhadnutý sklon (mm/°)",
+    y = "Počet"
+  ) +
+  theme_biostat(base_size = 10) +
+  ggplot2::theme(
+    plot.title = ggplot2::element_text(size = 10),
+    axis.title = ggplot2::element_text(size = 8),
+    axis.text = ggplot2::element_text(size = 7),
+    plot.margin = ggplot2::margin(8, 14, 12, 10)
+  )
+
+plot_pozorovana_studie <-
+  plot_body +
+  ggplot2::geom_abline(
+    intercept = odhad_interceptu,
+    slope = odhad_sklonu,
+    color = biostat_cols[["orange"]],
+    linewidth = 1.6
+  ) +
+  ggplot2::labs(
+    title = "Naše studie",
+    subtitle = paste0(
+      "pozorovaný sklon = ",
+      formatC(
+        odhad_sklonu,
+        format = "f",
+        digits = 3,
+        decimal.mark = ","
+      ),
+      " mm/°"
+    ),
+    x = "Zeměpisná šířka",
+    y = "Šířka (mm)"
+  ) +
+  ggplot2::theme(
+    plot.title = ggplot2::element_text(size = 10),
+    plot.subtitle = ggplot2::element_text(size = 8),
+    axis.title = ggplot2::element_text(size = 8),
+    axis.text = ggplot2::element_text(size = 7),
+    plot.margin = ggplot2::margin(8, 10, 12, 14)
+  )
+
+plot_pozorovani_proti_nule <-
+  cowplot::plot_grid(
+    plot_pozorovana_studie,
+    plot_nulove_sklony,
+    ncol = 2,
+    rel_widths = c(1, 1)
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 760,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_pozorovani_proti_nule,
+  file = here::here(path_materials, "pozorovani_proti_nulovym_sklonum.png")
+)
+```
+
+```{r}
+#| label: zobrazit-pozorovani-proti-nulovym-sklonum
+#| echo: false
+include_local_figure("pozorovani_proti_nulovym_sklonum.png")
+```
+
+::: {.panel-result .text-center .fragment}
+Nenulové sklony vznikají v nulovém světě běžně. Sklon tak velký jako náš je však mimořádně daleko od většiny simulací.
+:::
+
+## Jak vzdálené je naše pozorování od nuly?
+
+```{r}
+#| label: odvodit-testove-statistiky-sklonu
+#| echo: false
+#| message: false
+#| warning: false
+table_test_sklonu <-
+  summary(mod_krabi)$coefficients
+
+standardni_chyba_sklonu <-
+  table_test_sklonu[
+    "zemepisna_sirka",
+    "Std. Error"
+  ]
+
+t_pozorovane <-
+  table_test_sklonu[
+    "zemepisna_sirka",
+    "t value"
+  ]
+
+p_hodnota <-
+  table_test_sklonu[
+    "zemepisna_sirka",
+    "Pr(>|t|)"
+  ]
+
+stupne_volnosti <-
+  df.residual(mod_krabi)
+```
+
+<br>
+
+| | Hodnota |
+|---|---:|
+| Pozorovaný efekt | `r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")` mm/° |
+| Efekt v nulovém světě | 0 mm/° |
+| Rozdíl | `r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")` mm/° |
+| Standardní chyba odhadu | `r formatC(standardni_chyba_sklonu, format = "f", digits = 4, decimal.mark = ",")` mm/° |
+
+<br>
+
+::: {.box-question .text-center .fragment}
+Kolikrát se standardní chyba vejde do rozdílu mezi pozorovaným a nulovým sklonem?
+:::
+
+## Vzdálenost vyjádříme ve standardních chybách {.safe-title}
+
+::: {.box-rule .text-center}
+**Vzdálenost v jednotkách standardní chyby (SE)** = rozdíl mezi pozorovaným a nulovým sklonem ÷ standardní chyba (SE) sklonu
+:::
+
+::: {.fragment}
+$$
+\frac{
+`r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")`-0
+}{
+`r formatC(standardni_chyba_sklonu, format = "f", digits = 4, decimal.mark = ",")`
+}
+=`r formatC(t_pozorovane, format = "f", digits = 2, decimal.mark = ",")`
+$$
+:::
+
+::: {.fragment .box-result .text-center}
+$$
+t=
+\frac{\text{pozorovaný sklon}-\text{nulový sklon}}
+{\text{standardní chyba (SE) sklonu}}
+\approx `r formatC(t_pozorovane, format = "f", digits = 2, decimal.mark = ",")`
+$$
+
+Této standardizované vzdálenosti říkáme [t-statistika]{.text-highlight-black}.
+
+<br>
+
+Naše pozorování leží přibližně **`r formatC(t_pozorovane, format = "f", digits = 2, decimal.mark = ",")` standardních chyb od nuly**.
+:::
+
+## Kolik plochy zůstává za $|t|$? {.safe-title}
+
+```{r}
+#| label: pripravit-p-hodnotu-pozorovani
+#| echo: false
+#| message: false
+#| warning: false
+data_p_krivka <-
+  data.frame(
+    t = seq(
+      from = -7,
+      to = 7,
+      length.out = 5000
+    )
+  ) |>
+  dplyr::mutate(
+    hustota = dt(
+      x = t,
+      df = stupne_volnosti
+    ),
+    chvost = abs(t) >= abs(t_pozorovane),
+    strana = ifelse(t < 0, "levá", "pravá")
+  )
+
+plot_p_hodnota <-
+  ggplot2::ggplot(
+    data = data_p_krivka,
+    mapping = ggplot2::aes(
+      x = t,
+      y = hustota
+    )
+  ) +
+  ggplot2::annotate(
+    geom = "rect",
+    xmin = c(-7, abs(t_pozorovane)),
+    xmax = c(-abs(t_pozorovane), 7),
+    ymin = -Inf,
+    ymax = Inf,
+    fill = biostat_cols[["amethyst"]],
+    alpha = 0.14
+  ) +
+  ggplot2::geom_area(
+    data = data_p_krivka |>
+      dplyr::filter(chvost),
+    mapping = ggplot2::aes(group = strana),
+    fill = biostat_cols[["amethyst"]],
+    alpha = 0.95
+  ) +
+  ggplot2::geom_line(
+    color = biostat_cols[["graphite"]],
+    linewidth = 1.2
+  ) +
+  ggplot2::geom_vline(
+    xintercept = c(-abs(t_pozorovane), abs(t_pozorovane)),
+    color = biostat_cols[["orange"]],
+    linetype = "dashed",
+    linewidth = 1.1
+  ) +
+  ggplot2::labs(
+    x = "t-statistika v nulovém světě",
+    y = "Hustota"
+  ) +
+  theme_biostat(base_size = 17) +
+  ggplot2::theme(
+    plot.margin = ggplot2::margin(12, 18, 12, 28)
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 760,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_p_hodnota,
+  file = here::here(path_materials, "p_hodnota_chvosty.png")
+)
+```
+
+```{r}
+#| label: zobrazit-p-hodnotu
+#| echo: false
+#| out-width: "66%"
+include_local_figure("p_hodnota_chvosty.png")
+```
+
+::: {.box-rule}
+[P-hodnota]{.card-title}
+
+Pokud by nulový svět a předpoklady modelu platily, p-hodnota je pravděpodobnost získat statistiku alespoň tak vzdálenou od nuly jako tu naši. P-hodnota leží od **0 do 1**.
+:::
+
+## Co udělá větší hodnota $|t|$?
+
+```{r}
+#| label: pripravit-vliv-t-na-plochu
+#| echo: false
+#| message: false
+#| warning: false
+data_scenare_t <-
+  data.frame(
+    t_hodnota = c(1, 1.5, 3),
+    popisek = factor(
+      c("|t| = 1", "|t| = 1,5", "|t| = 3"),
+      levels = c("|t| = 1", "|t| = 1,5", "|t| = 3")
+    )
+  ) |>
+  dplyr::mutate(
+    p_hodnota_scenare = 2 * pt(
+      q = -abs(t_hodnota),
+      df = stupne_volnosti
+    ),
+    p_text = dplyr::if_else(
+      p_hodnota_scenare < 0.001,
+      "p < 0,001",
+      paste0(
+        "p = ",
+        formatC(
+          p_hodnota_scenare,
+          format = "f",
+          digits = 3,
+          decimal.mark = ","
+        )
+      )
+    ),
+    popisek = factor(
+      paste0(as.character(popisek), "\n", p_text),
+      levels = paste0(as.character(popisek), "\n", p_text)
+    )
+  )
+
+data_t_hodnoty <-
+  tidyr::crossing(
+    data_scenare_t,
+    t = seq(
+      from = -5,
+      to = 5,
+      length.out = 2400
+    )
+  ) |>
+  dplyr::mutate(
+    hustota = dt(
+      x = t,
+      df = stupne_volnosti
+    ),
+    chvost = abs(t) >= t_hodnota,
+    strana = ifelse(t < 0, "levá", "pravá")
+  )
+
+plot_t_hodnoty <-
+  ggplot2::ggplot(
+    data = data_t_hodnoty,
+    mapping = ggplot2::aes(
+      x = t,
+      y = hustota
+    )
+  ) +
+  ggplot2::geom_area(
+    data = data_t_hodnoty |>
+      dplyr::filter(chvost),
+    mapping = ggplot2::aes(group = strana),
+    fill = biostat_cols[["orange"]],
+    alpha = 0.75
+  ) +
+  ggplot2::geom_line(
+    color = biostat_cols[["graphite"]],
+    linewidth = 1
+  ) +
+  ggplot2::facet_wrap(
+    facets = ggplot2::vars(popisek),
+    nrow = 1
+  ) +
+  ggplot2::labs(
+    x = "t-statistika",
+    y = "Hustota",
+    caption = paste0(
+      "Ve všech třech panelech: df = ",
+      stupne_volnosti
+    )
+  ) +
+  theme_biostat(base_size = 11) +
+  ggplot2::theme(
+    strip.text = ggplot2::element_text(size = 11),
+    axis.title = ggplot2::element_text(size = 10),
+    axis.text = ggplot2::element_text(size = 8),
+    plot.caption = ggplot2::element_text(
+      size = 9,
+      hjust = 0.5
+    )
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 620,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_t_hodnoty,
+  file = here::here(path_materials, "t_hodnota_a_plocha.png")
+)
+```
+
+```{r}
+#| label: zobrazit-vliv-t-na-plochu
+#| echo: false
+#| out-width: "80%"
+include_local_figure("t_hodnota_a_plocha.png")
+```
+
+::: {.box-question .text-center .fragment}
+Když se $|t|$ vzdaluje od nuly, co se stane s oranžovou plochou?
+:::
+
+::: {.fragment .takeaway-strip .text-center}
+Čím dál leží $t$ od nuly, tím menší část nulového rozdělení zůstává stejně daleko nebo ještě dál. Tím menší je p-hodnota.
+:::
+
+## Více lokalit při stejném $|t|$
+
+```{r}
+#| label: pripravit-vliv-poctu-lokalit-na-plochu
+#| echo: false
+#| message: false
+#| warning: false
+data_scenare_df <-
+  data.frame(
+    n = c(3, 13, 100)
+  ) |>
+  dplyr::mutate(
+    df = n - 2,
+    p_hodnota_scenare = 2 * pt(
+      q = -2.5,
+      df = df
+    ),
+    p_text = dplyr::if_else(
+      p_hodnota_scenare < 0.001,
+      "p < 0,001",
+      paste0(
+        "p = ",
+        formatC(
+          p_hodnota_scenare,
+          format = "f",
+          digits = 3,
+          decimal.mark = ","
+        )
+      )
+    ),
+    popisek = factor(
+      paste0(
+        n,
+        " lokalit\ndf = ",
+        df,
+        "\n",
+        p_text
+      ),
+      levels = paste0(
+        n,
+        " lokalit\ndf = ",
+        df,
+        "\n",
+        p_text
+      )
+    )
+  )
+
+data_df_krivky <-
+  tidyr::crossing(
+    data_scenare_df,
+    t = seq(
+      from = -5,
+      to = 5,
+      length.out = 2400
+    )
+  ) |>
+  dplyr::mutate(
+    hustota = dt(
+      x = t,
+      df = df
+    ),
+    chvost = abs(t) >= 2.5,
+    strana = ifelse(t < 0, "levá", "pravá")
+  )
+
+plot_df_krivky <-
+  ggplot2::ggplot(
+    data = data_df_krivky,
+    mapping = ggplot2::aes(
+      x = t,
+      y = hustota
+    )
+  ) +
+  ggplot2::geom_area(
+    data = data_df_krivky |>
+      dplyr::filter(chvost),
+    mapping = ggplot2::aes(group = strana),
+    fill = biostat_cols[["amethyst"]],
+    alpha = 0.75
+  ) +
+  ggplot2::geom_line(
+    color = biostat_cols[["graphite"]],
+    linewidth = 1
+  ) +
+  ggplot2::facet_wrap(
+    facets = ggplot2::vars(popisek),
+    nrow = 1
+  ) +
+  ggplot2::labs(
+    x = NULL,
+    y = NULL,
+    caption = "Ve všech třech panelech držíme |t| = 2,5"
+  ) +
+  theme_biostat(base_size = 11) +
+  ggplot2::theme(
+    strip.text = ggplot2::element_text(size = 11),
+    axis.title = ggplot2::element_text(size = 10),
+    axis.text = ggplot2::element_text(size = 8),
+    plot.caption = ggplot2::element_text(
+      size = 9,
+      hjust = 0.5
+    )
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 620,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_df_krivky,
+  file = here::here(path_materials, "df_a_plocha.png")
+)
+```
+
+```{r}
+#| label: zobrazit-vliv-df-na-plochu
+#| echo: false
+#| out-width: "75%"
+include_local_figure("df_a_plocha.png")
+```
+
+::: {.box-question .text-center .fragment}
+Při stejném $|t|=2{,}5$: ve které studii zůstane v chvostech nejméně plochy?
+:::
+
+::: {.fragment .takeaway-strip .text-center}
+V jednoduché regresi platí $df=n-2$, tedy u krabů **$13-2=11$**. Více nezávislých pozorování znamená tenčí chvosty a menší p-hodnotu.
+:::
+
+## Která věta čte p-hodnotu správně? {.balance-misconception}
+
+<br>
+
+:::: {.columns .align-stretch}
+
+::: {.column width="31%"}
+::: {.panel-olive}
+**A)** Pravděpodobnost, že nulová hypotéza platí, je `r formatC(p_hodnota, format = "f", digits = 6, decimal.mark = ",")`.
+:::
+:::
+
+::: {.column width="31%"}
+::: {.panel-olive .rn-circle-orange}
+**B)** V nulovém světě by výsledek alespoň tak extrémní jako náš byl velmi neobvyklý.
+:::
+:::
+
+::: {.column width="31%"}
+::: {.panel-olive}
+**C)** Biologický efekt má velikost `r formatC(p_hodnota, format = "f", digits = 6, decimal.mark = ",")`.
+:::
+:::
+
+::::
+
+<br>
+
+::: {.takeaway-strip}
+Když nehlasujeme: vyberte A/B/C a vysvětlete volbu sousedovi jednou podmíněnou větou.
+:::
+
+## Co nám malá p-hodnota řekne — a co ne? {.balance-summary}
+
+<br>
+
+:::: {.columns .align-top}
+
 ::: {.column width="48%"}
-::: {.bg-orange style="padding:0.55rem 0.8rem;border-radius:10px;margin-bottom:0.5rem;"}
-[`.bg-orange` — vivid orange]{.text-color-graphite}
-:::
-[`.text-color-orange`]{.text-color-orange}
+::: {.panel-result .fragment}
+[Co říká]{.panel-title}
 
-[`.text-hgl-orange`]{.text-hgl-orange}
+Naše pozorování je velmi obtížně slučitelné s přesně nulovým systematickým sklonem a zvoleným modelem.
 :::
+:::
+
 ::: {.column width="48%"}
-::: {.bg-graphite style="padding:0.55rem 0.8rem;border-radius:10px;margin-bottom:0.5rem;"}
-[`.bg-graphite` — dark base]{.text-color-white}
-:::
-[`.text-color-graphite`]{.text-color-graphite}
+::: {.panel-warning .fragment .incremental}
+[Co neříká]{.panel-title}
 
-[`.text-hgl-graphite`]{.text-hgl-graphite}
-:::
-:::
-
-## Colours: neutral palette tones
-
-::: columns
-::: {.column width="23%"}
-::: {.bg-parchment style="padding:0.5rem 0.7rem;border-radius:10px;border:1px solid #ccc;"}
-[`.bg-parchment`]{.text-color-graphite .text-size-smaller}
-:::
-[`.text-color-parchment`]{.text-color-parchment .text-size-smaller .bg-graphite style="padding:1px 4px;border-radius:3px;"}
-
-[`.text-hgl-parchment`]{.text-hgl-parchment .text-size-smaller}
-:::
-::: {.column width="23%"}
-::: {.bg-grey_olive style="padding:0.5rem 0.7rem;border-radius:10px;"}
-[`.bg-grey_olive`]{.text-color-white .text-size-smaller}
-:::
-[`.text-color-grey_olive`]{.text-color-grey_olive .text-size-smaller}
-
-[`.text-hgl-grey_olive`]{.text-hgl-grey_olive .text-size-smaller}
-:::
-::: {.column width="23%"}
-::: {.bg-light_gray style="padding:0.5rem 0.7rem;border-radius:10px;border:1px solid #ccc;"}
-[`.bg-light_gray`]{.text-color-graphite .text-size-smaller}
-:::
-[`.text-color-light_gray`]{.text-color-light_gray .text-size-smaller .bg-graphite style="padding:1px 4px;border-radius:3px;"}
-
-[`.text-hgl-light_gray`]{.text-hgl-light_gray .text-size-smaller}
-:::
-::: {.column width="23%"}
-::: {.bg-white style="padding:0.5rem 0.7rem;border-radius:10px;border:1px solid #ccc;"}
-[`.bg-white`]{.text-color-graphite .text-size-smaller}
-:::
-[`.text-color-white`]{.text-color-white .text-size-smaller .bg-graphite style="padding:1px 4px;border-radius:3px;"}
-
-[`.text-hgl-white`]{.text-hgl-white .text-size-smaller}
+- že je biologická hypotéza pravdivá
+- že je efekt velký nebo důležitý
+- že model nemá omezení
+- jaký mechanismus vztah vytváří
 :::
 :::
 
-# Layout utilities {.center}
+::::
 
-## Layout: `.columns.align-top`
+<br>
 
-::: {.columns .align-top}
+::: {.takeaway-strip .fragment}
+P-hodnota hodnotí [pozorování v jednom hypotetickém světě]{.text-hgl-orange}. Není to stroj na pravdu.
+:::
+
+## Nulová hypotéza pojmenuje nulový svět {.balance-null-hypothesis}
+
+::::: {.columns .align-center}
+
 ::: {.column width="48%"}
-**Left column** starts at the top — without `.align-top` the content would be vertically centred.
-
-::: {.card-indigo}
-Card in the left column.
-
-Second paragraph inside the card — the left column is taller.
+```{r}
+#| label: znovu-zobrazit-nulovy-svet
+#| echo: false
+include_local_figure("nulovy_svet_residua.png")
+```
 :::
-:::
+
 ::: {.column width="48%"}
-**Right column** is shorter.
+::: {.box-rule}
+[$H_0$: nulová hypotéza]{.card-title}
 
-Without `.align-top` the right text would shift down to the centre of the column pair.
+Pro kraby říká:
+
+$$
+H_0:\ \text{systematický sklon}=0\ \text{mm/°}
+$$
+:::
+
+::: {.panel-data .fragment}
+Nulová hypotéza: Není žádný vztah mezi velikostí krunýře a zeměpisnou šířkou. Všechna pozorovaná variabilita je jen náhodná.
 :::
 :::
 
-[Syntax: `::: {.columns .align-top}` — add the class `.align-top` to `.columns`.]{.text-size-smaller .text-color-grey_olive}
+:::::
 
-## Layout: vertical offsets
+# Kdy musíme udělat rozhodnutí?
 
-::: {.card-question}
-[Example: `.slide-margin-top-15`]{.kicker}
+## Někdy nestačí popisovat — musíme jednat {.balance-bridge}
 
-This card would have `margin-top: 15%` if it had the class `.slide-margin-top-15`.
-Useful for vertically centring an isolated element on a slide.
+:::: {.bridge-stack}
+::: {.text-center .text-size-heading1 .text-bold}
+Monitoring zachytil jednoho jedince možného [invazního druhu]{.text-hgl-orange}.
 :::
 
-::: {.takeaway-strip .strip-compact}
-`.slide-margin-top-15` → `margin-top: 15%` · `.slide-margin-top-25` → `margin-top: 25%` · `.center-vertical` → absolute centre
+::: {.box-question .text-center .fragment}
+Zasáhnout, nebo pokračovat v pozorování? Jak velké riziko falešného poplachu jsme ochotni přijmout?
+:::
+::::
+
+## Kolik falešných poplachů jsme ochotni připustit? {.balance-alpha}
+
+::::: {.columns .align-center}
+
+::: {.column width="48%"}
+
+<br>
+
+::: {.box-question .text-center}
+Kdyby nulová hypotéza platila, jak často jsme ochotni ji **omylem** zamítnout?
+:::
 :::
 
+::: {.column width="48%"}
+::: {.box-rule .fragment}
+[$\alpha$: hladina významnosti]{.card-title}
+
+Předem zvolená přijatelná míra chyby.
+
+**$\alpha=0{,}05$** znamená 5 %.
+:::
+:::
+
+:::::
+
+<br>
+
+::: {.takeaway-strip .fragment}
+Pět procent je běžná konvence. Podle důsledků chyby můžeme zvolit i přísnější pravidlo.
+:::
+
+## Rozhodovací pravidlo volíme předem {.balance-rule}
+
+:::: {.rule-stack}
+::: {.box-rule}
+[Rozhodovací pravidlo]{.card-title}
+
+Porovnáme p-hodnotu s předem zvolenou hladinou $\alpha$.
+:::
+
+:::: {.columns .align-top}
+
+<br>
+
+::: {.column width="48%"}
+::: {.panel-question .fragment}
+[Když $p > \alpha$]{.panel-title}
+
+Nulovou hypotézu zamítnout **nemůžeme**.
+:::
+:::
+
+::: {.column width="48%"}
+::: {.panel-result .fragment}
+[Když $p \leq \alpha$]{.panel-title}
+
+Nulovou hypotézu zamítneme.
+
+Výsledek nazveme **statisticky významný** neboli **statisticky signifikantní**.
+:::
+:::
+::::
+::::
+
+::: {.footer}
+Dříve: $|t|$ vs. kritická hodnota z tabulky pro dané $df$. Dnes R: `t value` a `Pr(>|t|)`.
+:::
+
+## Co když se spleteme?
+
+:::: {.columns}
+
+::: {.column width="49%" .fragment}
+
+Chyba I. stupně
+
+```{r}
+#| label: zobrazit-falesne-pozitivni
+#| echo: false
+include_local_figure("chyba_i_falesne_pozitivni.jpg")
+```
+
+**Falešně pozitivní:** test hlásí stav, který není přítomen.
+:::
+
+::: {.column width="49%" .fragment}
+
+Chyba II. stupně
+
+```{r}
+#| label: zobrazit-falesne-negativni
+#| echo: false
+include_local_figure("chyba_ii_falesne_negativni.jpg")
+```
+
+**Falešně negativní:** test přehlédne stav, který přítomen je.
+:::
+
+::::
+
+
+## Invazní druh: která chyba je která? {.balance-errors}
+
+$$
+H_0:\ \text{invazní druh v oblasti není přítomen}
+$$
+
+| Realita | Průzkum: „nepřítomen“ | Průzkum: „přítomen“ |
+|---|---|---|
+| Druh není přítomen | správné rozhodnutí | **A: zbytečný zásah** |
+| Druh je přítomen | **B: přehlédnutá invaze** | správné rozhodnutí |
+
+<br>
+
+::: {.box-question .fragment}
+Zařaďte A a B jako chybu I. nebo II. stupně. Která může být závažnější?
+:::
+
+::: {.fragment .box-result .error-answer}
+**A = chyba I. stupně.**
+
+**B = chyba II. stupně.**
+:::
+
+# Co tedy můžeme tvrdit?
+
+## „p < 0,05, proto je hypotéza pravdivá“ {.balance-critique .text-center}
+
+:::: {.critique-stack}
+::: {.text-center .text-size-heading1 .text-bold}
+Co je na této větě špatně?
+:::
+
+<br>
+
+:::: {.columns}
+
+::: {.column width="48%"}
+::: {.box-warning .fragment}
+[Co tvrdí neprávem]{.card-title}
+
+P-hodnota neudává pravděpodobnost pravdy a test hypotézu nedokazuje.
+:::
+:::
+
+::: {.column width="48%"}
+::: {.panel-question .fragment}
+[Co ve větě chybí]{.panel-title}
+
+Efekt, jednotky, biologický význam, nejistota a omezení.
+:::
+:::
+
+::::
+::::
+
+## Ke stejné nule se můžeme vrátit intervalem
+
+```{r}
+#| label: pripravit-interval-proti-nule
+#| echo: false
+#| message: false
+#| warning: false
+plot_interval_nula <-
+  ggplot2::ggplot(
+    data = data_interval,
+    mapping = ggplot2::aes(
+      x = odhad,
+      y = radek
+    )
+  ) +
+  ggplot2::geom_vline(
+    xintercept = 0,
+    color = biostat_cols[["graphite"]],
+    linetype = "dashed",
+    linewidth = 1.2
+  ) +
+  ggplot2::geom_segment(
+    mapping = ggplot2::aes(
+      x = dolni,
+      xend = horni,
+      yend = radek
+    ),
+    color = biostat_cols[["indigo_velvet"]],
+    linewidth = 3
+  ) +
+  ggplot2::geom_point(
+    color = biostat_cols[["orange"]],
+    size = 6
+  ) +
+  ggplot2::annotate(
+    geom = "text",
+    x = 0,
+    y = 1.16,
+    label = "nulový sklon",
+    color = biostat_cols[["graphite"]],
+    size = 5
+  ) +
+  ggplot2::scale_x_continuous(
+    limits = c(-0.1, 0.75)
+  ) +
+  ggplot2::scale_y_continuous(
+    limits = c(0.78, 1.22),
+    breaks = NULL
+  ) +
+  ggplot2::labs(
+    x = "Sklon (mm na 1° severněji)",
+    y = NULL
+  ) +
+  theme_biostat(base_size = 18) +
+  ggview::canvas(
+    width = 1600,
+    height = 650,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_interval_nula,
+  file = here::here(path_materials, "interval_proti_nule.png")
+)
+```
+
+```{r}
+#| label: zobrazit-interval-proti-nule
+#| echo: false
+#| out-width: "90%"
+include_local_figure("interval_proti_nule.png")
+```
+
+::: {.panel-result .fragment}
+95% interval **[`r formatC(interval_sklonu[[1]], format = "f", digits = 3, decimal.mark = ",")`; `r formatC(interval_sklonu[[2]], format = "f", digits = 3, decimal.mark = ",")`] mm/°** neobsahuje nulu. Při $\alpha=0{,}05$ proto vede ke stejnému rozhodnutí jako p-hodnota a navíc ukazuje slučitelné velikosti efektu.
+:::
+
+
+## Napište výsledek pro biologa
+
+:::: {.columns .align-top}
+
+<br>
+
+::: {.column width="42%"}
+::: {.box-question}
+Napište 4–6 vět. Začněte tím, **co se mění a o kolik**. Poslední větou uveďte jednu důležitou limitaci studie.
+:::
+
+::: {.takeaway-strip}
+Potom přesvědčte souseda, že vaše pořadí důkazů dává smysl.
+:::
+:::
+
+::: {.column width="54%"}
+::: {.box-data}
+[Karta důkazů]{.panel-title}
+
+- `r nrow(data_lokality)` slanisek
+- pozorovaný sklon `r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")` mm/°
+- 95% CI [`r formatC(interval_sklonu[[1]], format = "f", digits = 3, decimal.mark = ",")`; `r formatC(interval_sklonu[[2]], format = "f", digits = 3, decimal.mark = ",")`] mm/°
+- $t=`r formatC(t_pozorovane, format = "f", digits = 2, decimal.mark = ",")`$, $df=`r stupne_volnosti`$, $p=`r formatC(p_hodnota, format = "f", digits = 6, decimal.mark = ",")`$
+- observační studie a jednoduchý lineární model
+- možné místní a prostorové rozdíly mezi lokalitami
+:::
+:::
+
+::::
+
+## Jedna možná odpověď {.balance-answer}
+
+::: {.box-result}
+:::: {.effect-conclusion}
+**Efekt:** Na `r nrow(data_lokality)` sledovaných slaniskách se průměrná šířka krunýře směrem k severu zvětšovala asi o **`r formatC(odhad_sklonu, format = "f", digits = 2, decimal.mark = ",")` mm na 1°**.
+
+**Nejistota:** 95% interval spolehlivosti byl **[`r formatC(interval_sklonu[[1]], format = "f", digits = 3, decimal.mark = ",")`; `r formatC(interval_sklonu[[2]], format = "f", digits = 3, decimal.mark = ",")`] mm/°**.
+
+**Statistická významnost:** Výsledek je při $\alpha=0{,}05$ statisticky významný ($t=`r formatC(t_pozorovane, format = "f", digits = 2, decimal.mark = ",")`$, $df=`r stupne_volnosti`$, $p=`r formatC(p_hodnota, format = "f", digits = 6, decimal.mark = ",")`$).
+
+**Limitace:** Studie podporuje kladný vztah na sledovaných lokalitách, ale sama neodhaluje příčinu ani přesný vztah v celé populaci.
+::::
+:::
+
+## Co nám studie ukázala?
+
+:::: {.columns .align-center}
+
+::: {.column width="57%"}
+
+<br>
+
+::: {.panel-result}
+[Hlavní závěr]{.panel-title}
+
+Na `r nrow(data_lokality)` sledovaných slaniskách byli krabi směrem na sever v průměru větší. Odhadnutý vztah činil **`r formatC(odhad_sklonu, format = "f", digits = 2, decimal.mark = ",")` mm na 1°** a kladný severojižní trend je statisticky signifikantní.
+:::
+:::
+
+::: {.column width="39%"}
+::: {.panel-question .fragment}
+[Co zůstává otevřené]{.panel-title}
+
+- přesná velikost vztahu v dalších lokalitách
+- příčinný biologický mechanismus
+- vliv místních a prostorových podmínek
+:::
+:::
+
+::::
+
+<br>
+
+::: {.takeaway-strip .text-center .fragment}
+Nejistota neznamená, že studie nic neukázala. Vymezuje, jak daleko může náš závěr bezpečně sahat.
+:::
+
+## A co sýrový Měsíc?
+
+:::: {.columns .align-center}
+
+::: {.column width="44%" .moon-question}
+
+<br>
+
+```{r}
+#| label: znovu-zobrazit-mesic-ze-syra
+#| echo: false
+include_local_figure("mesic_ze_syra.png")
+```
+:::
+
+::: {.column width="52%"}
+:::: {.layout-stack .layout-center-y style="--layout-center-min-height: 420px; --layout-gap: 1.8rem;"}
+::: {.box-question .text-center}
+Prokázal by statistický test, že Měsíc není ze sýra?
+:::
+
+::: {.fragment .box-result .text-center}
+Ne. Ukázal by, jak slučitelná jsou pozorování s jedním přesně popsaným sýrovým světem.
+:::
+::::
+:::
+
+::::
+
+## Co si odnést {.balance-takeaways}
+
+:::: {.takeaways-stack}
+::: {.incremental}
+- Studie zachycuje omezené [pozorování reality]{.text-hgl-graphite}.
+- Výsledek začíná [velikostí efektu a jeho nejistotou]{.text-hgl-indigo_velvet}.
+- P-hodnota popisuje, jak neobvyklá jsou data v jednom nulovém světě.
+- Statistické rozhodnutí může být chybné; závěr proto spojuje důkaz i jeho limitace.
+:::
+
+::: {.takeaway-strip .text-center .fragment}
+Efekt → biologický význam → nejistota → p-hodnota → limitace závěru
+:::
+::::
+
+## Příště: porovnání skupin {.balance-next .safe-title}
+
+:::: {.next-stack}
+:::: {.columns .align-center}
+
+::: {.column width="44%"}
+::: {.panel-result}
+[Dnes]{.panel-title}
+
+Číselný prediktor: zeměpisná šířka.
+
+Efekt: **sklon**.
+:::
+:::
+
+::: {.column width="52%"}
+::: {.panel-question}
+[PŘÍŠTĚ]{.panel-title}
+
+Kategoriální prediktor: například kontrola a zásah.
+
+Efekt: **rozdíl mezi skupinami**.
+:::
+:::
+
+::::
+
+::: {.takeaway-strip}
+Co z dnešní logiky zůstane stejné, když místo trendu budeme porovnávat dvě biologické skupiny?
+:::
+::::

@@ -9,7 +9,7 @@
 - Additional instructor wording, layout, code-locality, and inference-sequence revision: 2026-08-05
 - Instructor-requested section-divider and pacing pass: 2026-08-06
 - Author: Ondřej Mottl with Codex
-- Human reviewer: Ondřej Mottl — final review completed; presentation confirmed finished on 2026-08-05
+- Human reviewer: Ondřej Mottl — final review completed; after the section-divider pass, the presentation was explicitly confirmed finished on 2026-08-06
 - Independent reviewer: read-only internal `vision-corrector`
 
 ## Git checkpoint
@@ -199,7 +199,7 @@ The complete deck was rerendered successfully after those resolutions. The resul
 
 ## Remaining uncertainty and human-review gate
 
-- The instructor completed the manual wording, layout, pacing, and tone review and requested the final confirmation pass.
+- On 2026-08-06 the instructor explicitly confirmed: “I consider the presentation as done.” This closes the Stage 5 human-review gate after the final section-divider pass.
 - No content or rendering blocker remains for Stage 5.
 - The HTML presentation still relies on the external MathJax CDN; fully offline classroom use would require a separate shared-infrastructure decision and is not a lesson-source defect.
 - Release work has not begun.

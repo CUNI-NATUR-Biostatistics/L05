@@ -2324,6 +2324,168 @@ Předem zvolená přijatelná míra chyby.
 Pět procent je běžná konvence. Podle důsledků chyby můžeme zvolit i přísnější pravidlo.
 :::
 
+## Kde začínají krajní 5 % nulového světa? {.safe-title}
+
+```{r}
+#| label: pripravit-kriticke-hodnoty-t
+#| echo: false
+#| message: false
+#| warning: false
+kriticke_t_graf <-
+  qt(
+    p = 1 - 0.05 / 2,
+    df = stupne_volnosti
+  )
+
+data_kriticke_t <-
+  tibble::tibble(
+    t = seq(
+      from = -7,
+      to = 7,
+      length.out = 5000
+    )
+  ) |>
+  dplyr::mutate(
+    hustota = dt(
+      x = t,
+      df = stupne_volnosti
+    ),
+    kriticky_chvost = abs(t) >= kriticke_t_graf,
+    strana = dplyr::if_else(t < 0, "levá", "pravá")
+  )
+
+plot_kriticke_hodnoty_t <-
+  ggplot2::ggplot(
+    data = data_kriticke_t,
+    mapping = ggplot2::aes(
+      x = t,
+      y = hustota
+    )
+  ) +
+  ggplot2::geom_area(
+    data = data_kriticke_t |>
+      dplyr::filter(kriticky_chvost),
+    mapping = ggplot2::aes(group = strana),
+    fill = biostat_cols[["amethyst"]],
+    alpha = 0.42
+  ) +
+  ggplot2::geom_line(
+    color = biostat_cols[["graphite"]],
+    linewidth = 1.2
+  ) +
+  ggplot2::geom_vline(
+    xintercept = c(-kriticke_t_graf, kriticke_t_graf),
+    color = biostat_cols[["amethyst"]],
+    linetype = 2,
+    linewidth = 1.1
+  ) +
+  ggplot2::geom_vline(
+    xintercept = t_pozorovane,
+    color = biostat_cols[["orange"]],
+    linewidth = 1.3
+  ) +
+  ggplot2::geom_vline(
+    xintercept = -abs(t_pozorovane),
+    color = biostat_cols[["orange"]],
+    linetype = 2,
+    linewidth = 1.3
+  ) +
+  ggplot2::annotate(
+    geom = "label",
+    x = 3.5,
+    y = 0.31,
+    label = paste0(
+      "kritické hranice\n= ±",
+      formatC(
+        kriticke_t_graf,
+        format = "f",
+        digits = 2,
+        decimal.mark = ","
+      )
+    ),
+    hjust = 0.5,
+    color = biostat_cols[["amethyst"]],
+    fill = "white",
+    linewidth = 0.2,
+    size = 3.8,
+    lineheight = 0.9
+  ) +
+  ggplot2::annotate(
+    geom = "label",
+    x = t_pozorovane,
+    y = 0.18,
+    label = paste0(
+      "pozorované t\n= +",
+      formatC(
+        t_pozorovane,
+        format = "f",
+        digits = 2,
+        decimal.mark = ","
+      )
+    ),
+    hjust = 1.05,
+    color = biostat_cols[["orange"]],
+    fill = "white",
+    linewidth = 0.2,
+    size = 3.8,
+    lineheight = 0.9
+  ) +
+  ggplot2::annotate(
+    geom = "label",
+    x = -abs(t_pozorovane),
+    y = 0.10,
+    label = paste0(
+      "zrcadlová hranice\n= -",
+      formatC(
+        abs(t_pozorovane),
+        format = "f",
+        digits = 2,
+        decimal.mark = ","
+      )
+    ),
+    hjust = -0.05,
+    color = biostat_cols[["orange"]],
+    fill = "white",
+    linewidth = 0.2,
+    size = 3.8,
+    lineheight = 0.9
+  ) +
+  ggplot2::labs(
+    x = "t-statistika v nulovém světě",
+    y = "Hustota"
+  ) +
+  theme_biostat(base_size = 17) +
+  ggplot2::theme(
+    plot.margin = ggplot2::margin(12, 18, 12, 28)
+  ) +
+  ggview::canvas(
+    width = 1600,
+    height = 720,
+    units = "px"
+  )
+
+ggview::save_ggplot(
+  plot = plot_kriticke_hodnoty_t,
+  file = here::here(path_materials, "kriticke_hodnoty_t.png")
+)
+```
+
+```{r}
+#| label: zobrazit-kriticke-hodnoty-t
+#| echo: false
+#| out-width: "76%"
+#| fig-alt: >
+#|   Nulové t-rozdělení s fialovými kritickými hranicemi minus
+#|   a plus 2,20 pro 11 stupňů volnosti, oranžovou pozorovanou
+#|   hodnotou t rovnou plus 6,16 a čárkovanou oranžovou
+#|   zrcadlovou hranicí minus 6,16.
+include_local_figure("kriticke_hodnoty_t.png")
+```
+
+::: {.takeaway-strip}
+Pro $df=`r stupne_volnosti`$ fialové hranice oddělují prostředních 95 % od chvostů o celkové ploše $\alpha=0{,}05$. Naše $|t|=`r formatC(abs(t_pozorovane), format = "f", digits = 2, decimal.mark = ",")`$ leží daleko za nimi.
+:::
+
 ## Rozhodovací pravidlo volíme předem {.balance-rule}
 
 :::: {.rule-stack}

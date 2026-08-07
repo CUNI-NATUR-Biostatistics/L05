@@ -1772,6 +1772,148 @@ Malá část takové tabulky by vypadala následovně. Hodnoty říkají, jak da
 
 V řádku pro `r stupne_volnosti` stupňů volnosti najdeme hranice přibližně $-`r round(qt(1 - 0.05 / 2, df = stupne_volnosti), 3)`$ a $+`r round(qt(1 - 0.05 / 2, df = stupne_volnosti), 3)`$. Pozorované krabí $|t|=`r round(abs(t_pozorovane), 3)`$ leží daleko za nimi.
 
+Teď stejné hranice přidáme přímo do známého t-rozdělení. Fialová vyznačuje předem zvolené kritické oblasti; oranžová ukazuje výsledek našeho modelu.
+
+```{r}
+#| label: zobrazit-kriticke-hodnoty-v-t-rozdeleni
+#| echo: false
+#| output: true
+#| message: false
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4.8
+#| fig-cap: >
+#|   Kritické hranice a pozorovaná t-statistika v nulovém
+#|   t-rozdělení. Fialové chvosty mají dohromady plochu alfa;
+#|   oranžové hranice vymezují oboustrannou p-hodnotu.
+#| fig-alt: >
+#|   Nulové t-rozdělení s fialovými kritickými hranicemi minus
+#|   a plus 2,201, oranžovou pozorovanou hodnotou t rovnou plus
+#|   6,159 a čárkovanou oranžovou zrcadlovou hranicí minus 6,159.
+kriticke_t_graf <-
+  qt(
+    p = 1 - 0.05 / 2,
+    df = stupne_volnosti
+  )
+
+data_kriticke_t <-
+  tibble::tibble(
+    t = seq(
+      from = -7,
+      to = 7,
+      length.out = 5000
+    )
+  ) |>
+  dplyr::mutate(
+    hustota = dt(
+      x = t,
+      df = stupne_volnosti
+    ),
+    kriticky_chvost = abs(t) >= kriticke_t_graf,
+    strana = dplyr::if_else(t < 0, "levá", "pravá")
+  )
+
+ggplot2::ggplot(
+  data = data_kriticke_t,
+  mapping = ggplot2::aes(
+    x = t,
+    y = hustota
+  )
+) +
+  ggplot2::geom_area(
+    data = data_kriticke_t |>
+      dplyr::filter(kriticky_chvost),
+    mapping = ggplot2::aes(group = strana),
+    fill = biostat_cols[["amethyst"]],
+    alpha = 0.42
+  ) +
+  ggplot2::geom_line(
+    color = biostat_cols[["graphite"]],
+    linewidth = 0.9
+  ) +
+  ggplot2::geom_vline(
+    xintercept = c(-kriticke_t_graf, kriticke_t_graf),
+    color = biostat_cols[["amethyst"]],
+    linetype = 2,
+    linewidth = 0.9
+  ) +
+  ggplot2::geom_vline(
+    xintercept = t_pozorovane,
+    color = biostat_cols[["orange"]],
+    linewidth = 1.1
+  ) +
+  ggplot2::geom_vline(
+    xintercept = -abs(t_pozorovane),
+    color = biostat_cols[["orange"]],
+    linetype = 2,
+    linewidth = 1.1
+  ) +
+  ggplot2::annotate(
+    geom = "label",
+    x = kriticke_t_graf,
+    y = 0.31,
+    label = paste0(
+      "kritické hranice = ±",
+      formatC(
+        kriticke_t_graf,
+        format = "f",
+        digits = 3,
+        decimal.mark = ","
+      )
+    ),
+    hjust = -0.05,
+    color = biostat_cols[["amethyst"]],
+    fill = "white",
+    linewidth = 0.2,
+    size = 3.2
+  ) +
+  ggplot2::annotate(
+    geom = "label",
+    x = t_pozorovane,
+    y = 0.12,
+    label = paste0(
+      "pozorované t = +",
+      formatC(
+        t_pozorovane,
+        format = "f",
+        digits = 3,
+        decimal.mark = ","
+      )
+    ),
+    hjust = 1.05,
+    color = biostat_cols[["orange"]],
+    fill = "white",
+    linewidth = 0.2,
+    size = 3.2
+  ) +
+  ggplot2::annotate(
+    geom = "label",
+    x = -abs(t_pozorovane),
+    y = 0.12,
+    label = paste0(
+      "zrcadlová hranice = -",
+      formatC(
+        abs(t_pozorovane),
+        format = "f",
+        digits = 3,
+        decimal.mark = ","
+      )
+    ),
+    hjust = -0.05,
+    color = biostat_cols[["orange"]],
+    fill = "white",
+    linewidth = 0.2,
+    size = 3.2
+  ) +
+  ggplot2::labs(
+    x = "t-statistika v nulovém světě",
+    y = "Hustota"
+  ) +
+  theme_biostat(base_size = 12)
+```
+
+Fialové chvosty za kritickými hranicemi mají dohromady plochu $\alpha=0{,}05$. Skutečně pozorovaná t-statistika je kladná; záporná oranžová hranice je pouze její zrcadlový protějšek pro oboustrannou otázku. P-hodnota je plocha pod t-křivkou za oběma oranžovými hranicemi. Protože $|t|=`r round(abs(t_pozorovane), 3)`$ leží za kritickou hodnotou `r round(qt(1 - 0.05 / 2, df = stupne_volnosti), 3)`, vedou porovnání $|t|$ s kritickou hodnotou a porovnání p-hodnoty s $\alpha$ ke stejnému rozhodnutí.
+
 Dnes stejnou hodnotu vyhledá R funkcí `qt()`. Funkce `pt()` pak spočítá plochu za pozorovaným t, tedy p-hodnotu. Následující kód používá přímo model, který jsme už fitovali:
 
 ```{r}

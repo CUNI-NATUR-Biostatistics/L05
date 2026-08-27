@@ -19,4 +19,6 @@ resources:
   data:
     - label: "Data krabů poustevníčků"
       path: data/pie_crab.csv
-  extras: []
+  extras:
+    - label: "Licence materiálů a kódu"
+      path: LICENSE.md

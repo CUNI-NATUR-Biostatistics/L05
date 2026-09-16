@@ -1,0 +1,98 @@
+{
+  "$schema": "https://raw.githubusercontent.com/CUNI-NATUR-Biostatistics/_internal/main/pollslive/quiz.schema.json",
+  "schemaVersion": 2,
+  "academicYear": "2026-27",
+  "lesson": "L05",
+  "retrievesLesson": "L04",
+  "lectureDate": "2026-11-02",
+  "title": "L05 – Opakování předchozí lekce – 2026/27",
+  "questions": [
+    {
+      "id": "proc-se-odhady-lisi",
+      "text": "Proč sto pozorovatelů nedostalo ze svých výběrů přesně stejný sklon?",
+      "options": [
+        {
+          "id": "jine-vybery",
+          "label": "Každý pracoval s jiným výběrem pozorování."
+        },
+        {
+          "id": "vztah-se-menil",
+          "label": "Skutečný vztah se po každém výpočtu změnil."
+        },
+        {
+          "id": "lm-losuje",
+          "label": "Funkce lm() vybírá sklon náhodně."
+        },
+        {
+          "id": "sklon-nesouvisi",
+          "label": "Sklon nemá s daty souvislost."
+        }
+      ],
+      "correctOptionId": "jine-vybery",
+      "explanation": "Výběry obsahují různá pozorování, a proto se jejich odhady liší. Této změně mezi výběry říkáme výběrová variabilita.",
+      "media": {
+        "path": "assets/l04-one-hundred-estimates.png",
+        "alt": "Bodový graf posledního ze sta výběrů a histogram sta odhadnutých sklonů, které se mezi výběry liší.",
+        "provenance": "Byte-identical copy of approved L04 figure Presentation/Materials/geyserwatch_100_hlaseni.png; checksum pinned by R/render_pollslive_assets.R."
+      }
+    },
+    {
+      "id": "odhad-versus-se",
+      "text": "Které číslo popisuje velikost odhadnutého vztahu mezi délkou erupce a čekáním?",
+      "options": [
+        {
+          "id": "estimate",
+          "label": "Hodnota ve sloupci Estimate"
+        },
+        {
+          "id": "std-error",
+          "label": "Hodnota ve sloupci Std. Error"
+        },
+        {
+          "id": "pocet-radku",
+          "label": "Počet řádků tabulky"
+        },
+        {
+          "id": "nazev-prediktoru",
+          "label": "Název prediktoru"
+        }
+      ],
+      "correctOptionId": "estimate",
+      "explanation": "Estimate je odhad sklonu. Std. Error popisuje přesnost tohoto odhadu.",
+      "media": {
+        "path": "assets/l04-estimate-standard-error.png",
+        "alt": "Řádek sklonu delka_erupce_min s hodnotou Estimate 13,34 a Standard Error 0,66.",
+        "provenance": "Deterministically rendered by R/render_pollslive_assets.R from the approved L04 Old Faithful data and lm(cekani_min ~ delka_erupce_min)."
+      }
+    },
+    {
+      "id": "vyznam-95-intervalu",
+      "text": "Co v tomto opakovaném postupu znamená označení „95% interval spolehlivosti“?",
+      "options": [
+        {
+          "id": "pokryti-v-opakovani",
+          "label": "Při opakování stejného postupu přibližně 95 % takto vytvořených intervalů pokryje skutečný parametr."
+        },
+        {
+          "id": "pravdepodobnost-jednoho",
+          "label": "Vypočtený interval má po výpočtu 95% pravděpodobnost obsahovat pevný parametr."
+        },
+        {
+          "id": "95-pozorovani",
+          "label": "Uvnitř intervalu leží 95 % jednotlivých pozorování."
+        },
+        {
+          "id": "odhad-bez-chyby",
+          "label": "Odhad je s pravděpodobností 95 % bez chyby."
+        }
+      ],
+      "correctOptionId": "pokryti-v-opakovani",
+      "explanation": "95 % popisuje dlouhodobou úspěšnost postupu při opakovaných výběrech, nikoli pravděpodobnost jednoho již vypočteného intervalu.",
+      "media": {
+        "path": "assets/l04-confidence-interval-coverage.png",
+        "alt": "Sto vodorovných 95% intervalů z opakovaných výběrů; většina protíná svislou referenční hodnotu a několik ji míjí.",
+        "provenance": "Byte-identical copy of approved L04 figure Presentation/Materials/sto_intervalu_pokryti.png; checksum pinned by R/render_pollslive_assets.R."
+      }
+    }
+  ]
+}

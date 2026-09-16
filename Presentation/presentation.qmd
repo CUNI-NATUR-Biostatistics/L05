@@ -63,19 +63,23 @@ slides_url <-
   )
 ```
 
-## Co nám statistický test dovoluje tvrdit?
+## Co nám statistický test dovoluje tvrdit? {.course-title .bg-indigo}
 
-<br>
-
-::: {.text-color-indigo_velvet .text-font-heading .text-size-heading1 .text-bold}
-`r display_name`
+::: {.course-title-mark}
+![Logo kurzu Biostatistika](../theme/course-logo-reversed.svg) BIOSTATISTIKA
 :::
 
-<br>
+::: {.course-title-number}
+L05
+:::
 
-[👤](https://ondrejmottl.github.io/) Ondřej Mottl
+::: {.course-title-formal}
+Od velikosti efektu k testování hypotéz
+:::
 
-[Moodle](https://dl2.cuni.cz/course/view.php?id=106)
+::: {.course-title-link}
+[cuni-natur-biostatistics.github.io/materialy.html](https://cuni-natur-biostatistics.github.io/materialy.html)
+:::
 
 ## Měsíc je celý ze sýra! {.text-center}
 
@@ -83,6 +87,7 @@ slides_url <-
 #| label: zobrazit-mesic-ze-syra
 #| echo: false
 #| fig-cap: "Ilustrační obraz vytvořen AI."
+#| fig-alt: "Humorná ilustrace Měsíce tvořeného sýrem; slouží jako příklad tvrzení, které lze ověřovat pozorováním."
 include_local_figure("mesic_ze_syra.png")
 ```
 
@@ -105,6 +110,7 @@ Jaké pozorování by vás přimělo tvrzení o sýrovém Měsíci vyvrátit?
 ```{r}
 #| label: zobrazit-maly-mesic-ze-syra
 #| echo: false
+#| fig-alt: "Humorná ilustrace Měsíce tvořeného sýrem vedle otázky, jaké pozorování by mohlo změnit závěr."
 include_local_figure("mesic_ze_syra.png")
 ```
 :::
@@ -125,6 +131,14 @@ Po dnešní přednášce budete schopni:
 - napsat vědecký závěr
 :::
 ::::
+
+{{< include ../pollslive/generated/active.qmd >}}
+
+## Od intervalu k nulovému tvrzení
+
+::: {.takeaway-strip .text-center}
+Interval ukazuje hodnoty slučitelné s daty. Dnes se zeptáme, **jak slučitelná jsou data s konkrétní nulovou hodnotou**.
+:::
 
 ## Která tvrzení mohou pozorování změnit? {.balance-claims}
 
@@ -158,6 +172,7 @@ Holub stěhovavý vyhynul.
 ```{r}
 #| label: zobrazit-tvrzeni-mesic
 #| echo: false
+#| fig-alt: "Humorná ilustrace Měsíce tvořeného sýrem jako příklad empiricky ověřitelného tvrzení."
 include_local_figure("mesic_ze_syra.png")
 ```
 
@@ -480,11 +495,34 @@ mod_krabi <-
     data = data_lokality
   )
 
+model_krabi_tidy <-
+  broom::tidy(
+    mod_krabi,
+    conf.int = TRUE
+  )
+
+radek_interceptu_krabi <-
+  model_krabi_tidy |>
+  dplyr::filter(term == "(Intercept)")
+
+radek_sklonu_krabi <-
+  model_krabi_tidy |>
+  dplyr::filter(term == "zemepisna_sirka")
+
 odhad_interceptu <-
-  coef(mod_krabi)[["(Intercept)"]]
+  radek_interceptu_krabi |>
+  dplyr::pull(estimate)
 
 odhad_sklonu <-
-  coef(mod_krabi)[["zemepisna_sirka"]]
+  radek_sklonu_krabi |>
+  dplyr::pull(estimate)
+
+stopifnot(
+  isTRUE(all.equal(
+    unname(model_krabi_tidy$estimate),
+    unname(coef(mod_krabi))
+  ))
+)
 
 plot_body_model <-
   plot_body +
@@ -550,19 +588,28 @@ summary(mod_krabi)
 #| label: zobrazit-koeficienty-modelu
 #| echo: false
 tabulka_summary <-
-  summary(mod_krabi)$coefficients
+  model_krabi_tidy |>
+  dplyr::transmute(
+    Parametr = dplyr::recode(
+      term,
+      "(Intercept)" = "Intercept",
+      "zemepisna_sirka" = "Zeměpisná šířka"
+    ),
+    Odhad = formatC(estimate, format = "f", digits = 3, decimal.mark = ","),
+    `Std. chyba` = formatC(std.error, format = "f", digits = 3, decimal.mark = ","),
+    `t` = formatC(statistic, format = "f", digits = 2, decimal.mark = ","),
+    `p` = gsub(
+      pattern = ".",
+      replacement = ",",
+      x = format.pval(p.value, digits = 3, eps = 0.001),
+      fixed = TRUE
+    )
+  )
 
 stupne_volnosti_summary <-
   df.residual(mod_krabi)
 
-colnames(tabulka_summary) <-
-  c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
-
-knitr::kable(
-  x = tabulka_summary,
-  digits = c(3, 3, 2, 6),
-  row.names = TRUE
-)
+tinytable::tt(tabulka_summary)
 ```
 :::
 
@@ -844,9 +891,10 @@ Pro názornost jsou z 200 simulací vybrány pohledy s nízkým, středním a vy
 #| message: false
 #| warning: false
 interval_sklonu <-
-  confint(mod_krabi)[
-    "zemepisna_sirka",
-  ]
+  c(
+    radek_sklonu_krabi$conf.low,
+    radek_sklonu_krabi$conf.high
+  )
 
 data_interval <-
   data.frame(
@@ -1765,26 +1813,17 @@ Nenulové sklony vznikají v nulovém světě běžně. Sklon tak velký jako n�
 #| echo: false
 #| message: false
 #| warning: false
-table_test_sklonu <-
-  summary(mod_krabi)$coefficients
-
 standardni_chyba_sklonu <-
-  table_test_sklonu[
-    "zemepisna_sirka",
-    "Std. Error"
-  ]
+  radek_sklonu_krabi |>
+  dplyr::pull(std.error)
 
 t_pozorovane <-
-  table_test_sklonu[
-    "zemepisna_sirka",
-    "t value"
-  ]
+  radek_sklonu_krabi |>
+  dplyr::pull(statistic)
 
 p_hodnota <-
-  table_test_sklonu[
-    "zemepisna_sirka",
-    "Pr(>|t|)"
-  ]
+  radek_sklonu_krabi |>
+  dplyr::pull(p.value)
 
 stupne_volnosti <-
   df.residual(mod_krabi)
@@ -2778,6 +2817,7 @@ Nejistota neznamená, že studie nic neukázala. Vymezuje, jak daleko může ná
 ```{r}
 #| label: znovu-zobrazit-mesic-ze-syra
 #| echo: false
+#| fig-alt: "Humorná ilustrace Měsíce tvořeného sýrem připomíná, že vědecký závěr zůstává otevřený novým důkazům."
 include_local_figure("mesic_ze_syra.png")
 ```
 :::

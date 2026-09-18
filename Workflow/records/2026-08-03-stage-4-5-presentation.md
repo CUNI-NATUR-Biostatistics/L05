@@ -213,3 +213,7 @@ The complete deck was rerendered successfully after those resolutions. The resul
 - [x] Human review completed
 - [x] Presentation approved and Stage 5 finished
 - [ ] Presentation PR ready
+
+## Issue #5 title-screen retrofit (2026-09-16)
+
+Ondřej Mottl approved sketch A for L03–L06 on 2026-09-16. The first slide of L05 now leads with the existing lesson question, while the original formal topic remains secondary. The next biological or visual hook, learning outcomes, and remaining teaching sequence are unchanged. This title-only retrofit does not rewrite the historical story-map approval or approve the later Issue #6 illustration pass.

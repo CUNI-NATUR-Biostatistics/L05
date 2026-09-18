@@ -118,6 +118,8 @@ include_local_figure("mesic_ze_syra.png")
 ::::
 :::::
 
+{{< include ../pollslive/generated/active.qmd >}}
+
 ## Výsledky učení {.balance-outcomes}
 
 :::: {.outcomes-stack}
@@ -131,8 +133,6 @@ Po dnešní přednášce budete schopni:
 - napsat vědecký závěr
 :::
 ::::
-
-{{< include ../pollslive/generated/active.qmd >}}
 
 ## Od intervalu k nulovému tvrzení
 

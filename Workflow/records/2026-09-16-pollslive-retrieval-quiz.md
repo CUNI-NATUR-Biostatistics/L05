@@ -12,7 +12,7 @@ Human approval: approved by the human author in this session on 2026-09-16, with
 
 ## Scope and integration map
 
-The retrieval block is inserted after `Výsledky učení` and before the existing claim-classification activity. It retrieves the L04 concepts needed for hypothesis testing and ends with `Od intervalu k nulovému tvrzení`.
+The retrieval block is inserted before `Výsledky učení` and before the existing claim-classification activity. It retrieves the L04 concepts needed for hypothesis testing and is followed by the learning outcomes and `Od intervalu k nulovému tvrzení`.
 
 | Position | Teaching move | Student knowledge used | Bridge |
 |---|---|---|---|
@@ -77,7 +77,7 @@ The two L04 figures are copied byte-identically and pinned by SHA-256; the coeff
 ## Implementation and validation
 
 - `pollslive/quiz.json` uses schema version 2 and contains the three approved questions.
-- The standard include is placed immediately after the learning outcomes and is followed by the approved bridge.
+- The standard include is placed after the opening question and before the learning outcomes; the approved bridge follows the outcomes.
 - `node pollslive/validate.mjs` passes without credentials.
 - All R chunks parse; checked source files are UTF-8 without BOM or replacement characters; no duplicate chunk labels were found.
 - Offline PollsLive rendering completed through the canonical presentation wrapper. The final PDF has 55 pages, and `Presentation/presentation.html` is byte-identical to `docs/index.html`.
@@ -102,3 +102,9 @@ Remote PollsLive synchronization, remote setting verification, QR/link testing o
 ## Dependency note
 
 `renv::status()` reports 16 already recorded and installed packages that are no longer used by current source. The focused lockfile change adds the newly used direct dependency `tinytable`; `broom` was already recorded. The stale unused entries were left unchanged to avoid unrelated dependency pruning.
+
+## 2026-09-18 author feedback revision
+
+The existing PollsLive include now appears after the opening question and before `Výsledky učení`; quiz content and evidence remain unchanged.
+
+Validation: canonical offline render passed; the 55-page PDF has retrieval on page 4 and outcomes on page 8, and HTML matches `docs/index.html`. The local `_internal` client was used because the pinned cache is absent.

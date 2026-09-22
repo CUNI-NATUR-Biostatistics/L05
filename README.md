@@ -33,6 +33,8 @@ Následující odkazy vedou vždy na nejnovější schválené vydání L05. Roz
 | --- | --- | --- |
 | Skripta | [Číst online](https://cuni-natur-biostatistics.github.io/L05/current/learning/) | [Stáhnout PDF](https://cuni-natur-biostatistics.github.io/L05/current/learning/skripta.pdf) |
 | Prezentace | [Otevřít slidy](https://cuni-natur-biostatistics.github.io/L05/current/presentation/) | [Stáhnout PDF](https://cuni-natur-biostatistics.github.io/L05/current/presentation/presentation.pdf) |
+| Praktické cvičení v R | [Stáhnout skript](https://cuni-natur-biostatistics.github.io/L05/current/code/cviceni.R) | — |
+| Data ke cvičení | [Průměry lokalit](https://cuni-natur-biostatistics.github.io/L05/current/data/pie_crab_site_means.csv), [jednotliví krabi](https://cuni-natur-biostatistics.github.io/L05/current/data/pie_crab.csv) | — |
 
 
 - [HUB kurzu](https://cuni-natur-biostatistics.github.io/) je hlavní vstup ke všem veřejným studijním materiálům.

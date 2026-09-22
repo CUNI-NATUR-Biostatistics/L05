@@ -13,9 +13,13 @@ resources:
     html: Presentation/presentation.html
     pdf: Presentation/presentation.pdf
     source: Presentation/presentation.qmd
-  exercises: []
+  exercises:
+    - label: "R skript ke cvičení"
+      path: Exercises/cviceni.R
   data:
-    - label: "Data krabů poustevníčků"
+    - label: "Průměry krabů podle lokalit"
+      path: data/pie_crab_site_means.csv
+    - label: "Jednotliví krabi"
       path: data/pie_crab.csv
   extras:
     - label: "Licence materiálů a kódu"

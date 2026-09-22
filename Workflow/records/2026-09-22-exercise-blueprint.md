@@ -5,7 +5,7 @@
 - Date: 2026-09-22
 - Branch: lesson/l05-exercises, created from clean main after the presentation and release work merged
 - Source: approved L05 written lesson and presentation, _internal/osnova_lekci.md, and L04 practical
-- Human exercise approval: pending
+- Human exercise approval: Ondřej Mottl, 2026-09-22; approved the worksheet after students were assigned the data loading in U01 and model fitting in U02; no further revisions requested
 - Independent exercise review: full review and focused U01/U02 re-review found no findings
 
 The 90-minute practical has a 68-minute direct-work core: 12 minutes for project and file preparation, then 56 minutes for U01–U08. This leaves about 22 minutes for discussion and slower groups. The script is a student worksheet for classroom and self-study use. Presentation-to-demo rhythm and teaching cues remain here.
@@ -72,4 +72,4 @@ Before human review: parse and check UTF-8 without BOM; run the unfilled script 
 - Three reference plots were saved and visually inspected. Czech axis labels and units rendered correctly.
 - The release YAML parsed under the available Czech UTF-8 locale and its exercise, site-means, and individual-data paths exist locally. Stable download links require a later public release; a live beginner RStudio pacing trial has not been performed. The 68-minute core is an author estimate.
 - A separate read-only exercise reviewer read the complete worksheet and blueprint against the canonical rules, L05 approved materials and outcomes, and the L04 practical. Result: No findings. A focused re-review of student-created data_lokality and mod_krabi, downstream prerequisites, unfilled sourcing, and timing also found no findings.
-- Human exercise approval and public release remain pending.
+- Human exercise approval is complete. A public release remains pending.

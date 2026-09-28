@@ -45,5 +45,5 @@
 - Independent amendment review: final cross-lesson re-review found no student-facing issue after removal of the premature p-value reference, narrowing of the multiplicity preview and clarification of the direction-specific biological threshold.
 - Glossary coverage: rechecked after the L01-L08 pass; the first new occurrence of `nejistota` is wrapped, and premature `prediktor` wording was removed when the multiplicity preview was narrowed.
 - Source checks: UTF-8 without BOM, no replacement characters, `git diff --check` passed.
-- Render: project-native HTML and PDF render passed; the final PDF has 38 pages, and affected pages 12, 26 and 31 were visually rechecked after the leakage fixes with no clipping, overlap or broken layout.
+- Render: project-native HTML and PDF render passed; all 38 PDF pages were inspected through lesson-wide contact sheets, and new-content pages 8, 26 and 31 were checked at readable size with no clipping, overlap, broken glyphs or orphaned blocks.
 - Pre-existing full-artifact review note outside this amendment: model-derived values remain hardcoded in one existing figure alternative-text string.

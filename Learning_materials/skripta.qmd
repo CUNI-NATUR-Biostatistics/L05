@@ -731,6 +731,8 @@ ggplot2::ggplot(
 
 Grafy neukazují nápadný systematický vzor, ale třináct lokalit je málo pro sebevědomou `r render_glossary_term("diagnostika-modelu", display = "diagnostiku")` tvaru rozdělení. Kontrola tedy neodhalila zřejmý problém; stále však musíme pamatovat na malý počet lokalit a jednoduchost modelu.
 
+Stejný modelový výsledek budeme dále číst podmíněně: všechny následující závěry o velikosti vztahu a `r render_glossary_term("nejistota", display = "nejistotě")` předpokládají, že zvolená přímka, chování residuí a nezávislost lokalit jsou pro naši otázku přiměřené. Diagnostika nemůže dokázat správnost modelu, ale pomáhá odhalit zřetelný rozpor dříve, než začneme interpretovat další čísla z modelu.
+
 Sklon `r round(odhad_sklonu, 3)` mm na jeden stupeň říká:
 
 ::: {.box-result title="Význam sklonu v našem modelu"}
@@ -1742,6 +1744,13 @@ Cyril jako jediný odpovídá na otázku, kterou p-hodnota skutečně klade.
 - ~~konečný verdikt o Bergmannově pravidle~~.
 :::
 
+::: {.box-data collapse="true" title="Doplňující: jedna předem položená otázka a mnoho vyzkoušených otázek"}
+
+Naše p-hodnota odpovídá jedné předem pojmenované otázce o sklonu vůči zeměpisné šířce. Kdybychom však ze stejných dat bez předem daného plánu položili mnoho souvisejících otázek, zvýšila by se šance, že alespoň jedna analýza vytvoří nápadně malou p-hodnotu i bez přesvědčivého biologického signálu.
+
+Proto k interpretaci patří také informace, kolik otázek výsledku předcházelo a zda byly zvoleny před pohledem na výsledky. Předem formulovaná biologická otázka omezuje hledání výsledku, který pouze vypadá zajímavě. V následující lekci uvidíme, jak se stejné riziko objeví, když z jedněch dat položíme několik souvisejících otázek.
+:::
+
 ## Když musíme udělat rozhodnutí
 
 `r render_glossary_term("p-hodnota", display = "P-hodnota")` popisuje, nakolik jsou data slučitelná s `r render_glossary_term("nulova-hypoteza", display = "nulovou hypotézou")`. V některých situacích ale musíme udělat také **rozhodnutí**: nulovou hypotézu zamítnout, nebo ji nezamítnout. K tomu potřebujeme pravidlo zvolené ještě před pohledem na výsledek.
@@ -2045,6 +2054,13 @@ Krabí interval od `r round(interval_sklonu[[1]], 3)` do `r round(interval_sklon
 Interval nám přitom ukazuje víc než samotné rozhodnutí. Vidíme z něj také rozsah kladných velikostí vztahu, které zůstávají slučitelné s daty a modelem.
 
 **Nezamítnout nulovou hypotézu naopak neznamená dokázat, že efekt je přesně nula.**
+
+::: {.box-data collapse="true" title="Doplňující: nula nemusí být biologicky nejdůležitější hranice"}
+
+Nulový sklon je matematicky jednoduchá referenční hodnota, ale biologická otázka může mít důležitější hranici. Výzkumníci mohou například předem určit, jak velký kladný sklon šířky krunýře na jeden stupeň je ještě biologicky zanedbatelný a od jaké velikosti už by měnil jejich biologický závěr. Konkrétní hranice musí vycházet z biologických znalostí a měla by být zdůvodněna před čtením výsledku.
+
+Interval spolehlivosti můžeme porovnat nejen s nulou, ale také s takovou předem zvolenou hranicí. Může například celý ležet pod hranicí biologicky důležitého kladného sklonu, i když obsahuje nulu; v takovém případě mezi hodnotami slučitelnými s daty a modelem není velký kladný efekt, ale interval neříká automaticky totéž o opačném směru. Jindy může interval připouštět nulový i biologicky významný kladný efekt. Formální testy ekvivalence patří do pokročilejšího kurzu; zde stačí číst celý rozsah efektů slučitelných s daty.
+:::
 
 ## Dva způsoby, jak se splést
 

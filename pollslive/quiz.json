@@ -12,16 +12,16 @@
       "text": "Proč sto pozorovatelů nedostalo ze svých výběrů přesně stejný sklon?",
       "options": [
         {
-          "id": "jine-vybery",
-          "label": "Každý pracoval s jiným výběrem pozorování."
-        },
-        {
           "id": "vztah-se-menil",
           "label": "Skutečný vztah se po každém výpočtu změnil."
         },
         {
           "id": "lm-losuje",
           "label": "Funkce lm() vybírá sklon náhodně."
+        },
+        {
+          "id": "jine-vybery",
+          "label": "Každý pracoval s jiným výběrem pozorování."
         },
         {
           "id": "sklon-nesouvisi",
@@ -41,10 +41,6 @@
       "text": "Které číslo popisuje velikost odhadnutého vztahu mezi délkou erupce a čekáním?",
       "options": [
         {
-          "id": "estimate",
-          "label": "Hodnota ve sloupci Estimate"
-        },
-        {
           "id": "std-error",
           "label": "Hodnota ve sloupci Std. Error"
         },
@@ -55,6 +51,10 @@
         {
           "id": "nazev-prediktoru",
           "label": "Název prediktoru"
+        },
+        {
+          "id": "estimate",
+          "label": "Hodnota ve sloupci Estimate"
         }
       ],
       "correctOptionId": "estimate",

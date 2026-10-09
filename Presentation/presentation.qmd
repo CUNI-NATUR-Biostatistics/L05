@@ -10,7 +10,6 @@ format:
     output-ext: "html"
     highlight-style: github-light
     include-in-header: "../theme/fonts-include.html"
-    css: "l05_presentation.css"
 filters:
   - ../theme/rn-shorthand.lua
   - ../_extensions/EmilHvitfeldt/roughnotation/rough.lua
@@ -29,6 +28,9 @@ knitr::opts_chunk$set(
 
 here::i_am("Presentation/presentation.qmd")
 source(here::here("R", "set_r_theme.R"))
+source(here::here("R", "Functions", "format_cz_math.R"))
+source(here::here("R", "Functions", "include_optional_figure.R"))
+source(here::here("R", "Functions", "ai_disclosure.R"))
 
 path_materials <- "Presentation/Materials"
 
@@ -63,7 +65,7 @@ slides_url <-
   )
 ```
 
-## Co nám statistický test dovoluje tvrdit? {.course-title .bg-indigo}
+## Co nám statistický test dovoluje tvrdit? {.course-title .course-title-illustrated .bg-indigo}
 
 ::: {.course-title-mark}
 ![Logo kurzu Biostatistika](../theme/course-logo-reversed.svg) BIOSTATISTIKA
@@ -81,6 +83,19 @@ Od velikosti efektu k testování hypotéz
 [cuni-natur-biostatistics.github.io/materialy.html](https://cuni-natur-biostatistics.github.io/materialy.html)
 :::
 
+::: {.course-title-illustration}
+```{r}
+#| label: zobrazit-titulni-ilustraci
+#| echo: false
+#| fig-alt: "Kompozitní ilustrace krabích výzkumníků s fialovou měřicí tyčí a skeptické volavky u okna do slaniska; dvě desky nesou schematické motivy rostoucího vztahu a rozdělení sklonů v nulovém světě. Ilustrace vytvořená pomocí AI."
+include_local_figure("krabi_titulni_kompozice.png")
+```
+:::
+
+::: {.course-title-caption}
+Ilustrace vytvořená pomocí AI. Anatomická reference: Natalia Agudelo / SERC, CC BY 2.0.
+:::
+
 ## Měsíc je celý ze sýra! {.text-center}
 
 ```{r}
@@ -91,22 +106,26 @@ Od velikosti efektu k testování hypotéz
 include_local_figure("mesic_ze_syra.png")
 ```
 
-## Co by mohlo změnit váš závěr? {.balance-moon-question}
+::: {.notes}
+Začínám záměrně absurdním tvrzením. Nechám pár vteřin smíchu a pak se zeptám, proč se smějeme: co o Měsíci víme a jak bychom to věděli? Cílem je otevřít otázku, co vůbec může věda tvrdit.
+:::
 
-::::: {.layout-stack .layout-center-y style="--layout-center-min-height: 520px;"}
-:::: {.columns .align-center}
+## Co by mohlo změnit váš závěr?
+
+::: {.slide-margin-top-15}
+:::: {.columns}
 
 ::: {.column width="62%"}
 
 <br>
 
-::: {.box-question .text-center .text-size-larger}
+::: {.box-question .text-center .text-size-large}
 Jaké pozorování by vás přimělo tvrzení o sýrovém Měsíci vyvrátit?
 :::
 
 :::
 
-::: {.column width="34%" .moon-question}
+::: {.column width="34%"}
 ```{r}
 #| label: zobrazit-maly-mesic-ze-syra
 #| echo: false
@@ -116,79 +135,81 @@ include_local_figure("mesic_ze_syra.png")
 :::
 
 ::::
-:::::
-
-{{< include ../pollslive/generated/active.qmd >}}
-
-## Výsledky učení {.balance-outcomes}
-
-:::: {.outcomes-stack}
-Po dnešní přednášce budete schopni:
-
-::: {.incremental}
-- rozlišit [biologickou realitu]{.text-hgl-indigo_velvet} od toho, co zachytila konkrétní studie
-- interpretovat pozorovaný [efekt a jeho nejistotu]{.text-hgl-orange}
-- vysvětlit, co vyjadřuje [p-hodnota]{.text-hgl-indigo_velvet}
-- rozlišit chybu I. a II. stupně a jejich důsledky
-- napsat vědecký závěr
-:::
-::::
-
-## Od intervalu k nulovému tvrzení
-
-::: {.takeaway-strip .text-center}
-Interval ukazuje hodnoty slučitelné s daty. Dnes se zeptáme, **jak slučitelná jsou data s konkrétní nulovou hodnotou**.
 :::
 
-## Která tvrzení mohou pozorování změnit? {.balance-claims}
+::: {.notes}
+Krátká diskuze se sousedem, asi minuta. Hledám odpovědi typu vzorek horniny, chemické složení, hustota. Zdůrazním, že tvrzení je testovatelné, i když je zjevně nevěrohodné.
+:::
 
-:::: {.claim-grid-4}
+## Která tvrzení mohou pozorování změnit?
 
-::: {.claim-item .fragment}
+:::: {.columns}
+
+::: {.column width="24%" .fragment}
 ```{r}
 #| label: zobrazit-tvrzeni-labute
 #| echo: false
+#| fig-alt: "Ilustrace bílých labutí k tvrzení, že všechny labutě jsou bílé."
 include_local_figure("tvrzeni_labute.png")
 ```
 
-::: {.claim-copy}
+::: {.text-center .text-bold}
 Všechny labutě jsou bílé.
 :::
 :::
 
-::: {.claim-item .fragment}
+::: {.column width="24%" .fragment}
 ```{r}
 #| label: zobrazit-tvrzeni-holub
 #| echo: false
+#| fig-alt: "Ilustrace holuba stěhovavého k tvrzení, že tento druh vyhynul."
 include_local_figure("tvrzeni_holub_stehovavy.png")
 ```
 
-::: {.claim-copy}
+::: {.text-center .text-bold}
 Holub stěhovavý vyhynul.
 :::
 :::
 
-::: {.claim-item .fragment}
+::: {.column width="24%" .fragment}
 ```{r}
 #| label: zobrazit-tvrzeni-mesic
 #| echo: false
 #| fig-alt: "Humorná ilustrace Měsíce tvořeného sýrem jako příklad empiricky ověřitelného tvrzení."
-include_local_figure("mesic_ze_syra.png")
+image_mesic <-
+  magick::image_read(path = here::here(path_materials, "mesic_ze_syra.png"))
+vyska_mesice <- magick::image_info(image = image_mesic)$height
+image_mesic_ctverec <-
+  magick::image_crop(
+    image = image_mesic,
+    geometry = magick::geometry_area(
+      width = vyska_mesice,
+      height = vyska_mesice,
+      x_off = (magick::image_info(image = image_mesic)$width - vyska_mesice) %/% 2,
+      y_off = 0
+    )
+  )
+magick::image_write(
+  image = image_mesic_ctverec,
+  path = here::here(path_materials, "tvrzeni_mesic.png")
+)
+include_local_figure("tvrzeni_mesic.png")
 ```
 
-::: {.claim-copy}
+::: {.text-center .text-bold}
 Měsíc je celý ze sýra.
 :::
 :::
 
-::: {.claim-item .fragment}
+::: {.column width="24%" .fragment}
 ```{r}
 #| label: zobrazit-tvrzeni-krasa
 #| echo: false
+#| fig-alt: "Ilustrace pestrého ptáka k hodnotovému tvrzení, že je nejkrásnější."
 include_local_figure("tvrzeni_nejkrasnejsi_ptak.png")
 ```
 
-::: {.claim-copy}
+::: {.text-center .text-bold}
 Tento pták je nejkrásnější.
 :::
 :::
@@ -203,16 +224,53 @@ Která tvrzení může změnit nové pozorování? U kterého to nedává smysl?
 [Testovatelné]{.text-hgl-indigo_velvet} neznamená pravděpodobné ani pravdivé. Pozorování jsou naše omezené informace o světě.
 :::
 
+::: {.notes}
+U labutí stačí jedna spolehlivě určená černá labuť. U holuba je asymetrie: jeden živý jedinec závěr změní, ale když žádného nenajdeme, jistota roste jen pomalu. U nejkrásnějšího ptáka nejde o empirické tvrzení, ale o hodnotový soud.
+:::
+
+{{< include ../pollslive/generated/active.qmd >}}
+
+## Od intervalu k nulovému tvrzení
+
+::: {.slide-margin-top-25}
+::: {.takeaway-strip .text-center}
+Interval ukazuje hodnoty slučitelné s daty. **Jak slučitelná jsou data s jednou konkrétní nulovou hodnotou?**
+:::
+:::
+
+::: {.notes}
+Most z minulé lekce: interval spolehlivosti jsme četli jako rozsah slučitelných efektů. V této lekci se ptáme opačně: vezmeme jednu přesně zadanou hodnotu, nulový sklon, a zjistíme, jak dobře se s ní data snesou.
+:::
+
+## Výsledky učení
+
+::: {.slide-margin-top-15}
+Po absolvování této přednášky budete schopni:
+
+::: {.incremental}
+- rozlišit [biologickou realitu]{.text-hgl-indigo_velvet} od toho, co zachytila konkrétní studie
+- interpretovat pozorovaný [efekt a jeho nejistotu]{.text-hgl-indigo_velvet}
+- převést biologické tvrzení na [nulovou a alternativní hypotézu]{.text-hgl-indigo_velvet} o sklonu
+- vysvětlit, co vyjadřuje [p-hodnota]{.text-hgl-indigo_velvet} a co nevyjadřuje
+- rozlišit chybu I. a II. typu a napsat opatrný vědecký závěr
+:::
+:::
+
+::: {.notes}
+Výsledky učení čtu nahlas jen stručně. Zdůrazním pořadí: nejdřív velikost efektu a nejistota, teprve potom p-hodnota.
+:::
+
 # Co z reality skutečně pozorujeme?
 
 ## Seznamte se: krab houslista
 
-:::: {.columns .align-center}
+:::: {.columns}
 
 ::: {.column width="62%"}
 ```{r}
 #| label: zobrazit-kraba-houslistu
 #| echo: false
+#| fig-alt: "Fotografie samce kraba houslisty s jedním výrazně zvětšeným klepetem na bahnitém dně slaniska."
 include_local_figure("krab_houslista.jpg")
 ```
 :::
@@ -221,7 +279,7 @@ include_local_figure("krab_houslista.jpg")
 
 <br>
 
-::: {.text-size-heading2 .text-bold}
+::: {.text-size-heading .text-bold}
 *Minuca pugnax*
 :::
 
@@ -240,7 +298,11 @@ Samec nese jedno nápadně zvětšené klepeto.
 Foto: Natalia Agudelo / Smithsonian Environmental Research Center, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Uca_pugnax_(I0443)_(14451829642).jpg), [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/).
 :::
 
-## 13 slanisek podél Atlantiku
+::: {.notes}
+Představím organismus: krab houslista žije v bahnitých slaniscích, samec má jedno obří klepeto. Měříme šířku krunýře, ne klepeto.
+:::
+
+## Slaniska podél Atlantiku
 
 ```{r}
 #| label: pripravit-mapu-lokalit
@@ -335,13 +397,14 @@ ggview::save_ggplot(
 )
 ```
 
-:::: {.columns .align-center}
+:::: {.columns}
 
 ::: {.column width="57%"}
 ```{r}
 #| label: zobrazit-mapu-lokalit
 #| echo: false
 #| out-width: "88%"
+#| fig-alt: "Mapa atlantského pobřeží USA od Floridy po Massachusetts s oranžovými body sledovaných slanisek."
 include_local_figure("mapa_lokalit.png")
 ```
 :::
@@ -353,7 +416,7 @@ include_local_figure("mapa_lokalit.png")
 ::: {.box-data}
 [Co budeme pozorovat]{.panel-title}
 
-- 13 slanisek od Floridy po Massachusetts
+- `r nrow(data_lokality)` slanisek od Floridy po Massachusetts
 - jeden bod = průměrná šířka krunýře na jedné lokalitě
 - zeměpisná šířka a velikost v milimetrech
 :::
@@ -371,23 +434,28 @@ Jak se průměrná velikost mění směrem na sever?
 Data: [LTER `pie_crab`](https://lter.github.io/lterdatasampler/articles/pie_crab_vignette.html), CC0; souřadnice: [Johnson et al. 2019](https://doi.org/10.1002/ece3.5883).
 :::
 
-## Kterou proměnnou chceme vysvětlit? {.balance-variables}
+::: {.notes}
+Každý bod na mapě je jedno slanisko. Zdůrazním jednotku pozorování: v hlavním modelu pracujeme s průměrem lokality, ne s jednotlivými kraby. Proč, rozvedeme až u hierarchických dat.
+:::
 
-:::: {.layout-grid-2 style="--layout-gap: 1rem;"}
+## Kterou proměnnou chceme vysvětlit?
 
-::: {.panel-olive .variable-card}
+::: {.slide-margin-top-15}
+::: {.layout-grid-2}
+
+::: {.panel-olive .text-center}
 [Zeměpisná šířka]{.panel-title}
 
 Poloha slaniska ve stupních severní šířky
 :::
 
-::: {.panel-olive .variable-card}
+::: {.panel-olive .text-center}
 [Průměrná šířka krunýře]{.panel-title}
 
 Velikost samců na lokalitě v milimetrech
 :::
 
-::::
+:::
 
 <br>
 <br>
@@ -395,10 +463,16 @@ Velikost samců na lokalitě v milimetrech
 ::: {.box-question .text-center .fragment}
 Která proměnná je **prediktor** a která **odezva**?
 :::
+:::
 
-## Bergmannovo pravidlo {.balance-bergmann}
+::: {.notes}
+Rychlé hlasování rukou. Prediktorem je zeměpisná šířka, odezvou průměrná šířka krunýře. Zeměpisná šířka sama nic nezpůsobuje; zastupuje teplotu, délku sezóny a další podmínky.
+:::
 
-:::: {.columns .align-center}
+## Bergmannovo pravidlo
+
+::: {.slide-margin-top-15}
+:::: {.columns}
 
 ::: {.column width="45%" .fragment}
 ::: {.blockquote}
@@ -407,7 +481,7 @@ Organismy bývají v chladnějších oblastech větší.
 
 <br>
 
-U krabů to nemusí platit. Je to biologická předpověď, kterou teprve porovnáme s daty.
+U krabů to nemusí platit. Je to biologická předpověď, kterou porovnáme s daty.
 :::
 
 ::: {.column width="5%"}
@@ -419,18 +493,26 @@ Pokud by byli krabi na severu větší, jaký směr vztahu bychom očekávali?
 :::
 
 <br>
-<div class="layout-grid-2" style="--layout-gap: 0.8rem;">
+
+::: {.layout-grid-2}
 
 ::: {.panel-olive .text-center}
 Klesající
 :::
+
 ::: {.panel-olive .text-center}
 Rostoucí
 :::
-</div>
+
+:::
 :::
 
 ::::
+:::
+
+::: {.notes}
+Bergmannovo pravidlo uvádím jako biologickou předpověď, ne jako fakt. Studenti hlasují směr; správně je rostoucí vztah se zeměpisnou šířkou. Hned dodám, že předpověď ještě nic nedokazuje.
+:::
 
 ## Co ukazují data?
 
@@ -479,7 +561,11 @@ include_local_figure("prumery_bez_primky.png")
 ```
 
 ::: {.takeaway-strip .fragment}
-Nejprve jen popište směr a rozptyl bodů. Co je na obrazu přesvědčivé a co vás zneklidňuje?
+Popište směr a rozptyl bodů. Co je na obrazu přesvědčivé a co vás zneklidňuje?
+:::
+
+::: {.notes}
+Necháme studenty popsat graf vlastními slovy, bez přímky. Přesvědčivý je převážně rostoucí směr; znepokojivé je, že bodů je málo a některé lokality vybočují.
 :::
 
 ## Lineární model
@@ -539,9 +625,10 @@ ggview::save_ggplot(
 )
 ```
 
-:::: {.columns .align-center}
+::: {.slide-margin-top-15}
+:::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="58%"}
 ```{r}
 #| label: zobrazit-prumery-s-primkou
 #| echo: false
@@ -549,7 +636,7 @@ include_local_figure("prumery_s_primkou.png")
 ```
 :::
 
-::: {.column width="50%"}
+::: {.column width="40%"}
 
 <br>
 
@@ -568,10 +655,15 @@ mod_krabi <-
 :::
 
 ::::
+:::
 
-## `summary()` {.balance-summary-output}
+::: {.notes}
+Přímku studenti znají z minulých lekcí. Kód ukazuji jen pro orientaci; důležité je, že fialová přímka je odhad modelu, šedé body jsou data.
+:::
 
-:::: {.columns .align-center}
+## `summary()`
+
+:::: {.columns}
 
 ::: {.column width="58%"}
 ```{r}
@@ -583,7 +675,6 @@ summary(mod_krabi)
 
 <br>
 
-::: {.summary-table}
 ```{r}
 #| label: zobrazit-koeficienty-modelu
 #| echo: false
@@ -606,12 +697,9 @@ tabulka_summary <-
     )
   )
 
-stupne_volnosti_summary <-
-  df.residual(mod_krabi)
-
-tinytable::tt(tabulka_summary)
+tinytable::tt(tabulka_summary) |>
+  tinytable::style_tt(fontsize = 0.75)
 ```
-:::
 
 ::: {.panel-result}
 [Odhadnutý model]{.panel-title}
@@ -621,7 +709,7 @@ Průměrná šířka = `r formatC(odhad_interceptu, format = "f", digits = 3, de
 
 :::
 
-::: {.column width="38%" .summary-side}
+::: {.column width="38%"}
 
 ::: {.panel-data}
 [Z minulé lekce]{.panel-title}
@@ -638,75 +726,99 @@ Průměrná šířka = `r formatC(odhad_interceptu, format = "f", digits = 3, de
 
 ::::
 
-## Je naměřený vztah realita?
-
-:::: {.columns .align-center}
-
-::: {.column width="64%"}
-
-<br>
-
-```{r}
-#| label: znovu-zobrazit-kotevni-graf
-#| echo: false
-include_local_figure("prumery_s_primkou.png")
-```
+::: {.notes}
+Připomenu Estimate a Std. Error z minulé lekce. Poslední dva sloupce zatím neumíme číst; právě k nim celá přednáška směřuje.
 :::
 
-::: {.column width="33%"}
+## Je naměřený vztah realita?
+
+:::: {.columns}
+
+::: {.column width="36%"}
+
+```{r}
+#| label: zobrazit-ilustraci-okno-do-reality
+#| echo: false
+#| out-width: "100%"
+#| fig-alt: !expr 'if (file.exists(here::here(path_materials, "krabi_okno_do_reality.png"))) "Humorná ilustrace kraba houslisty s deskami, který se dívá malým dřevěným oknem terénní stanice na rozlehlé slanisko; vidí jen jeho výsek. Ilustrace vytvořená pomocí AI." else "Bodový graf průměrné šířky krunýře proti zeměpisné šířce s rostoucí fialovou přímkou modelu."'
+# Planned illustration 1 (GENERATED_IMAGES.md); until generated, the anchor graph is shown.
+include_optional_figure(
+  data_source = "krabi_okno_do_reality.png",
+  fallback = "prumery_s_primkou.png"
+)
+```
+
+::: {.text-size-tiny .text-right}
+`r ai_disclosure("krabi_okno_do_reality.png")`
+:::
+:::
+
+::: {.column width="60%"}
+::::: {.layout-stack .layout-center-y}
 ::: {.box-question}
 Je fialová přímka skutečný vztah v přírodě, nebo odhad z této studie?
 :::
 
-<br>
-
 ::: {.fragment .panel-question}
 Jak často by podobně silný vztah vznikl prostou náhodou ve světě bez systematického trendu?
 :::
+:::::
 :::
 
 ::::
 
-##
+::: {.notes}
+Obě otázky na tomto slidu nechám chvíli otevřené. Fialová přímka je odhad z jedné studie, ne skutečný vztah v přírodě. Druhá otázka už ukazuje směr celé přednášky: jak často by podobný sklon vznikl i bez skutečného trendu?
 
-<br>
-
-:::: {.columns .align-center}
-
-::: {.column width="35%"}
-<div class="reality-card">
-<div class="text-size-heading2 text-bold">REALITA</div>
-<div class="reality-question">?</div>
-<div>Skutečný vztah ve všech možných lokalitách přímo nevidíme.</div>
-</div>
+Ilustrace (pokud je vložena): krab vidí slanisko jen oknem stanice; i naše studie vidí realitu jen výsekem.
 :::
 
-::: {.column width="15%"}
-<div class="observation-arrow">→</div>
+##
 
-<div class="text-center text-size-small">výběr<br>měření<br>místní rozdíly</div>
+::: {.slide-margin-top-15}
+:::: {.columns}
+
+::: {.column width="35%"}
+::: {.panel-indigo .text-center .text-size-large}
+[REALITA]{.panel-title}
+
+[?]{.text-size-heading .text-bold .text-color-indigo_velvet}
+
+Skutečný vztah ve všech možných lokalitách přímo nevidíme.
+:::
+:::
+
+::: {.column width="15%" .text-center}
+
+<br>
+<br>
+
+[→]{.text-size-heading .text-bold .text-color-orange}
+
+[výběr, měření, místní rozdíly]{.text-size-smaller}
 :::
 
 ::: {.column width="50%"}
 
-<br>
-
-<div class="study-window">
-
 ```{r}
 #| label: zobrazit-okno-studie
 #| echo: false
+#| fig-alt: "Graf průměrné šířky krunýře proti zeměpisné šířce s fialovou odhadnutou přímkou jako okno do reality."
 include_local_figure("prumery_s_primkou.png")
 ```
 
-</div>
-
 ::: {.text-center .text-bold}
-NAŠE POZOROVÁNÍ: 13 lokalit
+NAŠE POZOROVÁNÍ: `r nrow(data_lokality)` lokalit
 :::
 :::
 
 ::::
+:::
+
+::: {.notes}
+Realita je pro nás neviditelná. Vidíme ji jen přes okno konkrétní studie: vybrané lokality, měření a místní rozdíly mezi nimi.
+:::
+
 
 ## Stejná realita, jiné pozorování
 
@@ -720,9 +832,11 @@ set.seed(900723)
 rezidualni_sd_opakovane <-
   sigma(mod_krabi)
 
+pocet_opakovanych_pohledu <- 200
+
 data_opakovane_kandidati <-
   purrr::map(
-    .x = seq_len(200),
+    .x = seq_len(pocet_opakovanych_pohledu),
     .f = ~ {
       data_opakovany_pohled <-
         data.frame(
@@ -785,7 +899,7 @@ list_opakovane_pohledy <-
       ggplot2::geom_abline(
         intercept = coef(mod_krabi)[["(Intercept)"]],
         slope = odhad_sklonu,
-        color = biostat_cols[["indigo_velvet"]],
+        color = biostat_cols[["graphite"]],
         linetype = "dashed",
         linewidth = 1.1
       ) +
@@ -797,7 +911,7 @@ list_opakovane_pohledy <-
         method = "lm",
         formula = y ~ x,
         se = FALSE,
-        color = biostat_cols[["orange"]],
+        color = biostat_cols[["indigo_velvet"]],
         linewidth = 1.2
       ) +
       ggplot2::coord_cartesian(
@@ -837,7 +951,7 @@ purrr::walk2(
 )
 ```
 
-:::: {.columns .align-center}
+:::: {.columns}
 
 <br>
 
@@ -849,9 +963,7 @@ include_local_figure("pozorovani_a.png")
 ```
 :::
 
-::: {.column width="32%" .study-reveal}
-<div class="study-placeholder">Další možné pozorování</div>
-
+::: {.column width="32%"}
 ::: {.fragment}
 ```{r}
 #| label: zobrazit-druhy-pohled
@@ -861,9 +973,7 @@ include_local_figure("pozorovani_b.png")
 :::
 :::
 
-::: {.column width="32%" .study-reveal}
-<div class="study-placeholder">Další možné pozorování</div>
-
+::: {.column width="32%"}
 ::: {.fragment}
 ```{r}
 #| label: zobrazit-treti-pohled
@@ -880,10 +990,14 @@ Výsledek se změnil, protože se změnila [pozorování]{.text-hgl-orange}; př
 :::
 
 ::: {.footer}
-Pro názornost jsou z 200 simulací vybrány pohledy s nízkým, středním a vysokým odhadnutým sklonem.
+Pro názornost jsou z `r pocet_opakovanych_pohledu` simulací vybrány pohledy s nízkým, středním a vysokým odhadnutým sklonem.
 :::
 
-## Jak široké je naše okno do reality? {.balance-window}
+::: {.notes}
+Tři simulované studie ze stejné reality: šedá čárkovaná přímka je předpokládaný vztah, fialová plná přímka odhad z každé studie. Výsledek se mění, protože se mění pozorování, ne realita.
+:::
+
+## Jak široké je naše okno do reality?
 
 ```{r}
 #| label: pripravit-interval-sklonu
@@ -967,13 +1081,13 @@ ggview::save_ggplot(
 
 ```
 
-:::: {.columns .align-center}
+:::: {.columns}
 
 ::: {.column width="68%"}
 
 <br>
 
-::: {.text-size-heading3 .text-bold .text-color-indigo_velvet .text-center}
+::: {.text-size-large .text-bold .text-color-indigo_velvet .text-center}
 Odhad a 95% interval spolehlivosti
 :::
 
@@ -1008,11 +1122,15 @@ Sklon: **`r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")`
 <br>
 
 ::: {.panel-warning .fragment}
-Pouze 13 lokalit a jednoduchý observační model.
+Pouze `r nrow(data_lokality)` lokalit a jednoduchý observační model.
 :::
 :::
 
 ::::
+
+::: {.notes}
+Připomenutí z minulé lekce: bodový odhad a 95% interval. Celý interval leží nad nulou, ale je poměrně široký. Upozorním na malý počet lokalit.
+:::
 
 ## Rychlá kontrola modelu
 
@@ -1104,9 +1222,13 @@ include_local_figure("diagnostika_modelu.png")
 V residuích nevidíme nápadný problém, který by jednoduchý lineární model okamžitě zpochybnil.
 :::
 
-## Co už víme — a co stále nevidíme? {.balance-comparison}
+::: {.notes}
+Kontrolu residuí děláme po každém modelu. Při tak malém počtu bodů posuzujeme tvar rozdělení jen velmi opatrně; hledáme hlavně oblouk nebo trychtýř.
+:::
 
-::::: {.comparison-stack}
+## Co už víme — a co stále nevidíme?
+
+::::: {.slide-margin-top-15}
 :::: {.columns .align-top}
 
 ::: {.column width="48%"}
@@ -1137,15 +1259,19 @@ V residuích nevidíme nápadný problém, který by jednoduchý lineární mode
 ::::
 :::::
 
+::: {.notes}
+Poslední bod vpravo je most k další části: co kdyby žádný trend nebyl?
+:::
+
 # Co kdyby žádný trend nebyl?
 
-## Co bychom pozorovali bez trendu? {.safe-title}
+## Co bychom pozorovali bez trendu?
 
-:::: {.columns .align-center}
+:::: {.columns}
 
 ::: {.column width="44%"}
-::: {.reality-card}
-::: {.text-size-heading2 .text-bold}
+::: {.panel-indigo .text-center}
+::: {.text-size-heading .text-bold}
 HYPOTETICKÁ REALITA
 :::
 
@@ -1169,8 +1295,8 @@ Musí být odhadnutý sklon v každé pozorované studii také přesně nulový?
 **A)** Ano, všechny přímky budou vodorovné.
 :::
 
-::: {.panel-olive .rn-circle-orange}
-**B)** Ne, sklony se budou náhodně lišit kolem nuly.
+::: {.panel-olive}
+[**B)** Ne, sklony se budou náhodně lišit kolem nuly.]{.rn-circle-orange}
 :::
 
 ::: {.panel-olive}
@@ -1180,6 +1306,10 @@ Musí být odhadnutý sklon v každé pozorované studii také přesně nulový?
 :::
 
 ::::
+
+::: {.notes}
+Hlasování A/B/C. Správně je B: i bez trendu vznikají náhodou mírně rostoucí i klesající přímky. Odpověď hned ověříme simulací.
+:::
 
 ## Jak náhoda vytvoří nenulový sklon?
 
@@ -1255,7 +1385,7 @@ ggview::save_ggplot(
 )
 ```
 
-::: {.text-size-heading2 .text-bold .text-center}
+::: {.text-size-heading .text-bold .text-center}
 [pozorovaná velikost]{.text-hgl-graphite} = [základní úroveň + 0 × zeměpisná šířka]{.text-hgl-indigo_velvet} + [náhodné residuum]{.text-hgl-orange}
 :::
 
@@ -1268,6 +1398,10 @@ include_local_figure("nulovy_svet_residua.png")
 
 ::: {.takeaway-strip .text-center}
 Systematický sklon zůstává nulový. Náhodná residua posouvají jednotlivé body nad a pod vodorovnou přímku.
+:::
+
+::: {.notes}
+Vysvětlím rovnici barvami: šedá je pozorovaná velikost, fialová systematická část se sklonem nula, oranžová náhodné residuum. Velikost residuí bereme z našeho krabího modelu.
 :::
 
 ## Nulový trend, různé odhadnuté přímky
@@ -1376,6 +1510,10 @@ include_local_figure("nulove_studie_male_nasobky.png")
 Nulová realita zůstala stejná. Měnila se pozorování, a proto se měnily i odhadnuté sklony.
 :::
 
+::: {.notes}
+Dvanáct studií ze světa bez trendu. Necháme studenty najít nejstrmější rostoucí a klesající přímku.
+:::
+
 ## Sledujte cestu jednoho náhodného sklonu
 
 ```{r}
@@ -1459,6 +1597,9 @@ vec_indexy_snimku <-
 path_frames_nulove <-
   here::here("Temp", "nulovy_svet_frames_500")
 
+# Frames are saved at 90 dpi; align showtext font metrics with that resolution.
+showtext::showtext_opts(dpi = 90)
+
 fs::dir_create(path_frames_nulove)
 
 vec_frame_paths_nulove <-
@@ -1499,7 +1640,7 @@ vec_frame_paths_nulove <-
         ) +
         ggplot2::geom_point(
           color = biostat_cols[["grey_olive"]],
-          size = 2.6
+          size = 3.2
         ) +
         ggplot2::geom_abline(
           intercept = aktualni_intercept,
@@ -1525,12 +1666,14 @@ vec_frame_paths_nulove <-
           x = "Zeměpisná šířka",
           y = NULL
         ) +
-        theme_biostat(base_size = 8) +
+        theme_biostat(base_size = 24) +
         ggplot2::theme(
-          plot.title = ggplot2::element_text(size = 10),
-          plot.subtitle = ggplot2::element_text(size = 8),
-          axis.title = ggplot2::element_text(size = 8),
-          axis.text = ggplot2::element_text(size = 7),
+          plot.title = ggplot2::element_text(size = 30),
+          plot.subtitle = ggplot2::element_text(size = 22),
+          axis.title = ggplot2::element_text(size = 24),
+          axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 8)),
+          axis.title.y = ggplot2::element_text(margin = ggplot2::margin(r = 8)),
+          axis.text = ggplot2::element_text(size = 20),
           plot.margin = ggplot2::margin(8, 10, 12, 30)
         )
 
@@ -1556,16 +1699,18 @@ vec_frame_paths_nulove <-
         ) +
         ggplot2::labs(
           title = paste0("Sklony ", .x, "/", pocet_nulovych_studii_animace),
-          subtitle = "histogram se postupně plní",
+          subtitle = if (.x < pocet_nulovych_studii_animace) "histogram se postupně plní" else NULL,
           x = "Odhadnutý sklon (mm/°)",
           y = "Počet"
         ) +
-        theme_biostat(base_size = 8) +
+        theme_biostat(base_size = 24) +
         ggplot2::theme(
-          plot.title = ggplot2::element_text(size = 10),
-          plot.subtitle = ggplot2::element_text(size = 8),
-          axis.title = ggplot2::element_text(size = 8),
-          axis.text = ggplot2::element_text(size = 7),
+          plot.title = ggplot2::element_text(size = 30),
+          plot.subtitle = ggplot2::element_text(size = 22),
+          axis.title = ggplot2::element_text(size = 24),
+          axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 8)),
+          axis.title.y = ggplot2::element_text(margin = ggplot2::margin(r = 8)),
+          axis.text = ggplot2::element_text(size = 20),
           plot.margin = ggplot2::margin(8, 14, 12, 10)
         )
 
@@ -1600,6 +1745,8 @@ vec_frame_paths_nulove <-
       path_frame_nulovy
     }
   )
+
+showtext::showtext_opts(dpi = 300)
 ```
 
 ```{r}
@@ -1645,7 +1792,11 @@ include_local_figure("nulovy_sklon_do_histogramu.gif")
 Nová náhodná residua → nový soubor bodů → nový sklon → další část histogramu.
 :::
 
-## Po 500 nulových studiích
+::: {.notes}
+Animaci nechám proběhnout jednou celou. Vlevo jedna studie, vpravo se z jejích sklonů postupně staví histogram.
+:::
+
+## Po `r pocet_nulovych_studii_animace` nulových studiích
 
 ```{r}
 #| label: zobrazit-finalni-histogram-nulovych-sklonu
@@ -1657,6 +1808,10 @@ include_local_figure("nulovy_sklon_histogram_final.png")
 Kolem které hodnoty se sklony shlukují? Kam byste umístili náš pozorovaný sklon?
 :::
 
+::: {.notes}
+Statický konec animace. Sklony se shlukují kolem nuly. Studenti odhadnou, kam by patřil náš sklon, ještě než ho ukážeme.
+:::
+
 ## Stejný nulový svět, ale s naším pozorováním
 
 ```{r}
@@ -1666,9 +1821,11 @@ Kolem které hodnoty se sklony shlukují? Kam byste umístili náš pozorovaný 
 #| warning: false
 set.seed(900723)
 
+pocet_nulovych_studii <- 5000
+
 vec_nulove_sklony <-
   purrr::map_dbl(
-    .x = seq_len(5000),
+    .x = seq_len(pocet_nulovych_studii),
     .f = ~ {
       data_nulovy_vyber <-
         data_lokality |>
@@ -1702,13 +1859,15 @@ plot_nulove_sklony <-
   ) +
   ggplot2::geom_histogram(
     bins = 55,
-    fill = biostat_cols[["grey_olive"]],
+    fill = biostat_cols[["amethyst"]],
     color = "white",
-    linewidth = 0.2
+    linewidth = 0.2,
+    alpha = 0.8
   ) +
   ggplot2::geom_vline(
     xintercept = 0,
-    color = biostat_cols[["indigo_velvet"]],
+    color = biostat_cols[["graphite"]],
+    linetype = "dashed",
     linewidth = 1.2
   ) +
   ggplot2::geom_vline(
@@ -1734,7 +1893,13 @@ plot_nulove_sklony <-
     )
   ) +
   ggplot2::labs(
-    title = "5 000 nulových studií",
+    title = paste0(
+      format(
+        pocet_nulovych_studii,
+        big.mark = " "
+      ),
+      " nulových studií"
+    ),
     x = "Odhadnutý sklon (mm/°)",
     y = "Počet"
   ) +
@@ -1806,6 +1971,10 @@ include_local_figure("pozorovani_proti_nulovym_sklonum.png")
 Nenulové sklony vznikají v nulovém světě běžně. Sklon tak velký jako náš je však mimořádně daleko od většiny simulací.
 :::
 
+::: {.notes}
+Náš sklon leží úplně mimo většinu nulových simulací. Abychom řekli, jak daleko, potřebujeme měřítko: standardní chybu.
+:::
+
 ## Jak vzdálené je naše pozorování od nuly?
 
 ```{r}
@@ -1816,27 +1985,36 @@ Nenulové sklony vznikají v nulovém světě běžně. Sklon tak velký jako n�
 standardni_chyba_sklonu <-
   radek_sklonu_krabi |>
   dplyr::pull(std.error)
-
-t_pozorovane <-
-  radek_sklonu_krabi |>
-  dplyr::pull(statistic)
-
-p_hodnota <-
-  radek_sklonu_krabi |>
-  dplyr::pull(p.value)
-
-stupne_volnosti <-
-  df.residual(mod_krabi)
 ```
 
 <br>
 
+:::: {.columns}
+
+::: {.column width="58%"}
 | | Hodnota |
 |---|---:|
 | Pozorovaný efekt | `r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")` mm/° |
 | Efekt v nulovém světě | 0 mm/° |
 | Rozdíl | `r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")` mm/° |
 | Standardní chyba odhadu | `r formatC(standardni_chyba_sklonu, format = "f", digits = 4, decimal.mark = ",")` mm/° |
+:::
+
+::: {.column width="40%"}
+```{r}
+#| label: zobrazit-ilustraci-mereni-v-se
+#| echo: false
+#| fig-alt: "Humorná ilustrace dvou krabů houslistů, kteří na bahnité pláži odměřují vzdálenost od tmavého kolíku k oranžovému praporku stejně dlouhými fialovými tyčkami. Ilustrace vytvořená pomocí AI."
+# Planned illustration 2 (GENERATED_IMAGES.md); the slot stays empty until generated.
+include_optional_figure(data_source = "krabi_mereni_v_se.png")
+```
+
+::: {.text-size-tiny .text-right}
+`r ai_disclosure("krabi_mereni_v_se.png")`
+:::
+:::
+
+::::
 
 <br>
 
@@ -1844,7 +2022,23 @@ stupne_volnosti <-
 Kolikrát se standardní chyba vejde do rozdílu mezi pozorovaným a nulovým sklonem?
 :::
 
-## Vzdálenost vyjádříme ve standardních chybách {.safe-title}
+::: {.notes}
+Nechám studenty spočítat na kalkulačce nebo odhadnout zpaměti: rozdíl děleno standardní chybou.
+
+Ilustrace (pokud je vložena): krabi měří vzdálenost od nuly stejně dlouhými fialovými tyčkami; každá tyčka je jedna standardní chyba.
+:::
+
+## Vzdálenost ve standardních chybách
+
+```{r}
+#| label: spocitat-t-statistiku
+#| echo: false
+#| message: false
+#| warning: false
+t_pozorovane <-
+  radek_sklonu_krabi |>
+  dplyr::pull(statistic)
+```
 
 ::: {.box-rule .text-center}
 **Vzdálenost v jednotkách standardní chyby (SE)** = rozdíl mezi pozorovaným a nulovým sklonem ÷ standardní chyba (SE) sklonu
@@ -1853,11 +2047,11 @@ Kolikrát se standardní chyba vejde do rozdílu mezi pozorovaným a nulovým sk
 ::: {.fragment}
 $$
 \frac{
-`r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")`-0
+`r format_cz_math(odhad_sklonu, digits = 3, nsmall = 3)`-0
 }{
-`r formatC(standardni_chyba_sklonu, format = "f", digits = 4, decimal.mark = ",")`
+`r format_cz_math(standardni_chyba_sklonu, digits = 4, nsmall = 4)`
 }
-=`r formatC(t_pozorovane, format = "f", digits = 2, decimal.mark = ",")`
+=`r format_cz_math(t_pozorovane, digits = 2, nsmall = 2)`
 $$
 :::
 
@@ -1866,23 +2060,34 @@ $$
 t=
 \frac{\text{pozorovaný sklon}-\text{nulový sklon}}
 {\text{standardní chyba (SE) sklonu}}
-\approx `r formatC(t_pozorovane, format = "f", digits = 2, decimal.mark = ",")`
+\approx `r format_cz_math(t_pozorovane, digits = 2, nsmall = 2)`
 $$
 
-Této standardizované vzdálenosti říkáme [t-statistika]{.text-highlight-black}.
+Této standardizované vzdálenosti říkáme [t-statistika]{.text-hgl-indigo_velvet}.
 
 <br>
 
 Naše pozorování leží přibližně **`r formatC(t_pozorovane, format = "f", digits = 2, decimal.mark = ",")` standardních chyb od nuly**.
 :::
 
-## Kolik plochy zůstává za $|t|$? {.safe-title}
+::: {.notes}
+Pojmenování přichází až po výpočtu. t-statistika je vzdálenost od nuly měřená ve standardních chybách; není to velikost biologického efektu.
+:::
+
+## Kolik plochy zůstává za $|t|$?
 
 ```{r}
 #| label: pripravit-p-hodnotu-pozorovani
 #| echo: false
 #| message: false
 #| warning: false
+stupne_volnosti <-
+  df.residual(mod_krabi)
+
+p_hodnota <-
+  radek_sklonu_krabi |>
+  dplyr::pull(p.value)
+
 data_p_krivka <-
   data.frame(
     t = seq(
@@ -1957,14 +2162,22 @@ ggview::save_ggplot(
 ```{r}
 #| label: zobrazit-p-hodnotu
 #| echo: false
-#| out-width: "66%"
+#| out-width: "50%"
 include_local_figure("p_hodnota_chvosty.png")
 ```
 
-::: {.box-rule}
+::: {.takeaway-strip .text-center}
+Křivka je [t-rozdělení]{.text-hgl-indigo_velvet}: hodnoty $t$, které by vznikaly v nulovém světě. Celá plocha pod ní je 1.
+:::
+
+::: {.box-rule .fragment}
 [P-hodnota]{.card-title}
 
-Pokud by nulový svět a předpoklady modelu platily, p-hodnota je pravděpodobnost získat statistiku alespoň tak vzdálenou od nuly jako tu naši. P-hodnota leží od **0 do 1**.
+Pravděpodobnost získat v nulovém světě $t$ alespoň tak vzdálené od nuly jako naše. U krabů $p=`r format_cz_math(p_hodnota, digits = 6)`$.
+:::
+
+::: {.notes}
+Křivka je referenční t-rozdělení: hodnoty t, které by vznikaly v nulovém světě. Fialová plocha za oběma hranicemi je p-hodnota. U nás je tak malá, že ji v grafu skoro nevidíme.
 :::
 
 ## Co udělá větší hodnota $|t|$?
@@ -1976,10 +2189,17 @@ Pokud by nulový svět a předpoklady modelu platily, p-hodnota je pravděpodobn
 #| warning: false
 data_scenare_t <-
   data.frame(
-    t_hodnota = c(1, 1.5, 3),
-    popisek = factor(
-      c("|t| = 1", "|t| = 1,5", "|t| = 3"),
-      levels = c("|t| = 1", "|t| = 1,5", "|t| = 3")
+    t_hodnota = c(1, 1.5, 3)
+  ) |>
+  dplyr::mutate(
+    popisek = paste0(
+      "|t| = ",
+      format(
+        t_hodnota,
+        decimal.mark = ",",
+        drop0trailing = TRUE,
+        trim = TRUE
+      )
     )
   ) |>
   dplyr::mutate(
@@ -2036,7 +2256,7 @@ plot_t_hodnoty <-
     data = data_t_hodnoty |>
       dplyr::filter(chvost),
     mapping = ggplot2::aes(group = strana),
-    fill = biostat_cols[["orange"]],
+    fill = biostat_cols[["amethyst"]],
     alpha = 0.75
   ) +
   ggplot2::geom_line(
@@ -2051,8 +2271,9 @@ plot_t_hodnoty <-
     x = "t-statistika",
     y = "Hustota",
     caption = paste0(
-      "Ve všech třech panelech: df = ",
-      stupne_volnosti
+      "Ve všech třech panelech stejný počet lokalit jako u krabů (",
+      nrow(data_lokality),
+      ")"
     )
   ) +
   theme_biostat(base_size = 11) +
@@ -2085,11 +2306,15 @@ include_local_figure("t_hodnota_a_plocha.png")
 ```
 
 ::: {.box-question .text-center .fragment}
-Když se $|t|$ vzdaluje od nuly, co se stane s oranžovou plochou?
+Když se $|t|$ vzdaluje od nuly, co se stane s fialovou plochou?
 :::
 
 ::: {.fragment .takeaway-strip .text-center}
 Čím dál leží $t$ od nuly, tím menší část nulového rozdělení zůstává stejně daleko nebo ještě dál. Tím menší je p-hodnota.
+:::
+
+::: {.notes}
+Tři ilustrační hodnoty t při stejném df jako u krabů. Nejsou to krabí výsledky.
 :::
 
 ## Více lokalit při stejném $|t|$
@@ -2099,14 +2324,16 @@ Když se $|t|$ vzdaluje od nuly, co se stane s oranžovou plochou?
 #| echo: false
 #| message: false
 #| warning: false
+t_ilustracni <- 2.5
+
 data_scenare_df <-
   data.frame(
-    n = c(3, 13, 100)
+    n = c(3, nrow(data_lokality), 100)
   ) |>
   dplyr::mutate(
     df = n - 2,
     p_hodnota_scenare = 2 * pt(
-      q = -2.5,
+      q = -t_ilustracni,
       df = df
     ),
     p_text = dplyr::if_else(
@@ -2125,14 +2352,16 @@ data_scenare_df <-
     popisek = factor(
       paste0(
         n,
-        " lokalit\ndf = ",
+        dplyr::if_else(n < 5, " lokality", " lokalit"),
+        "\ndf = ",
         df,
         "\n",
         p_text
       ),
       levels = paste0(
         n,
-        " lokalit\ndf = ",
+        dplyr::if_else(n < 5, " lokality", " lokalit"),
+        "\ndf = ",
         df,
         "\n",
         p_text
@@ -2154,7 +2383,7 @@ data_df_krivky <-
       x = t,
       df = df
     ),
-    chvost = abs(t) >= 2.5,
+    chvost = abs(t) >= t_ilustracni,
     strana = ifelse(t < 0, "levá", "pravá")
   )
 
@@ -2184,7 +2413,13 @@ plot_df_krivky <-
   ggplot2::labs(
     x = NULL,
     y = NULL,
-    caption = "Ve všech třech panelech držíme |t| = 2,5"
+    caption = paste0(
+      "Ve všech třech panelech držíme |t| = ",
+      format(
+        t_ilustracni,
+        decimal.mark = ","
+      )
+    )
   ) +
   theme_biostat(base_size = 11) +
   ggplot2::theme(
@@ -2216,28 +2451,31 @@ include_local_figure("df_a_plocha.png")
 ```
 
 ::: {.box-question .text-center .fragment}
-Při stejném $|t|=2{,}5$: ve které studii zůstane v chvostech nejméně plochy?
+Při stejném $|t|=`r format_cz_math(t_ilustracni, digits = 1)`$: ve které studii zůstane ve chvostech nejméně plochy?
 :::
 
 ::: {.fragment .takeaway-strip .text-center}
-V jednoduché regresi platí $df=n-2$, tedy u krabů **$13-2=11$**. Více nezávislých pozorování znamená tenčí chvosty a menší p-hodnotu.
+Přímka odhaduje dva koeficienty, intercept a sklon, a proto platí $df=n-2$, u krabů **$`r nrow(data_lokality)`-2=`r stupne_volnosti`$**. Více nezávislých pozorování znamená tenčí chvosty a menší p-hodnotu.
 :::
 
-## Která věta čte p-hodnotu správně? {.balance-misconception}
+::: {.notes}
+Stupně volnosti vysvětlím slovně: z průměrů slanisek jsme dva stupně volnosti spotřebovali na odhad interceptu a sklonu. Podrobněji je to rozvedeno ve skriptech na příkladu se Sudoku.
+:::
 
-<br>
+## Která věta čte p-hodnotu správně?
 
-:::: {.columns .align-stretch}
+::: {.slide-margin-top-15}
+:::: {.columns}
 
 ::: {.column width="31%"}
 ::: {.panel-olive}
-**A)** Pravděpodobnost, že nulová hypotéza platí, je `r formatC(p_hodnota, format = "f", digits = 6, decimal.mark = ",")`.
+**A)** Pravděpodobnost, že skutečný sklon je nulový, je `r formatC(p_hodnota, format = "f", digits = 6, decimal.mark = ",")`.
 :::
 :::
 
 ::: {.column width="31%"}
-::: {.panel-olive .rn-circle-orange}
-**B)** V nulovém světě by výsledek alespoň tak extrémní jako náš byl velmi neobvyklý.
+::: {.panel-olive}
+[**B)** V nulovém světě by výsledek alespoň tak extrémní jako náš byl velmi neobvyklý.]{.rn-circle-orange}
 :::
 :::
 
@@ -2252,13 +2490,17 @@ V jednoduché regresi platí $df=n-2$, tedy u krabů **$13-2=11$**. Více nezáv
 <br>
 
 ::: {.takeaway-strip}
-Když nehlasujeme: vyberte A/B/C a vysvětlete volbu sousedovi jednou podmíněnou větou.
+Přesvědčte souseda, proč jste vybrali svou možnost.
+:::
 :::
 
-## Co nám malá p-hodnota řekne — a co ne? {.balance-summary}
+::: {.notes}
+Nejdřív individuální volba, pak přesvědčování souseda. Správně je B. A zaměňuje p-hodnotu za pravděpodobnost hypotézy, C ji zaměňuje za velikost efektu.
+:::
 
-<br>
+## Co nám malá p-hodnota řekne — a co ne?
 
+::: {.slide-margin-top-15}
 :::: {.columns .align-top}
 
 ::: {.column width="48%"}
@@ -2287,17 +2529,32 @@ Naše pozorování je velmi obtížně slučitelné s přesně nulovým systemat
 ::: {.takeaway-strip .fragment}
 P-hodnota hodnotí [pozorování v jednom hypotetickém světě]{.text-hgl-orange}. Není to stroj na pravdu.
 :::
+:::
 
-## Nulová hypotéza pojmenuje nulový svět {.balance-null-hypothesis}
+::: {.notes}
+Shrnutí misconception: malá p-hodnota neříká, že je hypotéza pravdivá, ani že je efekt velký.
+:::
 
-::::: {.columns .align-center}
+## Nulová hypotéza pojmenuje nulový svět
+
+::::: {.columns}
 
 ::: {.column width="48%"}
 ```{r}
-#| label: znovu-zobrazit-nulovy-svet
+#| label: zobrazit-ilustraci-skepticka-kolegyne
 #| echo: false
-include_local_figure("nulovy_svet_residua.png")
+#| out-width: "80%"
+#| fig-alt: !expr 'if (file.exists(here::here(path_materials, "volavka_skepticka_kolegyne.png"))) "Humorná ilustrace volavky v laboratorním plášti, která s pozvednutým obočím pokrčuje křídly nad deskami krabího týmu; krab houslista jí ukazuje rostoucí řadu teček. Ilustrace vytvořená pomocí AI." else "Simulovaný svět bez trendu: šedé body kolem fialové vodorovné přímky, oranžové úsečky ukazují náhodná residua."'
+# Planned illustration 3 (GENERATED_IMAGES.md); until generated, the null-world figure is shown.
+include_optional_figure(
+  data_source = "volavka_skepticka_kolegyne.png",
+  fallback = "nulovy_svet_residua.png"
+)
 ```
+
+::: {.text-size-tiny .text-right}
+`r ai_disclosure("volavka_skepticka_kolegyne.png")`
+:::
 :::
 
 ::: {.column width="48%"}
@@ -2311,30 +2568,71 @@ H_0:\ \text{systematický sklon}=0\ \text{mm/°}
 $$
 :::
 
+::: {.panel-question .fragment}
+[$H_A$: alternativní hypotéza]{.panel-title}
+
+$$
+H_A:\ \text{systematický sklon}\neq0\ \text{mm/°}
+$$
+:::
+
 ::: {.panel-data .fragment}
-Nulová hypotéza: Není žádný vztah mezi velikostí krunýře a zeměpisnou šířkou. Všechna pozorovaná variabilita je jen náhodná.
+Nulová hypotéza netvrdí, že se lokality neliší. Tvrdí jen, že se průměrná velikost se zeměpisnou šířkou systematicky lineárně nemění.
 :::
 :::
 
 :::::
 
+::: {.notes}
+Nulový svět, se kterým jsme celou dobu pracovali, teď dostává jméno. Alternativní hypotéza je oboustranná: připouští růst i pokles. Zdůrazním, že lokality se i podle H0 mohou lišit místními podmínkami.
+
+Ilustrace (pokud je vložena): skeptická kolegyně volavka zastupuje nulovou hypotézu; není to obvinění, ale přesně popsaná soupeřící možnost.
+:::
+
 # Kdy musíme udělat rozhodnutí?
 
-## Někdy nestačí popisovat — musíme jednat {.balance-bridge}
+## Někdy nestačí popisovat — musíme jednat
 
-:::: {.bridge-stack}
-::: {.text-center .text-size-heading1 .text-bold}
+:::: {.slide-margin-top-15}
+::: {.text-center .text-size-heading .text-bold}
 Monitoring zachytil jednoho jedince možného [invazního druhu]{.text-hgl-orange}.
 :::
 
 ::: {.box-question .text-center .fragment}
 Zasáhnout, nebo pokračovat v pozorování? Jak velké riziko falešného poplachu jsme ochotni přijmout?
 :::
+
+:::: {.columns}
+::: {.column width="31%"}
+:::
+::: {.column width="36%"}
+```{r}
+#| label: zobrazit-ilustraci-invazni-past
+#| echo: false
+#| out-width: "100%"
+#| fig-alt: "Humorná ilustrace dvou krabů houslistů u monitorovací pasti, ve které sedí jeden zelený krab; jeden houslista drží píšťalku na poplach, druhý dalekohled a gestem naznačuje počkat. Ilustrace vytvořená pomocí AI."
+# Planned illustration 4 (GENERATED_IMAGES.md); the slot stays empty until generated.
+include_optional_figure(data_source = "krabi_invazni_past.png")
+```
+:::
+::: {.column width="31%"}
+:::
 ::::
 
-## Kolik falešných poplachů jsme ochotni připustit? {.balance-alpha}
+::: {.text-size-tiny .text-right}
+`r ai_disclosure("krabi_invazni_past.png")`
+:::
+::::
 
-::::: {.columns .align-center}
+::: {.notes}
+Krátká diskuze: zásah stojí peníze a čas, přehlédnutá invaze může být nevratná. Rozhodnutí potřebuje pravidlo zvolené předem.
+
+Ilustrace (pokud je vložena): v pasti je jeden krab zelený, invazní druh na atlantském pobřeží; dva strážci se neshodnou, zda hned zasáhnout.
+:::
+
+## Kolik falešných poplachů jsme ochotni připustit?
+
+::::: {.columns}
 
 ::: {.column width="48%"}
 
@@ -2363,16 +2661,22 @@ Předem zvolená přijatelná míra chyby.
 Pět procent je běžná konvence. Podle důsledků chyby můžeme zvolit i přísnější pravidlo.
 :::
 
-## Kde začínají krajní 5 % nulového světa? {.safe-title}
+::: {.notes}
+Hladina významnosti je dlouhodobé riziko falešného zamítnutí pravdivé H0, které jsme ochotni přijmout. Volí se před pohledem na data.
+:::
+
+## Kde začíná krajních 5 % nulového světa?
 
 ```{r}
 #| label: pripravit-kriticke-hodnoty-t
 #| echo: false
 #| message: false
 #| warning: false
+alfa <- 0.05
+
 kriticke_t_graf <-
   qt(
-    p = 1 - 0.05 / 2,
+    p = 1 - alfa / 2,
     df = stupne_volnosti
   )
 
@@ -2474,7 +2778,7 @@ plot_kriticke_hodnoty_t <-
     x = -abs(t_pozorovane),
     y = 0.10,
     label = paste0(
-      "zrcadlová hranice\n= -",
+      "zrcadlové −|t|\n= -",
       formatC(
         abs(t_pozorovane),
         format = "f",
@@ -2513,21 +2817,21 @@ ggview::save_ggplot(
 #| label: zobrazit-kriticke-hodnoty-t
 #| echo: false
 #| out-width: "76%"
-#| fig-alt: >
-#|   Nulové t-rozdělení s fialovými kritickými hranicemi minus
-#|   a plus 2,20 pro 11 stupňů volnosti, oranžovou pozorovanou
-#|   hodnotou t rovnou plus 6,16 a čárkovanou oranžovou
-#|   zrcadlovou hranicí minus 6,16.
+#| fig-alt: !expr paste0("Nulové t-rozdělení s fialovými kritickými hranicemi minus a plus ", formatC(kriticke_t_graf, format = "f", digits = 2, decimal.mark = ","), " pro ", stupne_volnosti, " stupňů volnosti, oranžovou pozorovanou hodnotou t rovnou plus ", formatC(t_pozorovane, format = "f", digits = 2, decimal.mark = ","), " a čárkovanou oranžovou zrcadlovou hranicí.")
 include_local_figure("kriticke_hodnoty_t.png")
 ```
 
 ::: {.takeaway-strip}
-Pro $df=`r stupne_volnosti`$ fialové hranice oddělují prostředních 95 % od chvostů o celkové ploše $\alpha=0{,}05$. Naše $|t|=`r formatC(abs(t_pozorovane), format = "f", digits = 2, decimal.mark = ",")`$ leží daleko za nimi.
+Pro $df=`r stupne_volnosti`$ fialové hranice oddělují prostředních 95 % od chvostů o celkové ploše $\alpha=0{,}05$. Naše $|t|=`r format_cz_math(abs(t_pozorovane), digits = 2, nsmall = 2)`$ leží daleko za nimi.
 :::
 
-## Rozhodovací pravidlo volíme předem {.balance-rule}
+::: {.notes}
+Před počítači se kritická hodnota hledala v tištěných tabulkách podle df a hladiny alfa. Pozorované t leží daleko za kritickou hranicí.
+:::
 
-:::: {.rule-stack}
+## Rozhodovací pravidlo volíme předem
+
+:::: {.slide-margin-top-15}
 ::: {.box-rule}
 [Rozhodovací pravidlo]{.card-title}
 
@@ -2559,7 +2863,11 @@ Výsledek nazveme **statisticky významný** neboli **statisticky signifikantní
 ::::
 
 ::: {.footer}
-Dříve: $|t|$ vs. kritická hodnota z tabulky pro dané $df$. Dnes R: `t value` a `Pr(>|t|)`.
+Před počítači: $|t|$ vs. kritická hodnota z tabulky pro dané $df$. V R: `t value` a `Pr(>|t|)`.
+:::
+
+::: {.notes}
+Rozhodovací pravidlo je jednoduché, důležité je jeho slovní vyjádření: nezamítnout H0 neznamená dokázat nulový efekt.
 :::
 
 ## Co když se spleteme?
@@ -2568,34 +2876,40 @@ Dříve: $|t|$ vs. kritická hodnota z tabulky pro dané $df$. Dnes R: `t value`
 
 ::: {.column width="49%" .fragment}
 
-Chyba I. stupně
+[Chyba I. typu]{.text-bold}
 
 ```{r}
 #| label: zobrazit-falesne-pozitivni
 #| echo: false
+#| fig-alt: "Úmyslně absurdní ilustrace: zjevně netěhotný muž překvapeně drží pozitivní těhotenský test."
 include_local_figure("chyba_i_falesne_pozitivni.jpg")
 ```
 
-**Falešně pozitivní:** test hlásí stav, který není přítomen.
+**Falešně pozitivní:** zamítneme $H_0$, přestože platí.
 :::
 
 ::: {.column width="49%" .fragment}
 
-Chyba II. stupně
+[Chyba II. typu]{.text-bold}
 
 ```{r}
 #| label: zobrazit-falesne-negativni
 #| echo: false
+#| fig-alt: "Úmyslně absurdní ilustrace: zjevně těhotná žena překvapeně drží negativní těhotenský test."
 include_local_figure("chyba_ii_falesne_negativni.jpg")
 ```
 
-**Falešně negativní:** test přehlédne stav, který přítomen je.
+**Falešně negativní:** nezamítneme $H_0$, přestože neplatí.
 :::
 
 ::::
 
+::: {.notes}
+Paměťová pomůcka: nulový stav je „těhotenství není přítomno“. Vlevo test hlásí stav, který není; vpravo stav přehlédne. Skutečná definice vždy závisí na tom, jak jsme zvolili H0.
+:::
 
-## Invazní druh: která chyba je která? {.balance-errors}
+
+## Invazní druh: která chyba je která?
 
 $$
 H_0:\ \text{invazní druh v oblasti není přítomen}
@@ -2609,21 +2923,27 @@ $$
 <br>
 
 ::: {.box-question .fragment}
-Zařaďte A a B jako chybu I. nebo II. stupně. Která může být závažnější?
+Zařaďte A a B jako chybu I. nebo II. typu. Která může být závažnější?
 :::
 
-::: {.fragment .box-result .error-answer}
-**A = chyba I. stupně.**
+::: {.fragment .box-result}
+**A = chyba I. typu.**
 
-**B = chyba II. stupně.**
+**B = chyba II. typu.**
+
+Závažnost závisí na biologických a praktických důsledcích.
+:::
+
+::: {.notes}
+Žádná chyba není vždy horší. U invazního druhu může být přehlédnutá invaze nevratná, zbytečný zásah naopak stojí zdroje.
 :::
 
 # Co tedy můžeme tvrdit?
 
-## „p < 0,05, proto je hypotéza pravdivá“ {.balance-critique .text-center}
+## „p < 0,05, proto je hypotéza pravdivá“ {.text-center}
 
-:::: {.critique-stack}
-::: {.text-center .text-size-heading1 .text-bold}
+:::: {.slide-margin-top-15}
+::: {.text-center .text-size-heading .text-bold}
 Co je na této větě špatně?
 :::
 
@@ -2649,6 +2969,10 @@ Efekt, jednotky, biologický význam, nejistota a omezení.
 
 ::::
 ::::
+
+::: {.notes}
+Studenti nejdřív sami najdou, co je na větě špatně. Pak odkryju obě strany.
+:::
 
 ## Ke stejné nule se můžeme vrátit intervalem
 
@@ -2689,6 +3013,7 @@ plot_interval_nula <-
     x = 0,
     y = 1.16,
     label = "nulový sklon",
+    hjust = -0.08,
     color = biostat_cols[["graphite"]],
     size = 5
   ) +
@@ -2727,6 +3052,10 @@ include_local_figure("interval_proti_nule.png")
 95% interval **[`r formatC(interval_sklonu[[1]], format = "f", digits = 3, decimal.mark = ",")`; `r formatC(interval_sklonu[[2]], format = "f", digits = 3, decimal.mark = ",")`] mm/°** neobsahuje nulu. Při $\alpha=0{,}05$ proto vede ke stejnému rozhodnutí jako p-hodnota a navíc ukazuje slučitelné velikosti efektu.
 :::
 
+::: {.notes}
+Interval a test u oboustranné hladiny 5 % vedou ke stejnému rozhodnutí. Interval ale navíc říká, jak velké efekty jsou s daty slučitelné.
+:::
+
 
 ## Napište výsledek pro biologa
 
@@ -2740,7 +3069,7 @@ Napište 4–6 vět. Začněte tím, **co se mění a o kolik**. Poslední věto
 :::
 
 ::: {.takeaway-strip}
-Potom přesvědčte souseda, že vaše pořadí důkazů dává smysl.
+Přesvědčte souseda, že vaše pořadí důkazů dává smysl.
 :::
 :::
 
@@ -2751,7 +3080,7 @@ Potom přesvědčte souseda, že vaše pořadí důkazů dává smysl.
 - `r nrow(data_lokality)` slanisek
 - pozorovaný sklon `r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")` mm/°
 - 95% CI [`r formatC(interval_sklonu[[1]], format = "f", digits = 3, decimal.mark = ",")`; `r formatC(interval_sklonu[[2]], format = "f", digits = 3, decimal.mark = ",")`] mm/°
-- $t=`r formatC(t_pozorovane, format = "f", digits = 2, decimal.mark = ",")`$, $df=`r stupne_volnosti`$, $p=`r formatC(p_hodnota, format = "f", digits = 6, decimal.mark = ",")`$
+- $t=`r format_cz_math(t_pozorovane, digits = 2, nsmall = 2)`$, $df=`r stupne_volnosti`$, $p=`r format_cz_math(p_hodnota, digits = 6, nsmall = 6)`$
 - observační studie a jednoduchý lineární model
 - možné místní a prostorové rozdíly mezi lokalitami
 :::
@@ -2759,23 +3088,33 @@ Potom přesvědčte souseda, že vaše pořadí důkazů dává smysl.
 
 ::::
 
-## Jedna možná odpověď {.balance-answer}
+::: {.notes}
+Tři až čtyři minuty psaní, pak výměna se sousedem. Hlídám pořadí: efekt, nejistota, test, omezení.
+:::
 
+## Jedna možná odpověď
+
+::: {.slide-margin-top-15}
 ::: {.box-result}
-:::: {.effect-conclusion}
-**Efekt:** Na `r nrow(data_lokality)` sledovaných slaniskách se průměrná šířka krunýře směrem k severu zvětšovala asi o **`r formatC(odhad_sklonu, format = "f", digits = 2, decimal.mark = ",")` mm na 1°**.
+**Efekt:** Na `r nrow(data_lokality)` sledovaných slaniskách se průměrná šířka krunýře směrem k severu zvětšovala asi o **`r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")` mm na 1°**.
 
 **Nejistota:** 95% interval spolehlivosti byl **[`r formatC(interval_sklonu[[1]], format = "f", digits = 3, decimal.mark = ",")`; `r formatC(interval_sklonu[[2]], format = "f", digits = 3, decimal.mark = ",")`] mm/°**.
 
-**Statistická významnost:** Výsledek je při $\alpha=0{,}05$ statisticky významný ($t=`r formatC(t_pozorovane, format = "f", digits = 2, decimal.mark = ",")`$, $df=`r stupne_volnosti`$, $p=`r formatC(p_hodnota, format = "f", digits = 6, decimal.mark = ",")`$).
+**Biologický význam:** Přes celé sledované pobřeží to odpovídá změně asi `r formatC(odhad_sklonu * diff(range(data_lokality$zemepisna_sirka)), format = "f", digits = 1, decimal.mark = ",")` mm, tedy znatelnému rozdílu ve velikosti krabů.
+
+**Statistická významnost:** Výsledek je při $\alpha=0{,}05$ statisticky významný ($t=`r format_cz_math(t_pozorovane, digits = 2, nsmall = 2)`$, $df=`r stupne_volnosti`$, $p=`r format_cz_math(p_hodnota, digits = 6, nsmall = 6)`$).
 
 **Limitace:** Studie podporuje kladný vztah na sledovaných lokalitách, ale sama neodhaluje příčinu ani přesný vztah v celé populaci.
-::::
+:::
+:::
+
+::: {.notes}
+Jedna z mnoha možných správných odpovědí. Porovnáme ji s tím, co studenti napsali.
 :::
 
 ## Co nám studie ukázala?
 
-:::: {.columns .align-center}
+:::: {.columns}
 
 ::: {.column width="57%"}
 
@@ -2784,7 +3123,7 @@ Potom přesvědčte souseda, že vaše pořadí důkazů dává smysl.
 ::: {.panel-result}
 [Hlavní závěr]{.panel-title}
 
-Na `r nrow(data_lokality)` sledovaných slaniskách byli krabi směrem na sever v průměru větší. Odhadnutý vztah činil **`r formatC(odhad_sklonu, format = "f", digits = 2, decimal.mark = ",")` mm na 1°** a kladný severojižní trend je statisticky signifikantní.
+Na `r nrow(data_lokality)` sledovaných slaniskách byli krabi směrem na sever v průměru větší. Odhadnutý vztah činil **`r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")` mm na 1°** a kladný trend směrem k severu je statisticky významný.
 :::
 :::
 
@@ -2800,17 +3139,32 @@ Na `r nrow(data_lokality)` sledovaných slaniskách byli krabi směrem na sever 
 
 ::::
 
-<br>
+```{r}
+#| label: zobrazit-ilustraci-prezentace-zaveru
+#| echo: false
+#| out-width: "38%"
+#| fig-alt: "Humorná ilustrace krabího týmu, který na malé konferenci na pláži ukazuje plakát s několika tečkami a fialovým pásem; v publiku sedí zvědavá volavka a další živočichové. Ilustrace vytvořená pomocí AI."
+# Planned illustration 5, optional (GENERATED_IMAGES.md); the slot stays empty until generated.
+include_optional_figure(data_source = "krabi_prezentace_zaveru.png")
+```
+
+::: {.text-size-tiny .text-right}
+`r ai_disclosure("krabi_prezentace_zaveru.png")`
+:::
 
 ::: {.takeaway-strip .text-center .fragment}
 Nejistota neznamená, že studie nic neukázala. Vymezuje, jak daleko může náš závěr bezpečně sahat.
 :::
 
+::: {.notes}
+Návrat k hlavní otázce: co jsme o krabech zjistili a co zůstává otevřené.
+:::
+
 ## A co sýrový Měsíc?
 
-:::: {.columns .align-center}
+:::: {.columns}
 
-::: {.column width="44%" .moon-question}
+::: {.column width="44%"}
 
 <br>
 
@@ -2823,7 +3177,10 @@ include_local_figure("mesic_ze_syra.png")
 :::
 
 ::: {.column width="52%"}
-:::: {.layout-stack .layout-center-y style="--layout-center-min-height: 420px; --layout-gap: 1.8rem;"}
+<br>
+<br>
+
+:::: {.layout-stack}
 ::: {.box-question .text-center}
 Prokázal by statistický test, že Měsíc není ze sýra?
 :::
@@ -2836,29 +3193,20 @@ Ne. Ukázal by, jak slučitelná jsou pozorování s jedním přesně popsaným 
 
 ::::
 
-## Co si odnést {.balance-takeaways}
-
-:::: {.takeaways-stack}
-::: {.incremental}
-- Studie zachycuje omezené [pozorování reality]{.text-hgl-graphite}.
-- Výsledek začíná [velikostí efektu a jeho nejistotou]{.text-hgl-indigo_velvet}.
-- P-hodnota popisuje, jak neobvyklá jsou data v jednom nulovém světě.
-- Statistické rozhodnutí může být chybné; závěr proto spojuje důkaz i jeho limitace.
+::: {.notes}
+Uzavírám oblouk ze začátku přednášky. Test nikdy nedokazuje pravdu; posuzuje slučitelnost dat s jedním přesně popsaným tvrzením.
 :::
 
-::: {.takeaway-strip .text-center .fragment}
-Efekt → biologický význam → nejistota → p-hodnota → limitace závěru
-:::
-::::
+# Závěr
 
-## Příště: porovnání skupin {.balance-next .safe-title}
+## Platí stejná logika i pro dvě skupiny?
 
-:::: {.next-stack}
-:::: {.columns .align-center}
+::: {.slide-margin-top-15}
+:::: {.columns}
 
 ::: {.column width="44%"}
 ::: {.panel-result}
-[Dnes]{.panel-title}
+[Tato lekce]{.panel-title}
 
 Číselný prediktor: zeměpisná šířka.
 
@@ -2868,7 +3216,7 @@ Efekt: **sklon**.
 
 ::: {.column width="52%"}
 ::: {.panel-question}
-[PŘÍŠTĚ]{.panel-title}
+[Následující lekce]{.panel-title}
 
 Kategoriální prediktor: například kontrola a zásah.
 
@@ -2878,7 +3226,55 @@ Efekt: **rozdíl mezi skupinami**.
 
 ::::
 
+<br>
+
 ::: {.takeaway-strip}
-Co z dnešní logiky zůstane stejné, když místo trendu budeme porovnávat dvě biologické skupiny?
+Co z této logiky zůstane stejné, když místo trendu budeme porovnávat dvě biologické skupiny?
 :::
-::::
+:::
+
+::: {.notes}
+Most k následující lekci: stejný postup efekt, nejistota, test a omezení použijeme pro rozdíl dvou skupin.
+:::
+
+## Shrnutí
+
+::: {.slide-margin-top-15}
+::: {.blockquote}
+::: {.incremental}
+- Studie zachycuje omezené [pozorování reality]{.text-hgl-graphite}.
+- Výsledek začíná [velikostí efektu a jeho nejistotou]{.text-hgl-indigo_velvet}.
+- [Nulová hypotéza]{.text-hgl-indigo_velvet} popisuje jeden přesně zadaný svět; t-statistika měří vzdálenost od něj ve standardních chybách.
+- P-hodnota popisuje, jak neobvyklá jsou data v nulovém světě, ne pravděpodobnost hypotézy.
+- Rozhodnutí může být chybné: chyba I. a II. typu.
+:::
+:::
+
+::: {.takeaway-strip .text-center .fragment}
+Efekt → biologický význam → nejistota → p-hodnota → limitace závěru
+:::
+:::
+
+::: {.notes}
+Shrnutí prochází výsledky učení: realita a studie, efekt a nejistota, nulová hypotéza a t, p-hodnota, chyby a opatrný závěr.
+:::
+
+## Co potřebujete vidět, než napíšete „p < 0,05, takže severní krabi jsou větší“? {.text-center}
+
+<br>
+
+::: {.text-size-large .text-bold .text-center}
+Jaké tři otázky položíte autorovi, který vám ukáže jen tento titulek?
+:::
+
+<br>
+
+::: {.panel-olive}
+[Řekněte sousedovi jednou větou]{.panel-title}
+
+Kterou z otázek byste položili jako první, a proč?
+:::
+
+::: {.notes}
+Otevřená otázka bez jedné správné odpovědi. Očekávané otázky: O kolik milimetrů na stupeň a je to biologicky hodně? Jak široký je interval? Kolik lokalit a jak byly vybrány? Sedí přímka k datům? Tvrdí autor příčinu, nebo jen souvislost?
+:::

@@ -107,7 +107,15 @@ Decisions by Ondřej Mottl on 2026-10-09:
 - All seven new AI PNGs were opened and their hashes checked against the provenance record. The affected slides (1, 19, 32, 39, 41 and 52) were inspected in HTML and PDF. Slide 19 was additionally checked at 1600×900 and 1280×720 without overlaps or content extending outside the slide. Focused source checks passed for UTF-8, unique chunk labels and whitespace. QA evidence remains in ignored `Temp/image-qa/`.
 - Both story-map amendments and knowledge-state ledgers now have explicit human approval. This approval does not replace final artifact review or release validation; the earlier independent reviews and subsequent fixes remain recorded above.
 
+## Synchronized presentation render (2026-10-09)
+
+- After the five polish commits, the first synchronized-render attempt stopped at the missing-upstream guard without replacing final outputs. Ondřej Mottl then pushed `polish/l05-review-fixes`; the retry used the configured upstream `origin/polish/l05-review-fixes` and pinned client `8f85e9f9e31dc1b0f05912d5605e4c9cc557e8e6`, without a local client override.
+- Trusted synchronization workflow run `37918659121` succeeded for request `611b471a-8e16-4f9d-9a8f-3c5a543840af` and immutable L05 source revision `511c60f3129bbbde053f3d3e0f6c945b32a004ff`. The receipt records input checksum `e1ff9daee3a3a40294876c9e802c5e343b1ff61ca0c0f64a803271df1fc9d97d`, definition checksum `656e7f8ab845b497ea15c9aff3aba1b5a1660243d4ff2a240671e0379a0fd8d8`, and remote-content checksum `23a4886b0a8e591cc409d39ed08cbed6d71d786ea1ff2be674761e0d1709d908`.
+- The canonical presentation wrapper completed both HTML variants and the DeckTape PDF export. The synchronized live HTML has 58 slides; the static PDF has 57 pages. `Presentation/presentation.html` and `docs/index.html` are byte-identical, and the PDF contains no PollsLive URL.
+- The title composite and the reality-slide layout were visually checked in the final HTML and PDF. All six illustrated PDF slides retain an image and visible AI disclosure. QA reports, screenshots and the render log are in ignored `Temp/image-qa/` (`sync-html-report.json`, `sync-pdf-report.json`, `sync-html-*.png`, `sync-pdf-*.png`, `render-sync-after-push.log`).
+- The synchronized receipt confirms the poll is published, voting is closed, and public results are hidden. No response was submitted. This render does not constitute a stable release or final artifact-review approval.
+
 ## Remaining gates
 
-- A synchronized presentation render is needed before release, followed by the L06 quiz re-approval and re-synchronization for the changed answer labels.
+- L06 quiz re-approval and re-synchronization for the changed answer labels remain outside this L05 render task.
 - Glossary slugs for the TODO terms do not yet exist in `slovnik`.

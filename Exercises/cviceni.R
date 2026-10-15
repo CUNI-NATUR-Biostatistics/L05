@@ -164,11 +164,6 @@ if (
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# Tabulka obsahuje 13 slanisek. Zeměpisná šířka sahá od 30,0 do 42,7° s. š.
-# a na každém slanisku bylo změřeno 25 až 37 krabů. Žádná hodnota nechybí.
-# Prediktorem je zeměpisná šířka, odezvou průměrná šířka krunýře.
-#
 # Nápověda 1:
 # Kontrolovat můžete až tabulku, která už existuje v Environmentu. Jeden
 # řádek je jedno slanisko, takže počet slanisek je počet řádků. Rozsah
@@ -178,6 +173,11 @@ if (
 # Funkci read.csv() zadejte argument file = soubor_lokality. Dále použijte
 # nrow() a range(); sloupec vyberete pomocí $, například
 # data_lokality$pocet_krabu. Odezva je proměnná, kterou chceme vysvětlit.
+#
+# Očekávaný výsledek:
+# Tabulka obsahuje 13 slanisek. Zeměpisná šířka sahá od 30,0 do 42,7° s. š.
+# a na každém slanisku bylo změřeno 25 až 37 krabů. Žádná hodnota nechybí.
+# Prediktorem je zeměpisná šířka, odezvou průměrná šířka krunýře.
 #
 # Interpretace:
 # Je tvrzení testovatelné? Jaký výsledek v datech by mu odporoval?
@@ -216,10 +216,6 @@ if (
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# Body i přímka převážně stoupají. Sklon je asi 0,490 mm na 1°, za 5° to
-# odpovídá změně asi 2,45 mm.
-#
 # Nápověda 1:
 # Ve vzorci modelu patří odezva vlevo od ~ a prediktor vpravo. Přepočet
 # na 5° používá stejný sklon pro pětkrát větší rozdíl zeměpisné šířky.
@@ -227,6 +223,10 @@ if (
 # Nápověda 2:
 # Funkci lm() zadejte argumenty formula a data = data_lokality. Sklon je
 # druhá hodnota z coef(object = mod_krabi); vynásobte ji pěti.
+#
+# Očekávaný výsledek:
+# Body i přímka převážně stoupají. Sklon je asi 0,490 mm na 1°, za 5° to
+# odpovídá změně asi 2,45 mm.
 #
 # Interpretace:
 # Říká samotný sklon, zda je změna biologicky důležitá? Co byste k tomu
@@ -255,10 +255,6 @@ if (
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# Residua leží po obou stranách nuly bez zřetelného oblouku nebo
-# trychtýře. Několik slanisek se od přímky liší výrazněji než ostatní.
-#
 # Nápověda 1:
 # Graf proti odhadnutým hodnotám ukazuje, zda se odchylky od přímky
 # systematicky mění podél přímky. Histogram ukazuje, jak často se residua
@@ -267,6 +263,10 @@ if (
 # Nápověda 2:
 # V plot() zadejte x = fitted(object = mod_krabi) a
 # y = resid(object = mod_krabi). Čáru přidá abline(h = 0, lty = 2).
+#
+# Očekávaný výsledek:
+# Residua leží po obou stranách nuly bez zřetelného oblouku nebo
+# trychtýře. Několik slanisek se od přímky liší výrazněji než ostatní.
 #
 # Interpretace:
 # Vidíte oblouk, trychtýř nebo slanisko s velkým residuem? Co z těchto
@@ -296,11 +296,6 @@ if (
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# Odhad sklonu asi 0,490 mm/°, standardní chyba asi 0,0795 mm/° a 95%
-# interval 0,315–0,664 mm/°. Na 5° to je asi 1,57–3,32 mm. Interval
-# obsahuje hodnoty pod i nad hranicí 2 mm a nulu neobsahuje.
-#
 # Nápověda 1:
 # V obou výstupech má sklon vlastní řádek. Přepočet na 5° nemění model,
 # mění jen jednotku rozdílu.
@@ -308,6 +303,11 @@ if (
 # Nápověda 2:
 # V summary() čtěte sloupce Estimate a Std. Error. V confint() čtěte
 # sloupce 2.5 % a 97.5 % a obě hodnoty vynásobte pěti.
+#
+# Očekávaný výsledek:
+# Odhad sklonu asi 0,490 mm/°, standardní chyba asi 0,0795 mm/° a 95%
+# interval 0,315–0,664 mm/°. Na 5° to je asi 1,57–3,32 mm. Interval
+# obsahuje hodnoty pod i nad hranicí 2 mm a nulu neobsahuje.
 #
 # Interpretace:
 # Leží celý interval nad hranicí 2 mm, nebo ji protíná? Co z toho
@@ -344,11 +344,6 @@ if (
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# H0: průměrná šířka krunýře se se zeměpisnou šířkou lineárně nemění,
-# sklon je 0 mm/°. HA: sklon není 0 mm/°. t je asi 6,16 a odpovídá
-# sloupci t value. Obě cesty dávají df = 11.
-#
 # Nápověda 1:
 # V čitateli vzorce je vzdálenost odhadu od nulové hodnoty, ve jmenovateli
 # měřítko nejistoty odhadu.
@@ -356,6 +351,11 @@ if (
 # Nápověda 2:
 # Vydělte Estimate hodnotou Std. Error z řádku zemepisna_sirka. Počet
 # slanisek vrátí nrow(x = data_lokality).
+#
+# Očekávaný výsledek:
+# H0: průměrná šířka krunýře se se zeměpisnou šířkou lineárně nemění,
+# sklon je 0 mm/°. HA: sklon není 0 mm/°. t je asi 6,16 a odpovídá
+# sloupci t value. Obě cesty dávají df = 11.
 #
 # Interpretace:
 # Proč se od počtu slanisek odečítají právě dva? Co by se změnilo,
@@ -397,10 +397,6 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# p je asi 0,0000711 (R vypíše 7.112446e-05), tedy méně než 0,05, a H0
-# o nulovém sklonu zamítáme. Hodnota odpovídá sloupci Pr(>|t|). Interval nulu neobsahuje.
-#
 # Nápověda 1:
 # Oboustranná alternativa připouští kladný i záporný sklon, proto
 # potřebujete plochu v obou chvostech. Křivka je souměrná, takže stačí
@@ -409,6 +405,10 @@ pt(
 # Nápověda 2:
 # Funkci pt() zadejte jako q zápornou absolutní hodnotu t; absolutní
 # hodnotu vrátí abs(). Výsledek vynásobte dvěma.
+#
+# Očekávaný výsledek:
+# p je asi 0,0000711 (R vypíše 7.112446e-05), tedy méně než 0,05, a H0
+# o nulovém sklonu zamítáme. Hodnota odpovídá sloupci Pr(>|t|). Interval nulu neobsahuje.
 #
 # Interpretace:
 # Doplňte větu: „Kdyby platila H0 a předpoklady modelu, ...“. Znamená
@@ -436,11 +436,6 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# Chyba I. typu: hlásíme vztah se zeměpisnou šířkou, který ve skutečnosti
-# neexistuje. Chyba II. typu: skutečný vztah přehlédneme. Protože jsme H0
-# zamítli, mohla nastat jen chyba I. typu.
-#
 # Nápověda 1:
 # U každé chyby oddělte skutečný stav (H0 platí, nebo neplatí) od
 # rozhodnutí (H0 zamítneme, nebo nezamítneme).
@@ -448,6 +443,11 @@ pt(
 # Nápověda 2:
 # Chyba II. typu vyžaduje, abychom H0 nezamítli. Podívejte se, jak jsme
 # rozhodli v U06.
+#
+# Očekávaný výsledek:
+# Chyba I. typu: hlásíme vztah se zeměpisnou šířkou, který ve skutečnosti
+# neexistuje. Chyba II. typu: skutečný vztah přehlédneme. Protože jsme H0
+# zamítli, mohla nastat jen chyba I. typu.
 #
 # Interpretace:
 # Proč ani velmi malá p-hodnota nevylučuje omyl?
@@ -478,12 +478,6 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# Po otázce a kontrole modelu závěr uvede efekt asi 0,490 mm/° (2,45 mm
-# na 5°) a interval 0,315–0,664 mm/°; teprve potom p-hodnotu. Data jsou při předpokladech modelu obtížně slučitelná
-# s nulovým sklonem, ale neprokazují příčinu. Mezi omezeními je například
-# prostorová podobnost slanisek a nestejná přesnost průměrů.
-#
 # Nápověda 1:
 # Věcnou velikost vztahu uveďte před rozhodnutím testu; omezení patří
 # na konec.
@@ -491,6 +485,12 @@ pt(
 # Nápověda 2:
 # Čísla vezměte z U02 (sklon a 5°), U04 (interval) a U05–U06 (t, df, p).
 # Omezení najdete v textu nad touto úlohou.
+#
+# Očekávaný výsledek:
+# Po otázce a kontrole modelu závěr uvede efekt asi 0,490 mm/° (2,45 mm
+# na 5°) a interval 0,315–0,664 mm/°; teprve potom p-hodnotu. Data jsou při předpokladech modelu obtížně slučitelná
+# s nulovým sklonem, ale neprokazují příčinu. Mezi omezeními je například
+# prostorová podobnost slanisek a nestejná přesnost průměrů.
 #
 # Interpretace:
 # Které věty vašeho závěru by se nezměnily, kdyby p-hodnota vyšla 0,2?
@@ -522,16 +522,16 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# První a třetí výrok lze ověřovat daty, druhý je hodnotový soud. Měsíc
-# ze sýra je testovatelný, i když nevěrohodný.
-#
 # Nápověda 1:
 # Zeptejte se, zda si umíte představit pozorování, které by výrok vyvrátilo.
 #
 # Nápověda 2:
 # Chemické složení hornin i velikost krabů lze změřit; pro slovo
 # „nejkrásnější“ neexistuje společné měřicí pravidlo.
+#
+# Očekávaný výsledek:
+# První a třetí výrok lze ověřovat daty, druhý je hodnotový soud. Měsíc
+# ze sýra je testovatelný, i když nevěrohodný.
 #
 # Interpretace:
 # Čím se liší testovatelnost výroku od jeho věrohodnosti?
@@ -549,10 +549,6 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# Odhad asi 4,90 mm a interval asi 3,15–6,64 mm na 10°. Celý interval
-# leží nad hypotetickými 3 mm.
-#
 # Nápověda 1:
 # Jednotku „na 1°“ převedete na „na 10°“ stejným násobkem u odhadu
 # i u obou hranic intervalu.
@@ -560,6 +556,10 @@ pt(
 # Nápověda 2:
 # Druhou hodnotu z coef(object = mod_krabi) a řádek zemepisna_sirka
 # z confint(object = mod_krabi) vynásobte deseti.
+#
+# Očekávaný výsledek:
+# Odhad asi 4,90 mm a interval asi 3,15–6,64 mm na 10°. Celý interval
+# leží nad hypotetickými 3 mm.
 #
 # Interpretace:
 # Proč je pro biologický význam důležitější celý interval než samotný
@@ -577,16 +577,16 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# Změnu popisuje sklon v řádku zemepisna_sirka. Intercept je odhad pro
-# zeměpisnou šířku 0°, tedy hluboko mimo pozorovaný rozsah 30,0–42,7°.
-#
 # Nápověda 1:
 # Význam interceptu zjistíte, když za prediktor v rovnici přímky
 # dosadíte nulu.
 #
 # Nápověda 2:
 # Porovnejte 0° s výsledkem range() pro sloupec zemepisna_sirka.
+#
+# Očekávaný výsledek:
+# Změnu popisuje sklon v řádku zemepisna_sirka. Intercept je odhad pro
+# zeměpisnou šířku 0°, tedy hluboko mimo pozorovaný rozsah 30,0–42,7°.
 #
 # Interpretace:
 # Proč intercept nevykládáme jako šířku krabů na rovníku?
@@ -606,15 +606,15 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# df = 6 a df = 18.
-#
 # Nápověda 1:
 # Residuální stupně volnosti závisí na počtu nezávislých řádků hlavní
 # analýzy a na počtu odhadnutých koeficientů.
 #
 # Nápověda 2:
 # Model stále odhaduje dva koeficienty; odečtěte je od počtu slanisek.
+#
+# Očekávaný výsledek:
+# df = 6 a df = 18.
 #
 # Interpretace:
 # Proč se odečítá počet koeficientů, a ne počet změřených krabů?
@@ -631,15 +631,15 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# Asi 0,0708 pro df = 11 a 0,0546 pro df = 30; druhá plocha je menší.
-#
 # Nápověda 1:
 # Oboustranná otázka potřebuje oba chvosty za stejně vzdálenými hranicemi.
 #
 # Nápověda 2:
 # Použijte pt() stejně jako v ukázce před U06 a výsledek pokaždé
 # zdvojnásobte.
+#
+# Očekávaný výsledek:
+# Asi 0,0708 pro df = 11 a 0,0546 pro df = 30; druhá plocha je menší.
 #
 # Interpretace:
 # Proč je při více stupních volnosti stejná hodnota |t| neobvyklejší?
@@ -655,9 +655,6 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# Při alfa = 0,01 H0 zamítneme, při alfa = 0,00001 ji nezamítneme.
-#
 # Nápověda 1:
 # Nová hladina alfa mění hranici rozhodnutí, nikoli výstup už fitovaného
 # modelu.
@@ -665,6 +662,9 @@ pt(
 # Nápověda 2:
 # H0 zamítáme, když p < alfa. Pomůže zapsat obě čísla stejně:
 # p ≈ 7,1 × 10⁻⁵, alfa = 1 × 10⁻² a alfa = 1 × 10⁻⁵.
+#
+# Očekávaný výsledek:
+# Při alfa = 0,01 H0 zamítneme, při alfa = 0,00001 ji nezamítneme.
 #
 # Interpretace:
 # Změnila se se změnou hladiny alfa data nebo odhadnutý efekt?
@@ -682,17 +682,17 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# 90% interval asi 0,347–0,632 mm/° a 99% interval asi 0,243–0,736 mm/°.
-# Vyšší spolehlivost dává širší interval; žádný z intervalů nulu
-# neobsahuje.
-#
 # Nápověda 1:
 # Hladina spolehlivosti mění šířku intervalu, nikoli bodový odhad.
 #
 # Nápověda 2:
 # Hladinu zadejte v argumentu level jako desetinné číslo (95 % je 0.95).
 # Čtěte řádek zemepisna_sirka.
+#
+# Očekávaný výsledek:
+# 90% interval asi 0,347–0,632 mm/° a 99% interval asi 0,243–0,736 mm/°.
+# Vyšší spolehlivost dává širší interval; žádný z intervalů nulu
+# neobsahuje.
 #
 # Interpretace:
 # Proč si za větší jistotu platíme širším intervalem?
@@ -709,16 +709,16 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# Falešně ohlášený vztah může přesunout monitoring bez věcného důvodu;
-# přehlédnutý vztah může zdržet další výzkum.
-#
 # Nápověda 1:
 # Oddělte skutečný stav od rozhodnutí a popište, co by každý omyl stál
 # při omezených zdrojích.
 #
 # Nápověda 2:
 # U chyby I. typu je skutečný sklon nulový, u chyby II. typu nenulový.
+#
+# Očekávaný výsledek:
+# Falešně ohlášený vztah může přesunout monitoring bez věcného důvodu;
+# přehlédnutý vztah může zdržet další výzkum.
 #
 # Interpretace:
 # Proč volba hladiny alfa neodstraní obě chyby najednou? Pozor: netvrďte,
@@ -748,9 +748,6 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# 392 krabů ze 13 slanisek; model mod_krabi pracuje se 13 průměry slanisek.
-#
 # Nápověda 1:
 # Počet měření a počet nezávislých slanisek odpovídají dvěma různým
 # otázkám.
@@ -758,6 +755,9 @@ pt(
 # Nápověda 2:
 # Použijte read.csv(), nrow() a length(x = unique(x = ...)) na sloupec
 # data_krabi$kod_lokality.
+#
+# Očekávaný výsledek:
+# 392 krabů ze 13 slanisek; model mod_krabi pracuje se 13 průměry slanisek.
 #
 # Interpretace:
 # Proč krabi ze stejného slaniska nejsou 392 nezávislých odpovědí
@@ -774,14 +774,14 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# 25 až 37 krabů, tedy asi 1,5krát více.
-#
 # Nápověda 1:
 # Porovnejte nejmenší a největší hodnotu podílem.
 #
 # Nápověda 2:
 # Vydělte největší počet nejmenším; oba najdete ve výstupu range() z U01.
+#
+# Očekávaný výsledek:
+# 25 až 37 krabů, tedy asi 1,5krát více.
 #
 # Interpretace:
 # Proč mohou mít průměry slanisek různou přesnost? Jak s tím zacházel
@@ -802,9 +802,6 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# Slanisko VCR, residuum asi +1,87 mm.
-#
 # Nápověda 1:
 # Hledejte největší velikost odchylky bez ohledu na znaménko. Pořadí
 # residua odpovídá řádku v data_lokality.
@@ -813,6 +810,9 @@ pt(
 # Nejdřív z residuí udělejte absolutní hodnoty pomocí abs(), potom na ně
 # použijte which.max(). Získané číslo použijte jako číslo řádku
 # v data_lokality.
+#
+# Očekávaný výsledek:
+# Slanisko VCR, residuum asi +1,87 mm.
 #
 # Interpretace:
 # Proč velké residuum samo neprokazuje chybu měření ani chybnou nulovou
@@ -834,15 +834,15 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# Sklon se změní z asi 0,490 na asi 0,559 mm/°; oba jsou kladné.
-#
 # Nápověda 1:
 # Měníte soubor slanisek, nikoli odezvu ani prediktor.
 #
 # Nápověda 2:
 # Vyberte řádky, kde data_lokality$kod_lokality != "GTM", a v lm() použijte
 # stejný vzorec jako v U02.
+#
+# Očekávaný výsledek:
+# Sklon se změní z asi 0,490 na asi 0,559 mm/°; oba jsou kladné.
 #
 # Interpretace:
 # Zůstává směr vztahu stejný? Dokazuje tato jedna kontrola nezávislost
@@ -865,17 +865,17 @@ pt(
 # Vaše řešení:
 
 
-# Očekávaný výsledek:
-# P-hodnota je podmíněná plocha v nulovém světě. Věcnou velikost ukazuje
-# sklon s intervalem a biologickým kontextem. Observační vztah sám
-# neurčuje příčinu.
-#
 # Nápověda 1:
 # Každá věta zaměňuje jinou otázku: pravdivost hypotézy, velikost efektu
 # a příčinu.
 #
 # Nápověda 2:
 # Vraťte se k U04, U06 a k omezením uvedeným před U08.
+#
+# Očekávaný výsledek:
+# P-hodnota je podmíněná plocha v nulovém světě. Věcnou velikost ukazuje
+# sklon s intervalem a biologickým kontextem. Observační vztah sám
+# neurčuje příčinu.
 #
 # Interpretace:
 # Která z oprav by se změnila, kdyby studie byla řízený experiment?

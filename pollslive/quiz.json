@@ -8,90 +8,90 @@
   "title": "L05 – Opakování předchozí lekce – 2026/27",
   "questions": [
     {
-      "id": "proc-se-odhady-lisi",
-      "text": "Proč sto pozorovatelů nedostalo ze svých výběrů přesně stejný sklon?",
+      "id": "interval-ze-se",
+      "text": "Přibližný 95% interval spolehlivosti sklonu je odhad ± 2 standardní chyby. Který interval odpovídá výstupu?",
       "options": [
         {
-          "id": "vztah-se-menil",
-          "label": "Skutečný vztah se po každém výpočtu změnil."
+          "id": "plus-minus-jedna-se",
+          "label": "[12,7; 14,0] min/min"
         },
         {
-          "id": "lm-losuje",
-          "label": "Funkce lm() vybírá sklon náhodně."
+          "id": "plus-minus-dve-se",
+          "label": "[12,0; 14,7] min/min"
         },
         {
-          "id": "jine-vybery",
-          "label": "Každý pracoval s jiným výběrem pozorování."
+          "id": "plus-minus-dve-minuty",
+          "label": "[11,3; 15,3] min/min"
         },
         {
-          "id": "sklon-nesouvisi",
-          "label": "Sklon nemá s daty souvislost."
+          "id": "se-interceptu",
+          "label": "[8,4; 18,3] min/min"
         }
       ],
-      "correctOptionId": "jine-vybery",
-      "explanation": "Výběry obsahují různá pozorování, a proto se jejich odhady liší. Této změně mezi výběry říkáme výběrová variabilita.",
+      "correctOptionId": "plus-minus-dve-se",
+      "explanation": "Sklon je v řádku delka_erupce_min: 13,34 ± 2 · 0,66 = 13,34 ± 1,32, tedy asi [12,0; 14,7] min/min. SE z řádku (Intercept) patří k interceptu.",
       "media": {
-        "path": "assets/l04-one-hundred-estimates.png",
-        "alt": "Bodový graf posledního ze sta výběrů a histogram sta odhadnutých sklonů, které se mezi výběry liší.",
-        "provenance": "Byte-identical copy of approved L04 figure Presentation/Materials/geyserwatch_100_hlaseni.png; checksum pinned by R/render_pollslive_assets.R."
+        "path": "assets/l04-odhad-a-se.png",
+        "alt": "Výstup R se sloupci Estimate a Std. Error: (Intercept) 45.91 a 2.47, delka_erupce_min 13.34 a 0.66.",
+        "provenance": "Rendered by R/render_pollslive_assets.R from lm(cekani_min ~ delka_erupce_min) fitted to the approved L04 Old Faithful 2024 data (pollslive/source/old_faithful_2024.csv, SHA-256 pinned in the script); checksum pinned in R/verify_pollslive_assets.R."
       }
     },
     {
-      "id": "odhad-versus-se",
-      "text": "Které číslo popisuje velikost odhadnutého vztahu mezi délkou erupce a čekáním?",
+      "id": "presnost-dvou-vyberu",
+      "text": "Pepa odhadl sklon jen z červnových erupcí, my z celého souboru. Které tvrzení o obou odhadech platí?",
       "options": [
         {
-          "id": "std-error",
-          "label": "Hodnota ve sloupci Std. Error"
+          "id": "stejne-presne",
+          "label": "Oba odhady jsou stejně přesné; sklony se liší jen o 0,4 min/min."
         },
         {
-          "id": "pocet-radku",
-          "label": "Počet řádků tabulky"
+          "id": "pepa-chybny",
+          "label": "Pepův odhad je chybný, skutečný sklon je 13,34 min/min."
         },
         {
-          "id": "nazev-prediktoru",
-          "label": "Název prediktoru"
+          "id": "95-procent-erupci",
+          "label": "Celý soubor je přesnější, protože 95 % erupcí leží v jeho intervalu."
         },
         {
-          "id": "estimate",
-          "label": "Hodnota ve sloupci Estimate"
+          "id": "mensi-se",
+          "label": "Celý soubor je přesnější, protože jeho standardní chyba je menší."
         }
       ],
-      "correctOptionId": "estimate",
-      "explanation": "Estimate je odhad sklonu. Std. Error popisuje přesnost tohoto odhadu.",
+      "correctOptionId": "mensi-se",
+      "explanation": "Přesnost popisuje standardní chyba, ne podobnost odhadů: 0,66 je menší než 1,12 díky trojnásobku erupcí. I 13,34 je jen odhad a interval sklonu neobsahuje 95 % erupcí.",
       "media": {
-        "path": "assets/l04-estimate-standard-error.png",
-        "alt": "Řádek sklonu delka_erupce_min s hodnotou Estimate 13,34 a Standard Error 0,66.",
-        "provenance": "Deterministically rendered by R/render_pollslive_assets.R from the approved L04 Old Faithful data and lm(cekani_min ~ delka_erupce_min)."
+        "path": "assets/l04-dva-vybery.png",
+        "alt": "Tabulka sklonu delka_erupce_min: Pepa, červen, 39 erupcí, Estimate 12,92 a Std. Error 1,12; celý soubor, 117 erupcí, Estimate 13,34 a Std. Error 0,66.",
+        "provenance": "Rendered by R/render_pollslive_assets.R from lm(cekani_min ~ delka_erupce_min) fitted to the approved L04 Old Faithful 2024 data and to its June subset used for Pepa in the L04 learning materials; checksum pinned in R/verify_pollslive_assets.R."
       }
     },
     {
-      "id": "vyznam-95-intervalu",
-      "text": "Co v tomto opakovaném postupu znamená označení „95% interval spolehlivosti“?",
+      "id": "plan-dalsiho-mereni",
+      "text": "Pás ukazuje nejistotu průměrného trendu. Chceme přesněji odhadnout sklon. Který plán dalšího měření pomůže nejvíc?",
       "options": [
         {
-          "id": "pokryti-v-opakovani",
-          "label": "Při opakování stejného postupu přibližně 95 % takto vytvořených intervalů pokryje skutečný parametr."
+          "id": "rozprostrene-delky",
+          "label": "Přidat 50 erupcí s délkami rozprostřenými od 1,5 do 5 min."
         },
         {
-          "id": "pravdepodobnost-jednoho",
-          "label": "Vypočtený interval má po výpočtu 95% pravděpodobnost obsahovat pevný parametr."
+          "id": "delky-u-prumeru",
+          "label": "Přidat 50 erupcí, všechny dlouhé blízko průměru (asi 3,6 min)."
         },
         {
-          "id": "95-pozorovani",
-          "label": "Uvnitř intervalu leží 95 % jednotlivých pozorování."
+          "id": "vyradit-krajni",
+          "label": "Vyřadit nejkratší a nejdelší erupce jako odlehlé."
         },
         {
-          "id": "odhad-bez-chyby",
-          "label": "Odhad je s pravděpodobností 95 % bez chyby."
+          "id": "interval-99",
+          "label": "Místo 95% intervalu sklonu spočítat 99% interval."
         }
       ],
-      "correctOptionId": "pokryti-v-opakovani",
-      "explanation": "95 % popisuje dlouhodobou úspěšnost postupu při opakovaných výběrech, nikoli pravděpodobnost jednoho již vypočteného intervalu.",
+      "correctOptionId": "rozprostrene-delky",
+      "explanation": "SE sklonu je menší, když délky erupcí leží daleko od průměru (čárkovaná čára). Erupce u průměru sklon téměř nezpřesní, vyřazení krajních ho zhorší a 99% interval je širší.",
       "media": {
-        "path": "assets/l04-confidence-interval-coverage.png",
-        "alt": "Sto vodorovných 95% intervalů z opakovaných výběrů; většina protíná svislou referenční hodnotu a několik ji míjí.",
-        "provenance": "Byte-identical copy of approved L04 figure Presentation/Materials/sto_intervalu_pokryti.png; checksum pinned by R/render_pollslive_assets.R."
+        "path": "assets/l04-pas-spolehlivosti.png",
+        "alt": "Bodový graf délky erupce a čekání na další erupci s přímkou modelu a fialovým 95% pásem spolehlivosti; pás je nejužší u průměrné délky erupce asi 3,6 minuty, vyznačené svislou čárkovanou čarou. Délky erupcí sahají asi od 1,6 do 4,8 minuty.",
+        "provenance": "Byte-identical copy of approved L04 figure Presentation/Materials/pas_spolehlivosti.png; checksum pinned in R/verify_pollslive_assets.R."
       }
     }
   ]

@@ -90,7 +90,7 @@
       "explanation": "SE sklonu je menší, když délky erupcí leží daleko od průměru (čárkovaná čára). Erupce u průměru sklon téměř nezpřesní, vyřazení krajních ho zhorší a 99% interval je širší.",
       "media": {
         "path": "assets/l04-pas-spolehlivosti.png",
-        "alt": "Bodový graf délky erupce a čekání na další erupci s přímkou modelu a fialovým 95% pásem spolehlivosti; pás je nejužší u průměrné délky erupce asi 3,6 minuty, vyznačené svislou čárkovanou čarou. Délky erupcí sahají asi od 1,6 do 4,8 minuty.",
+        "alt": "Bodový graf délky erupce a čekání na další erupci s odhadnutou přímkou a fialovým 95% pásem spolehlivosti; pás je nejužší u průměrné délky erupce asi 3,6 minuty, vyznačené svislou čárkovanou čarou. Délky erupcí sahají asi od 1,6 do 4,8 minuty.",
         "provenance": "Byte-identical copy of approved L04 figure Presentation/Materials/pas_spolehlivosti.png; checksum pinned in R/verify_pollslive_assets.R."
       }
     }

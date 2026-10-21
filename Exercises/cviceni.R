@@ -1,6 +1,6 @@
 #----------------------------------------------------------#
 #
-#       L05 — Od velikosti efektu k testování hypotéz
+#   L05 — Od velikosti efektu k opatrnému vědeckému závěru
 #                 Praktické cvičení v R
 #             Studenti biologie a ekologie
 #                       O. Mottl
@@ -266,10 +266,10 @@ if (
 #
 # Očekávaný výsledek:
 # Residua leží po obou stranách nuly bez zřetelného oblouku nebo
-# trychtýře. Několik slanisek se od přímky liší výrazněji než ostatní.
+# vějíře. Několik slanisek se od přímky liší výrazněji než ostatní.
 #
 # Interpretace:
-# Vidíte oblouk, trychtýř nebo slanisko s velkým residuem? Co z těchto
+# Vidíte oblouk, vějíř nebo slanisko s velkým residuem? Co z těchto
 # grafů nepoznáte o nezávislosti blízkých slanisek?
 
 #--------------------------------------------------#
@@ -660,7 +660,7 @@ pt(
 # modelu.
 #
 # Nápověda 2:
-# H0 zamítáme, když p < alfa. Pomůže zapsat obě čísla stejně:
+# H0 zamítáme, když p ≤ alfa. Pomůže zapsat obě čísla stejně:
 # p ≈ 7,1 × 10⁻⁵, alfa = 1 × 10⁻² a alfa = 1 × 10⁻⁵.
 #
 # Očekávaný výsledek:

@@ -76,7 +76,7 @@ L05
 :::
 
 ::: {.course-title-formal}
-Od velikosti efektu k testování hypotéz
+Od velikosti efektu k opatrnému vědeckému závěru
 :::
 
 ::: {.course-title-link}
@@ -255,6 +255,8 @@ Po absolvování této přednášky budete schopni:
 - rozlišit chybu I. a II. typu a napsat opatrný vědecký závěr
 :::
 :::
+
+<!-- TODO (terminology review 2026-10-21): the skripta lists "síla testu" as a learning outcome; add a power slide (section "Kolik studií vztah odhalí?") and this outcome in the next lesson polish. -->
 
 ::: {.notes}
 Výsledky učení čtu nahlas jen stručně. Zdůrazním pořadí: nejdřív velikost efektu a nejistota, teprve potom p-hodnota.
@@ -658,7 +660,7 @@ mod_krabi <-
 :::
 
 ::: {.notes}
-Přímku studenti znají z minulých lekcí. Kód ukazuji jen pro orientaci; důležité je, že fialová přímka je odhad modelu, šedé body jsou data.
+Přímku studenti znají z minulých lekcí. Kód ukazuji jen pro orientaci; důležité je, že fialová čára je odhadnutá přímka, šedé body jsou data.
 :::
 
 ## `summary()`
@@ -714,7 +716,7 @@ Průměrná šířka = `r formatC(odhad_interceptu, format = "f", digits = 3, de
 ::: {.panel-data}
 [Z minulé lekce]{.panel-title}
 
-**Estimate** = intercept a sklon; **Std. Error** = nejistota odhadu.
+**Estimate** = intercept a sklon; **Std. Error** = standardní chyba (nejistota odhadu).
 :::
 
 <br>
@@ -740,7 +742,7 @@ Připomenu Estimate a Std. Error z minulé lekce. Poslední dva sloupce zatím n
 #| label: zobrazit-ilustraci-okno-do-reality
 #| echo: false
 #| out-width: "100%"
-#| fig-alt: !expr 'if (file.exists(here::here(path_materials, "krabi_okno_do_reality.png"))) "Humorná ilustrace kraba houslisty s deskami, který se dívá malým dřevěným oknem terénní stanice na rozlehlé slanisko; vidí jen jeho výsek. Ilustrace vytvořená pomocí AI." else "Bodový graf průměrné šířky krunýře proti zeměpisné šířce s rostoucí fialovou přímkou modelu."'
+#| fig-alt: !expr 'if (file.exists(here::here(path_materials, "krabi_okno_do_reality.png"))) "Humorná ilustrace kraba houslisty s deskami, který se dívá malým dřevěným oknem terénní stanice na rozlehlé slanisko; vidí jen jeho výsek. Ilustrace vytvořená pomocí AI." else "Bodový graf průměrné šířky krunýře proti zeměpisné šířce s rostoucí fialovou odhadnutou přímkou."'
 # Planned illustration 1 (GENERATED_IMAGES.md); until generated, the anchor graph is shown.
 include_optional_figure(
   data_source = "krabi_okno_do_reality.png",
@@ -1223,7 +1225,7 @@ V residuích nevidíme nápadný problém, který by jednoduchý lineární mode
 :::
 
 ::: {.notes}
-Kontrolu residuí děláme po každém modelu. Při tak malém počtu bodů posuzujeme tvar rozdělení jen velmi opatrně; hledáme hlavně oblouk nebo trychtýř.
+Kontrolu residuí děláme po každém modelu. Při tak malém počtu bodů posuzujeme tvar rozdělení jen velmi opatrně; hledáme hlavně oblouk nebo vějíř.
 :::
 
 ## Co už víme — a co stále nevidíme?
@@ -2647,7 +2649,7 @@ Kdyby nulová hypotéza platila, jak často jsme ochotni ji **omylem** zamítnou
 ::: {.box-rule .fragment}
 [$\alpha$: hladina významnosti]{.card-title}
 
-Předem zvolená přijatelná míra chyby.
+Předem zvolená přijatelná pravděpodobnost chyby I. typu.
 
 **$\alpha=0{,}05$** znamená 5 %.
 :::
@@ -2856,7 +2858,7 @@ Nulovou hypotézu zamítnout **nemůžeme**.
 
 Nulovou hypotézu zamítneme.
 
-Výsledek nazveme **statisticky významný** neboli **statisticky signifikantní**.
+Výsledek nazveme **statisticky významný** (v článcích také *statisticky signifikantní*).
 :::
 :::
 ::::
@@ -3208,7 +3210,7 @@ Uzavírám oblouk ze začátku přednášky. Test nikdy nedokazuje pravdu; posuz
 ::: {.panel-result}
 [Tato lekce]{.panel-title}
 
-Číselný prediktor: zeměpisná šířka.
+Numerický prediktor: zeměpisná šířka.
 
 Efekt: **sklon**.
 :::

@@ -221,10 +221,11 @@ Statistický test bude jen jedním dílkem tohoto většího obrazu.
 
 Po prostudování této lekce budete schopni:
 
-- rozlišit testovatelné vědecké tvrzení od hodnotového výroku a převést biologické tvrzení na `r render_glossary_term("nulova-hypoteza", display = "nulovou")` a alternativní hypotézu o `r render_glossary_term("sklon", display = "sklonu")` modelu;
-- popsat, jak velký vztah jsme v datech našli, posoudit jeho biologický význam a říct, jak přesně jsme ho `r render_glossary_term("odhad", display = "odhadli")`;
-- vysvětlit, jak z odhadu, jeho `r render_glossary_term("standardni-chyba", display = "standardní chyby")` a `r render_glossary_term("stupne-volnosti", display = "stupňů volnosti")` vzniká t-statistika a její referenční `r render_glossary_term("rozdeleni", display = "rozdělení")`, a správně interpretovat `r render_glossary_term("p-hodnota", display = "p-hodnotu")`;
-- rozlišit chybu I. a II. typu v kontextu biologické otázky;
+- rozlišit testovatelné vědecké tvrzení od hodnotového výroku a převést biologické tvrzení na `r render_glossary_term("nulova-hypoteza", display = "nulovou hypotézu")` a `r render_glossary_term("alternativni-hypoteza", display = "alternativní hypotézu")` o `r render_glossary_term("sklon", display = "sklonu")` modelu;
+- popsat, jak velký vztah jsme v datech našli, posoudit jeho biologický význam a říct, jak přesný je náš `r render_glossary_term("odhad", display = "odhad")`;
+- vysvětlit, jak z odhadu, jeho `r render_glossary_term("standardni-chyba", display = "standardní chyby")` a `r render_glossary_term("stupne-volnosti", display = "stupňů volnosti")` vzniká `r render_glossary_term("t-statistika", display = "t-statistika")` a její referenční `r render_glossary_term("rozdeleni", display = "rozdělení")`, a správně interpretovat `r render_glossary_term("p-hodnota", display = "p-hodnotu")`;
+- rozlišit `r render_glossary_term("chyba-i-typu", display = "chybu I. typu")` a `r render_glossary_term("chyba-ii-typu", display = "chybu II. typu")` v kontextu biologické otázky;
+- vysvětlit, co je `r render_glossary_term("sila-testu", display = "síla testu")` a proč malá studie může skutečný vztah přehlédnout;
 - napsat závěr v pořadí velikost `r render_glossary_term("efekt", display = "efektu")`, `r render_glossary_term("nejistota", display = "nejistota")`, slučitelnost s nulovou hypotézou a omezení studie.
 
 ## Každý řádek je jedno slanisko
@@ -626,7 +627,7 @@ Teď už můžeme body opravdu zobrazit. Každý bod je `r render_glossary_term(
 #|   Fialová přímka je jednoduchý lineární model.
 #| fig-alt: >
 #|   Bodový graf průměrné šířky krunýře proti zeměpisné šířce
-#|   s popisky lokalit a rostoucí fialovou přímkou modelu.
+#|   s popisky lokalit a rostoucí fialovou odhadnutou přímkou.
 ggplot2::ggplot(
   data = data_lokality,
   mapping = ggplot2::aes(
@@ -748,7 +749,7 @@ ggplot2::ggplot(
   theme_biostat(base_size = 12)
 ```
 
-Druhý graf vrací každé residuum k `r render_glossary_term("odhadnuta-hodnota", display = "hodnotě odhadnuté modelem")` pro danou lokalitu. Hledáme body rozptýlené kolem nuly bez zřetelného oblouku nebo trychtýře.
+Druhý graf vrací každé residuum k `r render_glossary_term("odhadnuta-hodnota", display = "hodnotě odhadnuté modelem")` pro danou lokalitu. Hledáme body rozptýlené kolem nuly bez zřetelného oblouku nebo vějíře.
 
 ```{r}
 #| label: zobrazit-residua-proti-odhadum
@@ -796,7 +797,7 @@ ggplot2::ggplot(
 ::: {.box-question title="Přečtěte diagnostické grafy"}
 
 - Jsou kladná i záporná residua zastoupena kolem nuly?
-- Vidíte v grafu residuí proti odhadnutým hodnotám oblouk, trychtýř nebo jiný systematický vzor?
+- Vidíte v grafu residuí proti odhadnutým hodnotám oblouk, vějíř nebo jiný systematický vzor?
 - Které lokality mají největší residua?
 - Co můžeme z tak malého počtu bodů posoudit jen velmi opatrně?
 :::
@@ -808,7 +809,7 @@ Stejný modelový výsledek budeme dále číst podmíněně: všechny následuj
 Sklon `r format_cz(odhad_sklonu, digits = 3)` mm na jeden stupeň říká:
 
 ::: {.box-result title="Význam sklonu v našem modelu"}
-Podle fitované přímky je na lokalitě o 1° severněji průměrná šířka krunýře větší přibližně o `r format_cz(odhad_sklonu, digits = 3)` mm.
+Podle odhadnuté přímky je na lokalitě o 1° severněji průměrná šířka krunýře větší přibližně o `r format_cz(odhad_sklonu, digits = 3)` mm.
 :::
 
 To je odpověď na otázku **„o kolik?“**. Takovému číselnému popisu změny říkáme `r render_glossary_term("efekt", display = "efekt")`; v tomto modelu ho nejlépe vyjadřuje sklon v milimetrech na stupeň. V dalších krocích se budeme ptát, jak přesný odhad je a jak neobvyklý by byl, kdyby ve skutečnosti žádný vztah neexistoval.
@@ -995,22 +996,22 @@ Z modelu už známe velikost vztahu i `r render_glossary_term("nejistota", displ
 
 Představte si skeptickou kolegyni. Podívá se na graf a řekne:
 
-> Možná mezi zeměpisnou šířkou a `r render_glossary_term("prumer", display = "průměrnou velikostí")` krabů v populaci žádný lineární vztah není. Těchto `r pocet_lokalit` bodů náhodou vyšlo rostoucích.
+> Možná mezi zeměpisnou šířkou a `r render_glossary_term("prumer", display = "průměrnou velikostí")` krabů v `r render_glossary_term("populace", display = "populaci")` žádný lineární vztah není. Těchto `r pocet_lokalit` bodů náhodou vyšlo rostoucích.
 
 Jak by takový svět vypadal v našem modelu? Kdyby měla přímka `r render_glossary_term("sklon", display = "sklon")` **nula**, průměrná velikost krabů by se při cestě na sever neměnila. To ale neznamená, že by všechny lokality měly úplně stejný průměr.
 
 I ve světě bez severojižního trendu by mezi lokalitami zůstávaly rozdíly. Mohly by vznikat například:
 
-- náhodným `r render_glossary_term("vyber", display = "výběrem")` jiných krabů;
+- `r render_glossary_term("nahodny-vyber", display = "náhodným výběrem")` jiných krabů;
 - nepřesností měření;
 - místními podmínkami, které v modelu nemáme, třeba potravou nebo teplotou;
 - dalšími biologickými rozdíly mezi slanisky.
 
 Budeme tedy skládat simulovaná data ze dvou částí: **systematický sklon nastavíme na nulu**, ale kolem vodorovné přímky ponecháme **náhodnou `r render_glossary_term("variabilita", display = "variabilitu")`**.
 
-Tuto druhou část už známe z `r render_glossary_term("diagnostika-modelu", display = "diagnostiky modelu")`. Rozdíl mezi hodnotou lokality a hodnotou na přímce jsme nazvali `r render_glossary_term("residuum", display = "residuum")`. V simulaci ke každé lokalitě vytvoříme nové náhodné residuum a přičteme ho k vodorovné přímce. Residua budou v průměru nulová, ale jednotlivě mohou být kladná i záporná. Jejich typickou velikost nastavíme podle `r render_glossary_term("rezidualni-smerodatna-odchylka", display = "reziduální směrodatné odchylky")` našeho krabího modelu, přibližně `r format_cz(sigma(mod_krabi), digits = 2)` mm.
+Tuto druhou část už známe z `r render_glossary_term("diagnostika-modelu", display = "diagnostiky modelu")`. Rozdíl mezi hodnotou lokality a hodnotou na přímce jsme nazvali `r render_glossary_term("residuum", display = "residuum")`. V simulaci ke každé lokalitě vytvoříme nové náhodné residuum a přičteme ho k vodorovné přímce. Residua budou v průměru nulová, ale jednotlivě mohou být kladná i záporná. Jejich typickou velikost nastavíme podle `r render_glossary_term("rezidualni-smerodatna-odchylka", display = "residuální směrodatné odchylky")` našeho krabího modelu (ve výstupu R *Residual standard error*), přibližně `r format_cz(sigma(mod_krabi), digits = 2)` mm.
 
-Právě tato simulovaná residua způsobí, že přímka fitovaná jednomu náhodnému souboru nemusí vyjít přesně vodorovná — stejně jako skutečná residua způsobují, že pozorované body neleží přesně na fitované přímce.
+Právě tato simulovaná residua způsobí, že přímka odhadnutá z jednoho náhodného výběru nemusí vyjít přesně vodorovná — stejně jako skutečná residua způsobují, že pozorované body neleží přesně na odhadnuté přímce.
 
 Porovnáváme tedy dvě možnosti:
 
@@ -1029,11 +1030,11 @@ H_0:\ \beta_{\text{zem. šířka}}=0
 H_A:\ \beta_{\text{zem. šířka}}\ne0
 $$
 
-`r render_glossary_term("nulova-hypoteza", display = "Nulová hypotéza")` $H_0$ je právě nulová možnost z tabulky. Alternativní hypotéza $H_A$ připouští růst i pokles. <!-- TODO: add slug alternativni-hypoteza to pojmy.yaml -->
+`r render_glossary_term("nulova-hypoteza", display = "Nulová hypotéza")` $H_0$ je právě nulová možnost z tabulky. `r render_glossary_term("alternativni-hypoteza", display = "Alternativní hypotéza")` $H_A$ připouští růst i pokles.
 
 Nulová hypotéza tedy **neříká**, že každý soubor `r pocet_lokalit` slanisek musí dát odhad sklonu přesně nula. Říká, že dlouhodobý systematický trend je nulový. Náhodná variabilita kolem něj může v jednotlivém souboru vytvořit mírně rostoucí i mírně klesající přímku.
 
-Tento nulový svět teď prozkoumáme simulací. Ponecháme stejné zeměpisné šířky jako v našich datech. Pro každou z nich vygenerujeme průměrnou velikost jako **stejnou základní úroveň plus nové náhodné residuum**. V simulaci tedy není žádný systematický růst k severu, ale lokality se stále liší. Každému novému souboru potom fitujeme přímku.
+Tento nulový svět teď prozkoumáme `r render_glossary_term("simulace", display = "simulací")`. Ponecháme stejné zeměpisné šířky jako v našich datech. Pro každou z nich vygenerujeme průměrnou velikost jako **stejnou základní úroveň plus nové náhodné residuum**. V simulaci tedy není žádný systematický růst k severu, ale lokality se stále liší. Každému novému souboru potom fitujeme přímku.
 
 ::: {.box-question title="Předpovězte výsledek simulace"}
 
@@ -1118,10 +1119,10 @@ data_nulove_sklony <-
 #|   Dvacet náhodných studií vytvořených ve světě s nulovým
 #|   sklonem. Od vodorovné přímky jsme ke každé lokalitě
 #|   přičetli nové náhodné residuum. Každá studie obsahuje
-#|   stejný počet bodů jako naše data a vlastní fitovanou přímku.
+#|   stejný počet bodů jako naše data a vlastní odhadnutou přímku.
 #| fig-alt: >
 #|   Dvacet malých bodových grafů simulovaných studií bez trendu;
-#|   fialové fitované přímky v nich mírně stoupají i klesají.
+#|   fialové odhadnuté přímky v nich mírně stoupají i klesají.
 ggplot2::ggplot(
   data = data_nulove_ukazky,
   mapping = ggplot2::aes(
@@ -1286,13 +1287,13 @@ Statistici tuto vzdálenost označují písmenem $t$. Stejný výpočet se obecn
 $$
 t=
 \frac{
-\hat{\beta}_{\text{šířka}}-0
+\hat{\beta}_{\text{zem. šířka}}-0
 }{
-\operatorname{SE}(\hat{\beta}_{\text{šířka}})
+\operatorname{SE}(\hat{\beta}_{\text{zem. šířka}})
 }.
 $$
 
-Symbol $\hat{\beta}_{\text{šířka}}$ označuje `r render_glossary_term("odhad", display = "odhadnutý")` sklon; stříška odlišuje odhad z našich dat od neznámého populačního sklonu $\beta_{\text{zem. šířka}}$. Nula je hodnota sklonu podle `r render_glossary_term("nulova-hypoteza", display = "nulové hypotézy")` a $\operatorname{SE}(\hat{\beta}_{\text{šířka}})$ standardní chyba odhadu. Výslednému číslu se říká t-statistika. <!-- TODO: add slug t-statistika to pojmy.yaml -->
+Symbol $\hat{\beta}_{\text{zem. šířka}}$ označuje `r render_glossary_term("odhad", display = "odhadnutý")` sklon; stříška odlišuje odhad z našich dat od neznámého populačního sklonu $\beta_{\text{zem. šířka}}$. Nula je hodnota sklonu podle `r render_glossary_term("nulova-hypoteza", display = "nulové hypotézy")` a $\operatorname{SE}(\hat{\beta}_{\text{zem. šířka}})$ standardní chyba odhadu. Výslednému číslu se říká `r render_glossary_term("t-statistika", display = "t-statistika")`. Je to `r render_glossary_term("testova-statistika", display = "testová statistika")`: číslo vypočtené z dat, které porovnáváme s referenčním rozdělením platným při nulové hypotéze.
 
 ::: {.box-question title="Zkuste si — Spočítejte t a řekněte, co znamená"}
 
@@ -1306,7 +1307,7 @@ T-statistika je **standardizovaná vzdálenost od jedné konkrétní hodnoty**. 
 
 ## Malá odbočka: kolik volnosti zbývá?
 
-Stejná hodnota $t$ není stejně neobvyklá ve studii se čtyřmi body a ve studii se čtyřmi tisíci body. Při malém množství informace `r render_glossary_term("odhad", display = "odhadujeme")` šum méně stabilně a musíme být opatrnější.
+Stejná hodnota $t$ není stejně neobvyklá ve studii se čtyřmi body a ve studii se čtyřmi tisíci body. Při malém množství informace odhadujeme šum méně stabilně a musíme být opatrnější.
 
 Tuto „zbývající informaci“ popisují `r render_glossary_term("stupne-volnosti", display = "stupně volnosti")`.
 
@@ -1508,10 +1509,10 @@ Krabí model má `r pocet_lokalit` průměrů slanisek. To je náš počet `r re
 - `r render_glossary_term("intercept", display = "intercept")`;
 - `r render_glossary_term("sklon", display = "sklon")`.
 
-Po odhadu těchto dvou koeficientů zbývá:
+Po `r render_glossary_term("odhad", display = "odhadu")` těchto dvou koeficientů zbývá:
 
 $$
-\text{reziduální stupně volnosti}
+\text{residuální stupně volnosti}
 =
 \text{počet pozorování (zde počet lokalit)}
 -
@@ -1547,19 +1548,19 @@ Doplňte tři věty:
 Analogie končí tam, kde Sudoku vynucuje přesnou číslici. V regresi residua vynucená nejsou; stupně volnosti jen říkají, kolik nezávislé informace o jejich rozptýlení zbývá.
 :::
 
-Teď si spojme počet pozorování s tím, kolik volnosti po fitování přímky zbývá. Přímka pokaždé odhaduje dva koeficienty, intercept a sklon:
+Teď si spojme počet pozorování s tím, kolik volnosti po fitování přímky zbývá. Přímka pokaždé odhaduje dva `r render_glossary_term("parametry-modelu", display = "koeficienty")`, intercept a sklon:
 
-| Počet nezávislých pozorování | Odhadnuté koeficienty | Zbývající reziduální df |
+| Počet nezávislých pozorování | Odhadnuté koeficienty | Zbývající residuální df |
 |---:|---:|---:|
 | 3 | 2 | 1 |
 | `r pocet_lokalit` | 2 | `r stupne_volnosti` |
 | 10 002 | 2 | 10 000 |
 
-Sudoku ukázalo volnost, která zbývá při postupném doplňování hodnot. Příklad s pevným průměrem ukázal stejnou myšlenku přesnou rovnicí. V regresi spotřebujeme část informace na odhad interceptu a sklonu. Když přidáme další nezávislá pozorování, ale stále odhadujeme jen tyto dva koeficienty, zbývá více reziduálních stupňů volnosti.
+Sudoku ukázalo volnost, která zbývá při postupném doplňování hodnot. Příklad s pevným průměrem ukázal stejnou myšlenku přesnou rovnicí. V regresi spotřebujeme část informace na odhad interceptu a sklonu. Když přidáme další nezávislá pozorování, ale stále odhadujeme jen tyto dva koeficienty, zbývá více residuálních stupňů volnosti.
 
 ### Proč jsme s malým počtem lokalit opatrnější?
 
-Pro vyhodnocení t-statistiky používáme `r render_glossary_term("rozdeleni", display = "t-rozdělení")`. Křivka ukazuje, které hodnoty $t$ bychom při opakování studie čekali častěji a které méně často. **Celá plocha pod křivkou představuje všechny možné výsledky dohromady.**
+Pro vyhodnocení `r render_glossary_term("t-statistika", display = "t-statistiky")` používáme `r render_glossary_term("t-rozdeleni", display = "t-rozdělení")`. Křivka ukazuje, které hodnoty $t$ bychom při opakování studie čekali častěji a které méně často. **Celá plocha pod křivkou představuje všechny možné výsledky dohromady.**
 
 Vyberme si dobře viditelnou hranici: hodnoty alespoň dvě `r render_glossary_term("standardni-chyba", display = "standardní chyby")` od nuly, tedy $t\leq-2$ nebo $t\geq2$. Fialová plocha ukáže, jak velká část možných výsledků leží za těmito hranicemi.
 
@@ -1693,13 +1694,13 @@ ggplot2::ggplot(
 - Co se s fialovou plochou mění, když roste počet stupňů volnosti?
 :::
 
-Při malém $df$ zůstává dál od nuly větší část celkové plochy. Pro tento tvar mají statistici běžný název: říkají, že taková křivka má **těžší chvosty**. Velké absolutní hodnoty $t$ proto nejsou při malém $df$ tak neobvyklé. Krabí model má `r stupne_volnosti` stupňů volnosti, takže v následující části použijeme tvar prostřední křivky — už ale s naší skutečnou hodnotou $t$, nikoli s ilustrační hranicí 2.
+Při malém $df$ zůstává dál od nuly větší část celkové plochy. Krajním oblastem křivky daleko od nuly se říká **chvosty rozdělení**. O křivce, která v nich má víc plochy, statistici říkají, že má **těžší chvosty**. Velké absolutní hodnoty $t$ proto nejsou při malém $df$ tak neobvyklé. Krabí model má `r stupne_volnosti` stupňů volnosti, takže v následující části použijeme tvar prostřední křivky — už ale s naší skutečnou hodnotou $t$, nikoli s ilustrační hranicí 2.
 
 ## Jak neobvyklé by bylo naše t v nulovém světě?
 
 Vraťme se ke krabům. `r render_glossary_term("nulova-hypoteza", display = "Nulová hypotéza")` popisuje svět, ve kterém je `r render_glossary_term("sklon", display = "sklon")` opravdu nulový. T-křivka s `r render_glossary_term("stupne-volnosti", display = "stupni volnosti")` `r stupne_volnosti` ukazuje, jaké hodnoty $t$ by v takovém světě vznikaly při opakování studie.
 
-Pozorovaný sklon leží přibližně `r format_cz(t_pozorovane, digits = 2)` `r render_glossary_term("standardni-chyba", display = "standardních chyb")` od nuly. Odpovídající t-statistika je tedy $t\approx `r format_cz_math(t_pozorovane, digits = 2)`$. Teď se ptáme, **jaká část nulového `r render_glossary_term("rozdeleni", display = "referenčního rozdělení")` leží alespoň tak daleko od nuly jako náš výsledek**.
+Pozorovaný sklon leží přibližně `r format_cz(t_pozorovane, digits = 2)` `r render_glossary_term("standardni-chyba", display = "standardních chyb")` od nuly. Odpovídající `r render_glossary_term("t-statistika", display = "t-statistika")` je tedy $t\approx `r format_cz_math(t_pozorovane, digits = 2)`$. Teď se ptáme, **jaká část nulového `r render_glossary_term("rozdeleni", display = "referenčního rozdělení")` leží alespoň tak daleko od nuly jako náš výsledek**.
 
 Celá plocha pod t-křivkou představuje všechny možné hodnoty $t$ v nulovém světě a má velikost 1. Hledaná část této plochy proto musí být číslo mezi 0 a 1.
 
@@ -1709,7 +1710,7 @@ Celá plocha pod t-křivkou představuje všechny možné hodnoty $t$ v nulovém
 | Výsledky ještě vzdálenější | vše nalevo od záporné hranice a napravo od kladné hranice |
 | Proč oba směry? | alternativa připouští kladný i záporný vztah |
 
-Obě krajní oblasti se nazývají **chvosty rozdělení**. Protože naše otázka připouští kladný i záporný sklon, budeme sčítat plochu v obou chvostech.
+Obě krajní oblasti jsou chvosty rozdělení, které jsme poznali při porovnání t-křivek. Protože naše otázka připouští kladný i záporný sklon, budeme sčítat plochu v obou chvostech.
 
 ```{r}
 #| label: pripravit-p-hodnotu
@@ -1870,7 +1871,7 @@ Následující výklady jsou nesprávné. P-hodnota není:
 
 ::: {.box-data collapse="true" title="Doplňující: jedna předem položená otázka a mnoho vyzkoušených otázek"}
 
-Naše p-hodnota odpovídá jedné předem pojmenované otázce o sklonu vůči zeměpisné šířce. Kdybychom však ze stejných dat bez předem daného plánu položili mnoho souvisejících otázek, zvýšila by se šance, že alespoň jedna analýza vytvoří nápadně malou p-hodnotu i bez přesvědčivého biologického signálu.
+Naše p-hodnota odpovídá jedné předem pojmenované otázce o sklonu vůči zeměpisné šířce. Kdybychom však ze stejných dat bez předem daného plánu položili mnoho souvisejících otázek (tzv. `r render_glossary_term("mnohonasobne-testovani", display = "mnohonásobné testování")`), zvýšila by se šance, že alespoň jedna analýza vytvoří nápadně malou p-hodnotu i bez přesvědčivého biologického signálu.
 
 Proto k interpretaci patří také informace, kolik otázek výsledku předcházelo a zda byly zvoleny před pohledem na výsledky. Předem formulovaná biologická otázka omezuje hledání výsledku, který pouze vypadá zajímavě. V následující lekci uvidíme, jak se stejné riziko objeví, když z jedněch dat položíme několik souvisejících otázek.
 :::
@@ -1912,13 +1913,13 @@ Tabulka tedy nepočítala přesnou plochu znovu pro každý model. Umožnila jed
 
 Nebyla to jedna hranice pro všechny modely. Bylo potřeba zvolit:
 
-- referenční rozdělení — zde t-rozdělení;
+- referenční rozdělení — zde `r render_glossary_term("t-rozdeleni", display = "t-rozdělení")`;
 - oboustrannou hladinu významnosti — zde $\alpha=`r format_cz_math(alfa)`$;
 - správný řádek podle stupňů volnosti — zde $df=`r stupne_volnosti`$.
 
 Malá část takové tabulky by vypadala následovně. Hodnoty říkají, jak daleko od nuly začíná při oboustranné hladině 5 % krajních pět procent t-rozdělení.
 
-| Reziduální stupně volnosti | Kritická hodnota $|t|$ pro $\alpha=`r format_cz_math(alfa)`$ |
+| Residuální stupně volnosti | Kritická hodnota $|t|$ pro $\alpha=`r format_cz_math(alfa)`$ |
 |---:|---:|
 | **`r stupne_volnosti` — krabí model** | **`r format_cz(kriticka_hodnota, digits = 3)`** |
 | 10 000 | `r format_cz(qt(p = 1 - alfa / 2, df = 10000), digits = 3)` |
@@ -2043,7 +2044,7 @@ ggplot2::ggplot(
   theme_biostat(base_size = 12)
 ```
 
-Fialové chvosty za kritickými hranicemi mají dohromady plochu $\alpha=`r format_cz_math(alfa)`$. Skutečně pozorovaná t-statistika je kladná; záporná oranžová hranice je pouze její zrcadlový protějšek pro oboustrannou otázku. P-hodnota je plocha pod t-křivkou za oběma oranžovými hranicemi. Protože $|t|=`r format_cz_math(abs(t_pozorovane), digits = 2)`$ leží za kritickou hodnotou `r format_cz(kriticka_hodnota, digits = 3)`, vedou porovnání $|t|$ s kritickou hodnotou a porovnání p-hodnoty s $\alpha$ ke stejnému rozhodnutí.
+Fialové chvosty za kritickými hranicemi mají dohromady plochu $\alpha=`r format_cz_math(alfa)`$. Skutečně pozorovaná `r render_glossary_term("t-statistika", display = "t-statistika")` je kladná; záporná oranžová hranice je pouze její zrcadlový protějšek pro oboustrannou otázku. P-hodnota je plocha pod t-křivkou za oběma oranžovými hranicemi. Protože $|t|=`r format_cz_math(abs(t_pozorovane), digits = 2)`$ leží za kritickou hodnotou `r format_cz(kriticka_hodnota, digits = 3)`, vedou porovnání $|t|$ s kritickou hodnotou a porovnání p-hodnoty s $\alpha$ ke stejnému rozhodnutí.
 
 V R stejnou hodnotu vyhledá funkce `qt()`. Funkce `pt()` pak spočítá plochu za pozorovaným t, tedy p-hodnotu. Následující kód používá přímo model, který jsme už fitovali:
 
@@ -2092,12 +2093,12 @@ P-hodnotu pro naši biologickou otázku najdeme v tabulce `Coefficients`:
 - vybereme řádek `zemepisna_sirka`, protože právě ten obsahuje `r render_glossary_term("sklon", display = "sklon")` vztahu k zeměpisné šířce;
 - ve sloupci `t value` vidíme pozorovanou t-statistiku `r format_cz(t_pozorovane, digits = 3)`;
 - ve sloupci `Pr(>|t|)` vidíme oboustrannou p-hodnotu `r format_cz(p_hodnota, digits = 6)`;
-- počet reziduálních stupňů volnosti `r stupne_volnosti` najdeme níže ve výpisu na řádku `Residual standard error`.
+- počet residuálních stupňů volnosti `r stupne_volnosti` najdeme níže ve výpisu na řádku `Residual standard error` (`r render_glossary_term("rezidualni-smerodatna-odchylka", display = "residuální směrodatná odchylka")`).
 
 To je hodnota, kterou budeme při běžné práci číst. Tabulka kritických hodnot, porovnání s $|t|$ a porovnání p-hodnoty s $\alpha$ jsou jen tři zápisy stejného rozhodovacího pravidla. Počítač princip porovnání nezměnil; stejné hranice a plochy však vypočítá za nás.
 
 ::: {.box-data collapse="true" title="Doplňující: proč se mluví o t-testu"}
-Test, který R provedl pro sklon, patří mezi takzvané `r render_glossary_term("t-test", display = "t-testy")`: odhad vydělíme jeho standardní chybou a výslednou t-statistiku porovnáme s t-rozdělením. V učebnicích a článcích se pod názvem t-test nejčastěji objevuje porovnání průměrů dvou skupin, například kontroly a zásahu. K tomuto t-testu se můžeme vrátit později v kurzu. Uvidíme, že jde o stejný lineární model, jen s prediktorem, který označuje příslušnost ke skupině.
+Test, který R provedl pro sklon, patří mezi takzvané `r render_glossary_term("t-test", display = "t-testy")`: `r render_glossary_term("odhad", display = "odhad")` vydělíme jeho `r render_glossary_term("standardni-chyba", display = "standardní chybou")` a výslednou t-statistiku porovnáme s t-rozdělením. V učebnicích a článcích se pod názvem t-test nejčastěji objevuje porovnání průměrů dvou skupin, například kontroly a zásahu. K tomuto t-testu se můžeme vrátit později v kurzu. Uvidíme, že jde o stejný `r render_glossary_term("linearni-model", display = "lineární model")`, jen s `r render_glossary_term("prediktor", display = "prediktorem")`, který označuje příslušnost ke skupině.
 :::
 
 Rozhodovací pravidlo pak zní:
@@ -2107,13 +2108,13 @@ Rozhodovací pravidlo pak zní:
 | p-hodnota je nejvýše $\alpha$ | **zamítneme nulovou hypotézu**; výsledek označíme jako **statisticky významný** |
 | p-hodnota je větší než $\alpha$ | **nulovou hypotézu nezamítneme**; výsledek není na zvolené hladině statisticky významný |
 
-V těchto materiálech používáme český termín **statisticky významný**. <!-- TODO: add slug statisticky-vyznamny to pojmy.yaml --> V článcích často uvidíte také synonymum **statisticky signifikantní** (anglicky *statistically significant*). P-hodnota je v obou případech menší než předem zvolená rozhodovací hranice.
+V těchto materiálech používáme český termín **`r render_glossary_term("statisticky-vyznamny", display = "statisticky významný")`**. V článcích často uvidíte také synonymum *statisticky signifikantní* (anglicky *statistically significant*). P-hodnota je v obou případech menší než předem zvolená rozhodovací hranice.
 
 ::: {.box-warning title="Statisticky významný neznamená biologicky důležitý"}
 Slovo „významný“ zde **neříká**, že je `r render_glossary_term("efekt", display = "efekt")` velký, biologicky důležitý nebo určitě pravdivý. O biologickém významu rozhodujeme podle velikosti efektu v jeho jednotkách a podle biologického kontextu, nikoli podle samotného porovnání p-hodnoty s hranicí.
 :::
 
-U krabů je p-hodnota `r format_cz(p_hodnota, digits = 6)`. Při $\alpha=`r format_cz_math(alfa)`$ proto nulovou hypotézu o přesně nulovém sklonu zamítáme a výsledek nazveme statisticky významným. Odpovídající `r render_glossary_term("interval-spolehlivosti", display = "95% interval spolehlivosti")` nulu neprotíná, takže vede ke stejnému rozhodnutí. Neříkáme tím, že jsme alternativní hypotézu dokázali; říkáme, že přesně nulový sklon je za předpokladů modelu s výsledkem velmi obtížně slučitelný.
+U krabů je p-hodnota `r format_cz(p_hodnota, digits = 6)`. Při $\alpha=`r format_cz_math(alfa)`$ proto nulovou hypotézu o přesně nulovém sklonu zamítáme a výsledek nazveme statisticky významným. Odpovídající `r render_glossary_term("interval-spolehlivosti", display = "95% interval spolehlivosti")` nulu neprotíná, takže vede ke stejnému rozhodnutí. Neříkáme tím, že jsme `r render_glossary_term("alternativni-hypoteza", display = "alternativní hypotézu")` dokázali; říkáme, že přesně nulový sklon je za předpokladů modelu s výsledkem velmi obtížně slučitelný.
 
 ### Stejnou otázku můžeme položit intervalu
 
@@ -2208,8 +2209,8 @@ Rozhodovací pravidlo už máme: `r render_glossary_term("p-hodnota", display = 
 
 U těhotenského testu si představme nulový stav „těhotenství není přítomno“:
 
-- **chyba I. typu neboli falešně pozitivní výsledek:** test hlásí těhotenství v očividně nemožné situaci;
-- **chyba II. typu neboli falešně negativní výsledek:** test nehlásí těhotenství v očividně pokročilé fázi.
+- **`r render_glossary_term("chyba-i-typu", display = "chyba I. typu")` neboli falešně pozitivní výsledek:** test hlásí těhotenství v očividně nemožné situaci;
+- **`r render_glossary_term("chyba-ii-typu", display = "chyba II. typu")` neboli falešně negativní výsledek:** test nehlásí těhotenství v očividně pokročilé fázi.
 
 ::: {#fig-tehotensky-test-chyby layout-ncol="2"}
 ![Falešně pozitivní výsledek: zjevně netěhotný muž překvapeně drží pozitivní těhotenský test.](images/chyba_i_falesne_pozitivni.jpg)
@@ -2295,9 +2296,9 @@ odhad_sily_pozorovany_sklon <-
   mean(vec_odhalen_pozorovany_sklon)
 ```
 
-Chyba II. typu popisuje jednotlivý omyl. Zbývá ale praktická otázka: **Jak dobře je naše studie připravena skutečný vztah vůbec odhalit?** Této schopnosti říkáme **síla testu**. <!-- TODO: add slug sila-testu to pojmy.yaml -->
+Chyba II. typu popisuje jednotlivý omyl. Zbývá ale praktická otázka: **Jak dobře je naše studie připravena skutečný vztah vůbec odhalit?** Této schopnosti říkáme **`r render_glossary_term("sila-testu", display = "síla testu")`**.
 
-V tomto kontextu znamená „efekt“ vždy **předem zvolenou skutečnou velikost efektu** (*effect size*) v širší populaci — například skutečný sklon `r format_cz(skutecny_sklon_sila)` mm na stupeň. Nejde o pravděpodobnost, že efekt existuje, ani o dodatečné přejmenování sklonu, který jsme právě pozorovali.
+V tomto kontextu znamená „efekt“ vždy **předem zvolenou skutečnou velikost efektu** (*effect size*) v širší `r render_glossary_term("populace", display = "populaci")` — například skutečný sklon `r format_cz(skutecny_sklon_sila)` mm na stupeň. Nejde o pravděpodobnost, že efekt existuje, ani o dodatečné přejmenování sklonu, který jsme právě pozorovali.
 
 Kdybychom opakovali stejně navrženou studii ve světě s touto konkrétní skutečnou velikostí efektu, síla testu by byla podíl opakování, ve kterých bychom nulovou hypotézu správně zamítli. Vyšší síle obvykle pomáhá:
 
@@ -2310,7 +2311,7 @@ Nízká síla znamená, že častěji nastane chyba II. typu: reálný vztah př
 
 ### Kolik studií vztah odhalí?
 
-Sílu testu můžeme `r render_glossary_term("odhad", display = "odhadnout")` simulací. Musíme si zvolit **konkrétní skutečný efekt**, který chceme umět odhalit. Zvolíme vztah `r format_cz(skutecny_sklon_sila)` mm na jeden stupeň, tedy asi `r format_cz(100 * skutecny_sklon_sila / odhad_sklonu, digits = 0)` % sklonu pozorovaného u krabů. Ptáme se tak, zda by stejná studie dokázala zachytit i slabší, ale předem zvolený vztah. Výsledek porovnáme také s naším pozorovaným sklonem.
+Sílu testu můžeme odhadnout `r render_glossary_term("simulace", display = "simulací")`. Musíme si zvolit **konkrétní skutečný efekt**, který chceme umět odhalit. Zvolíme vztah `r format_cz(skutecny_sklon_sila)` mm na jeden stupeň, tedy asi `r format_cz(100 * skutecny_sklon_sila / odhad_sklonu, digits = 0)` % sklonu pozorovaného u krabů. Ptáme se tak, zda by stejná studie dokázala zachytit i slabší, ale předem zvolený vztah. Výsledek porovnáme také s naším pozorovaným sklonem.
 
 Vytvoříme `r format(pocet_simulaci_sila, big.mark = " ")` hypotetických studií. Každá bude mít stejné zeměpisné šířky jako naše data. Do každé vložíme skutečný sklon `r format_cz(skutecny_sklon_sila)` mm na stupeň a přidáme náhodná `r render_glossary_term("residuum", display = "residua")` podobně velká jako v našem modelu. Potom vždy fitujeme přímku a zaznamenáme, zda při $\alpha=`r format_cz_math(alfa_sila)`$ zamítla nulový sklon.
 
@@ -2348,7 +2349,7 @@ kde $m$ je počet simulovaných studií, které nulový sklon zamítly, a $N$ je
 To znamená: kdyby byl skutečný sklon `r format_cz(skutecny_sklon_sila)` mm na stupeň a všechny ostatní podmínky odpovídaly této simulaci, přibližně `r format_cz(100 * odhad_sily, digits = 1)` % stejně navržených studií by při $\alpha=`r format_cz_math(alfa)`$ nulový sklon zamítlo. Zbylé studie by tento skutečný vztah přehlédly — dopustily by se chyby II. typu.
 
 ::: {.box-result title="Druhý zvolený scénář: větší skutečný sklon"}
-Zvolme ještě druhý scénář, ve kterém je skutečný sklon stejně velký jako náš odhad, tedy `r format_cz(odhad_sklonu, digits = 3)` mm na stupeň. Nulový sklon pak zamítne `r format(pocet_odhalenych_pozorovany_sklon, big.mark = " ")` z `r format(pocet_simulaci_sila, big.mark = " ")` studií a síla vychází přibližně `r format_cz(100 * odhad_sily_pozorovany_sklon, digits = 2)` %. Je vyšší než u sklonu `r format_cz(skutecny_sklon_sila)` mm na stupeň, protože větší skutečný efekt je při stejném počtu lokalit a stejné variabilitě snazší odhalit.
+Zvolme ještě druhý scénář, ve kterém je skutečný sklon stejně velký jako náš `r render_glossary_term("odhad", display = "odhad")`, tedy `r format_cz(odhad_sklonu, digits = 3)` mm na stupeň. Nulový sklon pak zamítne `r format(pocet_odhalenych_pozorovany_sklon, big.mark = " ")` z `r format(pocet_simulaci_sila, big.mark = " ")` studií a síla vychází přibližně `r format_cz(100 * odhad_sily_pozorovany_sklon, digits = 2)` %. Je vyšší než u sklonu `r format_cz(skutecny_sklon_sila)` mm na stupeň, protože větší skutečný efekt je při stejném počtu lokalit a stejné variabilitě snazší odhalit.
 
 **Ani toto číslo není síla naší již dokončené studie.** Pozorovaný sklon je jen odhad a skutečný sklon může být menší i větší. Sílu proto počítáme pro předem zvolené scénáře, nikoli zpětně z výsledku, který jsme už viděli.
 :::
@@ -2403,7 +2404,7 @@ Napište pět až šest vět tak, aby čtenář nejprve pochopil, **co se s veli
 Jedna možná odpověď:
 
 ::: {.box-result title="Příklad úplného výsledku"}
-Na `r pocet_lokalit` sledovaných slaniskách atlantského pobřeží se průměrná šířka krunýře samců zvyšovala přibližně o `r format_cz(odhad_sklonu, digits = 3)` mm na každý stupeň zeměpisné šířky, tedy asi o `r format_cz(efekt_zvoleny_rozdil, digits = 2)` mm na `r rozdil_stupnu`°. Přes celý sledovaný rozsah odpovídá fitovaná přímka změně přibližně `r format_cz(efekt_cely_rozsah, digits = 2)` mm, která je vzhledem k velikosti krabů biologicky zajímavá. 95% interval spolehlivosti sahal od `r format_cz(interval_sklonu[[1]], digits = 3)` do `r format_cz(interval_sklonu[[2]], digits = 3)` mm na stupeň. Při hladině $\alpha=`r format_cz_math(alfa)`$ byl výsledek statisticky významný; při předpokladech jednoduchého `r render_glossary_term("linearni-model", display = "lineárního modelu")` byla data obtížně slučitelná s přesně nulovým sklonem ($t\approx `r format_cz_math(t_pozorovane, digits = 2)`$, $df=`r stupne_volnosti`$, $p\approx `r format_cz_math(p_hodnota, digits = 6)`$). Výsledek podporuje kladný vztah mezi zeměpisnou šířkou a průměrnou velikostí samců na sledovaných slaniskách, ale sám neprokazuje, že zeměpisná šířka velikost krabů způsobuje.
+Na `r pocet_lokalit` sledovaných slaniskách atlantského pobřeží se průměrná šířka krunýře samců zvyšovala přibližně o `r format_cz(odhad_sklonu, digits = 3)` mm na každý stupeň zeměpisné šířky, tedy asi o `r format_cz(efekt_zvoleny_rozdil, digits = 2)` mm na `r rozdil_stupnu`°. Přes celý sledovaný rozsah odpovídá odhadnutá přímka změně přibližně `r format_cz(efekt_cely_rozsah, digits = 2)` mm, která je vzhledem k velikosti krabů biologicky zajímavá. 95% interval spolehlivosti sahal od `r format_cz(interval_sklonu[[1]], digits = 3)` do `r format_cz(interval_sklonu[[2]], digits = 3)` mm na stupeň. Při `r render_glossary_term("hladina-vyznamnosti", display = "hladině významnosti")` $\alpha=`r format_cz_math(alfa)`$ byl výsledek `r render_glossary_term("statisticky-vyznamny", display = "statisticky významný")`; při předpokladech jednoduchého `r render_glossary_term("linearni-model", display = "lineárního modelu")` byla data obtížně slučitelná s přesně nulovým sklonem ($t\approx `r format_cz_math(t_pozorovane, digits = 2)`$, $df=`r stupne_volnosti`$, $p\approx `r format_cz_math(p_hodnota, digits = 6)`$). Výsledek podporuje kladný vztah mezi zeměpisnou šířkou a průměrnou velikostí samců na sledovaných slaniskách, ale sám neprokazuje, že zeměpisná šířka velikost krabů způsobuje.
 :::
 
 ```{r}
@@ -2433,7 +2434,7 @@ vec_sklony_bez_lokality <-
 - **Mohou si blízká slaniska být podobnější?** Ano. Geografické lokality nemusí být zcela nezávislé a přímka není úplný prostorový ekologický model.
 - **Dokazuje vztah příčinu?** Ne. Studie je observační. Zeměpisná šířka může souviset s teplotou, délkou sezóny i dalšími podmínkami.
 
-Kvůli těmto omezením nemusíme výsledek zahodit. Musíme ale být opatrní, když ho zobecňujeme na jiná místa, populace nebo biologické mechanismy.
+Kvůli těmto omezením nemusíme výsledek zahodit. Musíme ale být opatrní, když ho zobecňujeme na jiná místa, `r render_glossary_term("populace", display = "populace")` nebo biologické mechanismy.
 
 ## Měsíc pořád není ze sýra
 
@@ -2457,7 +2458,7 @@ Vědecký závěr vzniká spojením více částí:
 
 ## Co bude následovat dál
 
-Zeměpisná šířka byla číselný `r render_glossary_term("prediktor", display = "prediktor")`, a proto jsme vztah popisovali `r render_glossary_term("sklon", display = "sklonem")`. V následující lekci nebude prediktorem číslo, ale příslušnost ke skupině, například kontrola a zásah. Místo sklonu se budeme ptát na rozdíl mezi dvěma `r render_glossary_term("prumer", display = "průměry")`.
+Zeměpisná šířka byla `r render_glossary_term("numericka-promenna", display = "numerický")` `r render_glossary_term("prediktor", display = "prediktor")`, a proto jsme vztah popisovali `r render_glossary_term("sklon", display = "sklonem")`. V následující lekci nebude prediktorem číslo, ale příslušnost ke skupině, například kontrola a zásah. Místo sklonu se budeme ptát na rozdíl mezi dvěma `r render_glossary_term("prumer", display = "průměry")`.
 
 Způsob uvažování zůstane stejný: nejprve velikost a biologický význam rozdílu, potom `r render_glossary_term("nejistota", display = "nejistota")`, srovnání s přesnou nulou a nakonec omezení studie.
 
@@ -2465,12 +2466,12 @@ Způsob uvažování zůstane stejný: nejprve velikost a biologický význam ro
 
 - Testovatelnost tvrzení není totéž jako jeho věrohodnost.
 - Nulový `r render_glossary_term("sklon", display = "sklon")` znamená žádný **systematický lineární trend**, nikoli žádnou náhodnou `r render_glossary_term("variabilita", display = "variabilitu")` mezi lokalitami.
-- T-statistika měří vzdálenost od nulového sklonu ve `r render_glossary_term("standardni-chyba", display = "standardních chybách")`.
+- `r render_glossary_term("t-statistika", display = "T-statistika")` měří vzdálenost od nulového sklonu ve `r render_glossary_term("standardni-chyba", display = "standardních chybách")`.
 - `r render_glossary_term("stupne-volnosti", display = "Stupně volnosti")` určují, kterou referenční t-křivku použijeme a kolik plochy zůstává daleko od nuly.
 - `r render_glossary_term("p-hodnota", display = "P-hodnota")` je podmíněná plocha v chvostech referenčního `r render_glossary_term("rozdeleni", display = "rozdělení")`, nikoli pravděpodobnost pravdivosti hypotézy.
-- „Statisticky významný“ je výsledek rozhodovacího pravidla; neznamená automaticky velký nebo biologicky důležitý `r render_glossary_term("efekt", display = "efekt")`.
+- „`r render_glossary_term("statisticky-vyznamny", display = "Statisticky významný")`“ je výsledek rozhodovacího pravidla; neznamená automaticky velký nebo biologicky důležitý `r render_glossary_term("efekt", display = "efekt")`.
 - Zamítnutí i nezamítnutí `r render_glossary_term("nulova-hypoteza", display = "nulové hypotézy")` může být chybné a závažnost obou chyb závisí na jejich důsledcích.
-- Síla testu popisuje schopnost odhalit předem zvolenou skutečnou velikost efektu; nízká síla zvyšuje riziko, že reálný vztah přehlédneme.
+- `r render_glossary_term("sila-testu", display = "Síla testu")` popisuje schopnost odhalit předem zvolenou skutečnou velikost efektu; nízká síla zvyšuje riziko, že reálný vztah přehlédneme.
 - Dobrá vědecká odpověď spojuje velikost vztahu, `r render_glossary_term("nejistota", display = "nejistotu")`, srovnání s přesnou nulou, `r render_glossary_term("diagnostika-modelu", display = "diagnostiku modelu")` a omezení studie.
 
 ### Závěrečná otázka

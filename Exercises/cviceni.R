@@ -37,6 +37,8 @@
 # 3. V panelu Files otevřete cviceni.R.
 # 4. Přes File > Save As si uložte vlastní kopii, například
 #    cviceni_L05_prijmeni.R.
+# Příště projekt otevřete dvojklikem na soubor L05_praktikum.Rproj nebo
+# v RStudiu přes File > Open Project.
 #
 # Výsledná složka vypadá takto:
 # L05_praktikum/
@@ -89,16 +91,19 @@
 # - napsat opatrný biologický závěr.
 #
 # Navazujeme na předchozí lekce: datové rámce, plot(), hist(), lm(),
-# coef(), summary(), confint(), residua a interval spolehlivosti. Nové
-# funkce vysvětlujeme vždy u úlohy, kde je poprvé potřebujete.
+# coef(), summary(), confint(), predict(), residua, Q–Q graf, Cookova
+# vzdálenost, interval a pás spolehlivosti. Nové funkce vysvětlujeme vždy
+# u úlohy, kde je poprvé potřebujete.
 #
-# Krátké připomenutí z minulé lekce (pokud ho znáte, přeskočte ho):
+# Krátké připomenutí z minulých lekcí (pokud ho znáte, přeskočte ho):
 # - sklon říká, o kolik se v průměru změní odezva, když se prediktor
 #   zvětší o jednu jednotku;
 # - standardní chyba popisuje nejistotu odhadu sklonu;
 # - 95% interval spolehlivosti ukazuje rozsah sklonů slučitelných
-#   s daty a modelem;
-# - graf residuí ukazuje, co přímka nevystihla.
+#   s daty a modelem; pás spolehlivosti ukazuje totéž pro průměrnou
+#   odezvu podél celé přímky;
+# - grafy residuí ukazují, co přímka nevystihla, a Cookova vzdálenost,
+#   které pozorování přímku nejvíc ovlivňuje.
 
 #--------------------------------------------------#
 ## Technická kontrola souboru -----
@@ -113,8 +118,8 @@ if (
   stop(
     paste0(
       "Soubor data/pie_crab_site_means.csv nebyl nalezen. ",
-      "Otevřete projekt L05_praktikum a zkontrolujte jméno ",
-      "a umístění CSV v podsložce data."
+      "Otevřete projekt L05_praktikum (File > Open Project) ",
+      "a zkontrolujte jméno a umístění CSV v podsložce data."
     ),
     call. = FALSE
   )
@@ -237,10 +242,34 @@ if (
 #--------------------------------------------------#
 # Residuum je pozorovaný průměr slaniska minus hodnota odhadnutá přímkou.
 # Nula znamená, že slanisko leží přesně na přímce.
+#
+# Intervaly a p-hodnoty z modelu čteme za předpokladů modelu: vztah je
+# přibližně přímkový, residua jsou kolem přímky rozptýlená podobně
+# a slaniska jsou nezávislá. Nezávislost znamená, že hodnota jednoho
+# slaniska nic neříká o hodnotě jiného. Blízká slaniska si ale mohou být
+# podobná, například počasím. Grafy residuí pomohou posoudit první dva
+# předpoklady.
+#
 # - resid() vrací residua modelu, fitted() hodnoty odhadnuté modelem.
 # - abline(h = 0) přidá do grafu vodorovnou čáru v nule; argument lty = 2
 #   ji udělá přerušovanou.
 # - hist() nakreslí histogram.
+# - qqnorm() nakreslí Q–Q graf a qqline() do něj přidá přímku; obě funkce
+#   potřebují stejná residua a qqline() voláte až po qqnorm(). Body blízko
+#   přímky znamenají, že residua mají přibližně normální rozdělení.
+# - cooks.distance(model = ...) vrátí Cookovu vzdálenost každého
+#   slaniska: jak moc by se změnily odhadnuté hodnoty, kdybychom slanisko
+#   vynechali. Hodnota 4/n (n je počet slanisek v modelu) jen označuje
+#   slaniska, na která se vyplatí podívat blíž; není to pravidlo pro mazání
+#   dat.
+# - plot() s jediným vektorem a argumentem type = "h" nakreslí každou
+#   hodnotu jako svislou čáru v pořadí řádků; abline(h = ...) přidá
+#   vodorovnou čáru v zadané výšce.
+# - Panel Plots ukazuje vždy poslední graf. Starší grafy najdete šipkami
+#   v jeho horní liště; každý graf si prohlédněte, než nakreslíte další.
+# - Porovnání jako x > 0.3 vrátí pro každou hodnotu TRUE nebo FALSE.
+#   Zápis vektor[podmínka] vybere z vektoru hodnoty, kde je podmínka TRUE.
+#   Pořadí hodnot cooks.distance() odpovídá řádkům data_lokality.
 
 #----------------------------------------#
 ### Úloha | L05-U03 -----
@@ -250,69 +279,125 @@ if (
 # 1. Nakreslete bodový graf residuí mod_krabi (osa y) proti hodnotám
 #    odhadnutým modelem (osa x). Obě osy popište včetně jednotky mm.
 # 2. Přidejte vodorovnou přerušovanou čáru v nule.
-# 3. V samostatném grafu nakreslete histogram residuí.
+# 3. V samostatných grafech nakreslete histogram residuí a jejich Q–Q graf
+#    s přímkou.
+# 4. Spočítejte Cookovu vzdálenost slanisek v mod_krabi, nakreslete ji
+#    jako svislé čáry a přidejte vodorovnou čáru ve výšce 4/n. Zjistěte
+#    kod_lokality slanisek, která hodnotu 4/n přesahují.
 
 # Vaše řešení:
 
 
 # Nápověda 1:
 # Graf proti odhadnutým hodnotám ukazuje, zda se odchylky od přímky
-# systematicky mění podél přímky. Histogram ukazuje, jak často se residua
-# různé velikosti vyskytují.
+# systematicky mění podél přímky. Histogram a Q–Q graf ukazují, jak jsou
+# residua rozdělená. Cookova vzdálenost se ptá na něco jiného: zda by
+# přímka vypadala jinak bez jediného slaniska.
 #
 # Nápověda 2:
 # V plot() zadejte x = fitted(object = mod_krabi) a
 # y = resid(object = mod_krabi). Čáru přidá abline(h = 0, lty = 2).
+# Do hist(), qqnorm() i qqline() vložte resid(object = mod_krabi).
+# Cookovu vzdálenost vložte do plot() jako x s type = "h". Hodnotu 4/n
+# spočítejte jako 4 / nrow(x = data_lokality). Porovnání
+# cooks.distance(model = mod_krabi) > 4 / nrow(x = data_lokality) vrací
+# TRUE nebo FALSE; vložte ho do hranatých závorek za
+# data_lokality$kod_lokality.
 #
 # Očekávaný výsledek:
 # Residua leží po obou stranách nuly bez zřetelného oblouku nebo
-# vějíře. Několik slanisek se od přímky liší výrazněji než ostatní.
+# vějíře a body Q–Q grafu leží blízko přímky. Několik slanisek se
+# od přímky liší výrazněji než ostatní. Hodnota 4/n je asi 0,31; přesahují
+# ji dvě nejjižnější slaniska GTM (asi 0,50) a SI (asi 0,43).
 #
 # Interpretace:
-# Vidíte oblouk, vějíř nebo slanisko s velkým residuem? Co z těchto
-# grafů nepoznáte o nezávislosti blízkých slanisek?
+# Vidíte oblouk, vějíř nebo slanisko s velkým residuem? Proč mají velký
+# vliv právě slaniska na kraji rozsahu zeměpisné šířky? Proč ani pěkné
+# grafy residuí nezaručí, že blízká slaniska jsou nezávislá?
 
 #--------------------------------------------------#
 ## Jak přesně známe velikost vztahu? -----
 #--------------------------------------------------#
 # Ve výstupu summary() sledujte řádek zemepisna_sirka. Estimate je odhad
 # sklonu, Std. Error jeho standardní chyba. Sloupce t value a Pr(>|t|)
-# zatím nevykládejte; vrátíme se k nim v U05 a U06.
+# zatím nevykládejte; vrátíme se k nim v U05 a U06. Hvězdičky, R-squared
+# a F-statistic v této lekci nepotřebujeme.
 # confint() vypíše 95% intervaly spolehlivosti obou koeficientů.
+#
+# Nejistotu přímky ukazuje i pás spolehlivosti z minulé lekce. predict()
+# s argumentem interval = "confidence" vrátí pro zadané zeměpisné šířky
+# tři sloupce: fit (odhadnutý průměr), lwr a upr (hranice 95% intervalu).
+# lines() je spojí čarami do posledního grafu. predict() vrací matici:
+# mat_pas[, "lwr"] vybere její sloupec lwr (prázdné místo před čárkou
+# znamená všechny řádky). data.frame(), seq() a min()/max() jen připraví
+# padesát zeměpisných šířek, pro které pás spočítáme.
+#
+# Ukázka: pás spolehlivosti pro mod_krabi. Ukázka je zakomentovaná,
+# protože potřebuje data_lokality a mod_krabi z U01 a U02. Nejdřív znovu
+# nakreslete bodový graf z U02.
+# # Padesát zeměpisných šířek od nejjižnější po nejsevernější lokalitu
+# data_mrizka <-
+#   data.frame(
+#     zemepisna_sirka = seq(
+#       from = min(data_lokality$zemepisna_sirka),
+#       to = max(data_lokality$zemepisna_sirka),
+#       length.out = 50
+#     )
+#   )
+#
+# # Pro každou šířku odhadnutý průměr (fit) a hranice intervalu
+# mat_pas <-
+#   predict(
+#     object = mod_krabi,
+#     newdata = data_mrizka,
+#     interval = "confidence"
+#   )
+#
+# # Přímka plnou čarou, hranice pásu přerušovaně
+# lines(x = data_mrizka$zemepisna_sirka, y = mat_pas[, "fit"], lwd = 2)
+# lines(x = data_mrizka$zemepisna_sirka, y = mat_pas[, "lwr"], lty = 2)
+# lines(x = data_mrizka$zemepisna_sirka, y = mat_pas[, "upr"], lty = 2)
 
 #----------------------------------------#
 ### Úloha | L05-U04 -----
 #----------------------------------------#
 
 # Zadání:
+# Představte si, že biologové předem označili změnu alespoň 2 mm na 5°
+# za biologicky zajímavou.
 # 1. Zobrazte summary(object = mod_krabi) a confint(object = mod_krabi).
 # 2. V řádku zemepisna_sirka najděte odhad sklonu, jeho standardní chybu
 #    a 95% interval spolehlivosti.
-# 3. Přepočtěte obě hranice intervalu na rozdíl 5°.
-#
-# Představte si, že biologové předem označili změnu alespoň 2 mm na 5°
-# za biologicky zajímavou.
+# 3. Přepočtěte obě hranice intervalu na rozdíl 5° a porovnejte je
+#    s hranicí 2 mm.
+# 4. Znovu nakreslete bodový graf z U02 a přidejte do něj pás
+#    spolehlivosti z ukázky. Kde je pás nejužší a kde nejširší?
 
 # Vaše řešení:
 
 
 # Nápověda 1:
 # V obou výstupech má sklon vlastní řádek. Přepočet na 5° nemění model,
-# mění jen jednotku rozdílu.
+# mění jen jednotku rozdílu. Šířku pásu porovnejte uprostřed a na obou
+# okrajích rozsahu zeměpisné šířky.
 #
 # Nápověda 2:
 # V summary() čtěte sloupce Estimate a Std. Error. V confint() čtěte
-# sloupce 2.5 % a 97.5 % a obě hodnoty vynásobte pěti.
+# sloupce 2.5 % a 97.5 % a obě hodnoty vynásobte pěti. Ukázku pásu
+# zkopírujte, odstraňte # a spusťte až po plot() z U02.
 #
 # Očekávaný výsledek:
 # Odhad sklonu asi 0,490 mm/°, standardní chyba asi 0,0795 mm/° a 95%
 # interval 0,315–0,664 mm/°. Na 5° to je asi 1,57–3,32 mm. Interval
 # obsahuje hodnoty pod i nad hranicí 2 mm a nulu neobsahuje.
+# Pás je nejužší (asi 1,5 mm) uprostřed, blízko průměrné zeměpisné šířky
+# kolem 37,6°, a k okrajům se rozšiřuje až na asi 3,1 mm.
 #
 # Interpretace:
 # Leží celý interval nad hranicí 2 mm, nebo ji protíná? Co z toho
 # vyplývá o biologickém významu? Oddělte odhad, jeho nejistotu a předem
-# zvolenou hranici důležitosti.
+# zvolenou hranici důležitosti. Proč známe průměrnou šířku krunýře
+# nejhůř na okrajích rozsahu?
 
 #--------------------------------------------------#
 ## Jaké přesné tvrzení porovnáváme s daty? -----
@@ -325,9 +410,10 @@ if (
 # standardní chyby:
 #   t = (odhad sklonu - 0) / standardní chyba sklonu
 #
-# Model odhaduje dva koeficienty, intercept a sklon. Residuální stupně
-# volnosti proto získáme jako počet slanisek minus 2. Funkce df.residual()
-# vrací tento počet přímo z modelu.
+# Pozorováním modelu je slanisko, ne jednotlivý krab. Model z nich
+# odhaduje dva koeficienty, intercept a sklon. Residuální stupně volnosti
+# proto získáme jako počet slanisek minus 2. Funkce df.residual() vrací
+# tento počet přímo z modelu.
 
 #----------------------------------------#
 ### Úloha | L05-U05 -----
@@ -336,8 +422,8 @@ if (
 # Zadání:
 # 1. Do komentáře zapište H0 a HA pro mod_krabi vlastními slovy. Použijte
 #    názvy obou proměnných a jednotku sklonu.
-# 2. Z výstupu summary(object = mod_krabi) opište odhad sklonu a jeho standardní
-#    chybu a spočtěte z nich t.
+# 2. Z výstupu summary(object = mod_krabi) opište odhad sklonu a jeho
+#    standardní chybu a spočtěte z nich t.
 # 3. Spočtěte počet slanisek minus 2 a porovnejte výsledek
 #    s df.residual(object = mod_krabi).
 
@@ -345,8 +431,9 @@ if (
 
 
 # Nápověda 1:
-# V čitateli vzorce je vzdálenost odhadu od nulové hodnoty, ve jmenovateli
-# měřítko nejistoty odhadu.
+# t vyjadřuje, kolik standardních chyb leží odhad od nulové hodnoty.
+# Stupně volnosti jsou počet slanisek, který zbude po odhadu obou
+# koeficientů přímky.
 #
 # Nápověda 2:
 # Vydělte Estimate hodnotou Std. Error z řádku zemepisna_sirka. Počet
@@ -366,17 +453,13 @@ if (
 #--------------------------------------------------#
 # Kdyby platila H0 i předpoklady modelu, kolísaly by hodnoty t podle
 # t-rozdělení se stejnými stupni volnosti, jaké má model. Pozorované t
-# proto porovnáváme s tímto rozdělením. Funkce pt() vrací plochu pod
-# t-křivkou nalevo od zadané hodnoty t.
+# proto porovnáváme s tímto rozdělením.
 #
-# Ukázka: plocha nalevo od t = -2 při 11 stupních volnosti.
-pt(
-  q = -2,
-  df = 11
-)
 # Oboustranná p-hodnota sčítá plochu v obou chvostech, tedy všechny
-# výsledky alespoň tak vzdálené od nuly jako pozorované t. Hladinu
-# významnosti alfa = 0,05 volíme dřív, než se na p-hodnotu podíváme.
+# výsledky alespoň tak vzdálené od nuly jako pozorované t. Tuto plochu
+# za nás spočítá summary(): je to sloupec Pr(>|t|), poslední sloupec
+# tabulky koeficientů. Hladinu významnosti alfa = 0,05 volíme dřív, než
+# se na p-hodnotu podíváme.
 #
 # Velmi malá čísla R vypisuje zkráceně. Například 7.11e-05 znamená
 # 7,11 × 10⁻⁵, tedy 0,0000711. Zápis e-05 říká „posuň desetinnou čárku
@@ -387,9 +470,10 @@ pt(
 #----------------------------------------#
 
 # Zadání:
-# 1. Spočtěte oboustrannou p-hodnotu jako dvojnásobek plochy nalevo
-#    od -|t|. Použijte t ze své úlohy U05 a
-#    df.residual(object = mod_krabi).
+# 1. Ve výstupu summary(object = mod_krabi) najděte oboustrannou
+#    p-hodnotu sklonu a přepište ji jako desetinné číslo. Patří k t
+#    a df = 11 z U05: je to plocha t-křivky s 11 stupni volnosti za −|t|
+#    a +|t|.
 # 2. Porovnejte p-hodnotu s předem zvolenou hladinou významnosti alfa = 0,05
 #    a rozhodněte o H0.
 # 3. Zkontrolujte, zda 95% interval sklonu z U04 obsahuje nulu.
@@ -398,17 +482,17 @@ pt(
 
 
 # Nápověda 1:
-# Oboustranná alternativa připouští kladný i záporný sklon, proto
-# potřebujete plochu v obou chvostech. Křivka je souměrná, takže stačí
-# jeden chvost zdvojnásobit.
+# P-hodnota patří ke stejnému koeficientu jako t z U05, tedy ke sklonu.
+# Oboustranná alternativa připouští kladný i záporný sklon a sloupec
+# Pr(>|t|) už obsahuje plochu v obou chvostech.
 #
 # Nápověda 2:
-# Funkci pt() zadejte jako q zápornou absolutní hodnotu t; absolutní
-# hodnotu vrátí abs(). Výsledek vynásobte dvěma.
+# Čtěte řádek zemepisna_sirka, sloupec Pr(>|t|). Zápis e-05 převedete
+# na desetinné číslo posunutím desetinné čárky o pět míst doleva.
 #
 # Očekávaný výsledek:
-# p je asi 0,0000711 (R vypíše 7.112446e-05), tedy méně než 0,05, a H0
-# o nulovém sklonu zamítáme. Hodnota odpovídá sloupci Pr(>|t|). Interval nulu neobsahuje.
+# p je asi 0,0000711 (R vypíše 7.11e-05), tedy méně než 0,05, a H0
+# o nulovém sklonu zamítáme. Interval nulu neobsahuje.
 #
 # Interpretace:
 # Doplňte větu: „Kdyby platila H0 a předpoklady modelu, ...“. Znamená
@@ -455,20 +539,22 @@ pt(
 #--------------------------------------------------#
 ## Co smíme říct o krabech? -----
 #--------------------------------------------------#
-# Studie je observační. Počty krabů na slaniskách se mírně liší,
-# jednoduchý model ale přesto dává průměrům všech slanisek stejnou váhu. Blízká slaniska
-# si mohou být podobná a některá mají na přímku větší vliv. Graf residuí
-# sám neprokáže nezávislost slanisek ani příčinu vztahu.
+# Studie je observační: zeměpisnou šířku slanisek jsme nenastavovali,
+# slaniska jsme jen vybrali a změřili. Zeměpisná šířka proto může souviset
+# i s teplotou nebo délkou sezóny. Počty krabů na slaniskách se mírně liší,
+# jednoduchý model ale přesto dává průměrům všech slanisek stejnou váhu.
+# Blízká slaniska si mohou být podobná a některá mají na přímku větší vliv.
+# Graf residuí sám neprokáže nezávislost slanisek ani příčinu vztahu.
 
 #----------------------------------------#
 ### Úloha | L05-U08 -----
 #----------------------------------------#
 
 # Zadání:
-# Napište do komentáře 4–6 vět pro biologa o vztahu zeměpisné šířky
+# Napište do komentáře 6–8 vět pro biologa o vztahu zeměpisné šířky
 # a průměrné šířky krunýře. Dodržte toto pořadí:
 # 1. biologická otázka a jednotka pozorování;
-# 2. graf, přímka a kontrola residuí;
+# 2. graf, přímka, kontrola residuí a vlivných slanisek;
 # 3. odhad sklonu v mm/° a na 5° a jeho možná biologická důležitost;
 # 4. 95% interval spolehlivosti;
 # 5. p-hodnota vzhledem k H0: sklon = 0 a hladině alfa = 0,05;
@@ -479,18 +565,23 @@ pt(
 
 
 # Nápověda 1:
-# Věcnou velikost vztahu uveďte před rozhodnutím testu; omezení patří
-# na konec.
+# Ke každému číslu připište jednotku a krátce, co znamená pro kraby.
+# U p-hodnoty uveďte, ke které nulové hypotéze se vztahuje, a u omezení,
+# proč brání silnějšímu závěru.
 #
 # Nápověda 2:
-# Čísla vezměte z U02 (sklon a 5°), U04 (interval) a U05–U06 (t, df, p).
+# Čísla vezměte z U02 (sklon a 5°), U04 (interval) a U05–U06 (t, df, p);
+# vlivná slaniska z U03.
 # Omezení najdete v textu nad touto úlohou.
 #
 # Očekávaný výsledek:
 # Po otázce a kontrole modelu závěr uvede efekt asi 0,490 mm/° (2,45 mm
-# na 5°) a interval 0,315–0,664 mm/°; teprve potom p-hodnotu. Data jsou při předpokladech modelu obtížně slučitelná
-# s nulovým sklonem, ale neprokazují příčinu. Mezi omezeními je například
-# prostorová podobnost slanisek a nestejná přesnost průměrů.
+# na 5°) a interval 0,315–0,664 mm/°; teprve potom p-hodnotu. Data jsou
+# při předpokladech modelu obtížně slučitelná s nulovým sklonem, ale
+# neprokazují příčinu. Závěr zmíní, že Cookova vzdálenost GTM a SI
+# přesahuje 4/n: přímka je citlivější na dvě nejjižnější slaniska, ale
+# kladný směr to samo nevyvrací. Mezi omezeními je například prostorová
+# podobnost slanisek a nestejná přesnost průměrů.
 #
 # Interpretace:
 # Které věty vašeho závěru by se nezměnily, kdyby p-hodnota vyšla 0,2?
@@ -594,6 +685,16 @@ pt(
 #--------------------------------------------------#
 ## Testová statistika a rozhodnutí -----
 #--------------------------------------------------#
+# K úloze L05-N05: plochu pod t-křivkou umí R spočítat i bez modelu.
+# Funkce pt() vrací plochu nalevo od zadané hodnoty t (argument q) při
+# zadaných stupních volnosti (argument df). Stejný výpočet stojí za
+# sloupcem Pr(>|t|) ve výstupu summary().
+#
+# Ukázka: plocha nalevo od t = -2 při 11 stupních volnosti.
+pt(
+  q = -2,
+  df = 11
+)
 
 #----------------------------------------#
 ### Úloha navíc | L05-N04 -----
@@ -635,8 +736,8 @@ pt(
 # Oboustranná otázka potřebuje oba chvosty za stejně vzdálenými hranicemi.
 #
 # Nápověda 2:
-# Použijte pt() stejně jako v ukázce před U06 a výsledek pokaždé
-# zdvojnásobte.
+# Použijte pt() stejně jako v ukázce nad touto částí, s q = -2, a výsledek
+# pokaždé zdvojnásobte, protože t-křivka je souměrná.
 #
 # Očekávaný výsledek:
 # Asi 0,0708 pro df = 11 a 0,0546 pro df = 30; druhá plocha je menší.
@@ -787,17 +888,18 @@ pt(
 # Proč mohou mít průměry slanisek různou přesnost? Jak s tím zacházel
 # model mod_krabi, který všem slaniskům dal stejnou váhu?
 
+# K úloze L05-N11: funkce which.max() vrátí pořadí největší hodnoty
+# ve vektoru; abs() vrací absolutní hodnotu, tedy velikost čísla bez
+# znaménka.
+
 #----------------------------------------#
 ### Úloha navíc | L05-N11 -----
 #----------------------------------------#
 
-# Funkce which.max() vrátí pořadí největší hodnoty ve vektoru; abs() vrací
-# absolutní hodnotu, tedy velikost čísla bez znaménka.
-#
 # Zadání:
-# Z resid(object = mod_krabi) najděte slanisko s největší absolutní odchylkou
-# od přímky. V data_lokality určete jeho kod_lokality a uveďte velikost
-# residua v mm.
+# Z resid(object = mod_krabi) najděte slanisko s největší absolutní
+# odchylkou od přímky. V data_lokality určete jeho kod_lokality a uveďte
+# velikost residua v mm.
 
 # Vaše řešení:
 
@@ -818,18 +920,20 @@ pt(
 # Proč velké residuum samo neprokazuje chybu měření ani chybnou nulovou
 # hypotézu?
 
+# K úloze L05-N12: operátor != znamená „není rovno“. Zápis
+# x[podmínka, ] vybere řádky, ve kterých je podmínka TRUE.
+
 #----------------------------------------#
 ### Úloha navíc | L05-N12 -----
 #----------------------------------------#
 
-# Operátor != znamená „není rovno“. Zápis x[podmínka, ] vybere řádky,
-# ve kterých je podmínka TRUE.
-#
 # Zadání:
+# V U03 přesáhla hodnotu 4/n Cookova vzdálenost slanisek GTM a SI.
 # 1. Z data_lokality vynechte nejjižnější slanisko GTM a zbylá slaniska
 #    uložte jako data_bez_gtm.
 # 2. Fitujte stejnou přímku jako mod_krabi, uložte ji jako mod_bez_gtm
 #    a porovnejte oba sklony.
+# 3. Totéž zopakujte bez slaniska SI.
 
 # Vaše řešení:
 
@@ -842,7 +946,8 @@ pt(
 # stejný vzorec jako v U02.
 #
 # Očekávaný výsledek:
-# Sklon se změní z asi 0,490 na asi 0,559 mm/°; oba jsou kladné.
+# Sklon se změní z asi 0,490 na asi 0,559 mm/°; oba jsou kladné. Bez SI
+# by vyšel asi 0,429 mm/°, tedy také kladný.
 #
 # Interpretace:
 # Zůstává směr vztahu stejný? Dokazuje tato jedna kontrola nezávislost

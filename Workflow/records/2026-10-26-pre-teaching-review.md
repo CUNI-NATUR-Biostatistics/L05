@@ -139,4 +139,4 @@
 - L06 (branch `fix/l06-coefficient-notation-reference`): the notation sentence now says that L03, L04 and L05 all wrote $a$ and $b$, and that $\beta$ is used from L06 on; it no longer mentions $\hat{\beta}_1$ in L04.
 - Presentation: "Jedna možná odpověď" rewritten as one Results-style paragraph (effect, uncertainty, test, biological meaning, limitation; statistics in brackets after the claim); deck re-rendered in PollsLive sync mode (58 slides).
 - Ondřej Mottl approved the presentation (2026-10-28).
-- Still open: human approval of the exercise (wording changes since 2026-10-21 and the D1/D2 additions) and the core-timing decision.
+- Ondřej Mottl approved the exercise (2026-10-28). All three artifacts are now approved; the core-timing estimate (95–110 min against 85–95 min) is recorded in the exercise blueprint. Next: merge PR #19 and release before teaching.

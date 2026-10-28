@@ -84,3 +84,9 @@ Before human review: parse and check UTF-8 without BOM; run the unfilled script 
 - The live `/L05/current/cviceni.R` predates the 2026-10-21 and 2026-10-26 changes; students get them only after the next release.
 - Focused re-review (same independent reviewer, 2026-10-26): all six findings resolved, ready for human review. Its two optional nits were then applied: the assumptions paragraph now names intervals and p-values, the U03 `Interpretace` asks why a clean residual plot does not guarantee independence, and the moved N11/N12 notes start with "K úloze L05-N11/N12:". Re-checked: parse OK, UTF-8, CRLF, clean unfilled run.
 - Human approval of the 2026-10-21 and 2026-10-26 wording changes is still required before the next release (`exercises.md`).
+
+## Revision 2026-10-28 (decisions D1 and D2)
+
+- Changes are recorded in `2026-10-26-pre-teaching-review.md` (revision 2026-10-28): U03 adds a Q–Q plot and Cook's distance, a worked example before U04 draws the confidence band, U06 reads `Pr(>|t|)` from `summary()`, `pt()` has its own worked example before optional N05, and U08 and N12 use the U03 influence result.
+- Estimated core timing after these additions: 95–110 min against the 85–95 min budget (U03 +8–12 min, U04 +5 min).
+- Ondřej Mottl approved the exercise, including the 2026-10-21, 2026-10-26 and 2026-10-28 changes (2026-10-28).

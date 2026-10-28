@@ -963,14 +963,6 @@ abline(
 data_lokality$kod_lokality[
   vec_cookova_vzdalenost > 4 / nrow(x = data_lokality)
 ]
-
-# Změna sklonu po vynechání každé jednotlivé lokality; dfbeta() ji vrátí
-#   pro každý koeficient, sloupec zemepisna_sirka patří ke sklonu
-vec_zmena_sklonu <-
-  dfbeta(model = mod_krabi)[, "zemepisna_sirka"]
-
-# Největší změna sklonu bez ohledu na směr
-max(abs(x = vec_zmena_sklonu))
 ```
 
 ```{=typst}
@@ -988,8 +980,6 @@ vec_lokality_nad_hranici <-
 vec_dve_nejjiznejsi <-
   data_lokality$kod_lokality[order(data_lokality$zemepisna_sirka)[1:2]]
 
-max_zmena_sklonu <- max(abs(vec_zmena_sklonu))
-
 vec_sklony_bez_lokality <-
   purrr::map_dbl(
     .x = seq_len(pocet_lokalit),
@@ -1002,9 +992,11 @@ vec_sklony_bez_lokality <-
       coef(mod_bez_lokality)[["zemepisna_sirka"]]
     }
   )
+
+max_zmena_sklonu <- max(abs(vec_sklony_bez_lokality - odhad_sklonu))
 ```
 
-Orientační hodnotu 4/n = `r format_cz(hranice_cook, digits = 2)` překračují lokality `r paste(vec_lokality_nad_hranici, collapse = " a ")`. `r if (setequal(vec_lokality_nad_hranici, vec_dve_nejjiznejsi)) "Jsou to dvě nejjižnější slaniska: leží na okraji rozsahu zeměpisné šířky, a proto mají velký pákový efekt." else ""` Vynechání kterékoli jedné lokality změní sklon nejvýš o `r format_cz(max_zmena_sklonu, digits = 3)` mm na stupeň, tedy asi o `r format_cz(100 * max_zmena_sklonu / standardni_chyba_sklonu, digits = 0)` % standardní chyby sklonu. `r if (min(vec_sklony_bez_lokality) > 0) "Sklon přitom zůstává vždy kladný" else "Sklon se přitom pohybuje"`: přibližně od `r format_cz(min(vec_sklony_bez_lokality), digits = 3)` do `r format_cz(max(vec_sklony_bez_lokality), digits = 3)` mm na stupeň.
+Orientační hodnotu 4/n = `r format_cz(hranice_cook, digits = 2)` překračují lokality `r paste(vec_lokality_nad_hranici, collapse = " a ")`. `r if (setequal(vec_lokality_nad_hranici, vec_dve_nejjiznejsi)) "Jsou to dvě nejjižnější slaniska: leží na okraji rozsahu zeměpisné šířky, a proto mají velký pákový efekt." else ""` Když model přepočítáme `r pocet_lokalit`krát, pokaždé bez jedné lokality, změní se sklon nejvýš o `r format_cz(max_zmena_sklonu, digits = 3)` mm na stupeň, tedy asi o `r format_cz(100 * max_zmena_sklonu / standardni_chyba_sklonu, digits = 0)` % standardní chyby sklonu. `r if (min(vec_sklony_bez_lokality) > 0) "Sklon přitom zůstává vždy kladný" else "Sklon se přitom pohybuje"`: přibližně od `r format_cz(min(vec_sklony_bez_lokality), digits = 3)` do `r format_cz(max(vec_sklony_bez_lokality), digits = 3)` mm na stupeň.
 
 ::: {.box-question title="Zkuste si — Smažeme vlivné lokality?"}
 Spolužák navrhne lokality nad orientační čarou z dat vyřadit, „protože jsou `r render_glossary_term("vlivne-pozorovani", display = "vlivné")`“. Co mu odpovíte?
@@ -1240,7 +1232,23 @@ Náhodnou část už známe z `r render_glossary_term("diagnostika-modelu", disp
 pocet_blizko_primky <- sum(abs(vec_residua_krabi) < sigma(mod_krabi))
 ```
 
-Jak velká mají simulovaná residua být? Stejně velká jako residua kolem skutečné krabí přímky. Jejich typickou velikost popisuje `r render_glossary_term("rezidualni-smerodatna-odchylka", display = "residuální směrodatná odchylka")` (ve výstupu R *Residual standard error*), kterou jsme poznali v minulé lekci. Je to obdoba `r render_glossary_term("smerodatna-odchylka", display = "směrodatné odchylky")`: neměří ale vzdálenosti hodnot od průměru, nýbrž vzdálenosti bodů od přímky, tedy velikost residuí. U krabího modelu vychází přibližně `r format_cz(sigma(mod_krabi), digits = 2)` mm. Průměr typického slaniska tedy leží zhruba `r format_cz(sigma(mod_krabi), digits = 2)` mm nad přímkou nebo pod ní; blíž než tato hodnota leží `r pocet_blizko_primky` z `r pocet_lokalit` lokalit.
+Jak velká mají simulovaná residua být? Stejně velká jako residua kolem skutečné krabí přímky. Jejich typickou velikost popisuje `r render_glossary_term("rezidualni-smerodatna-odchylka", display = "residuální směrodatná odchylka")`, kterou jsme poznali v minulé lekci. Už ji máme před sebou: ve výpisu `summary(mod_krabi)` z oddílu „Co říká známá přímka?“ je to řádek hned pod tabulkou koeficientů:
+
+```{r}
+#| label: ukazat-radek-rezidualni-smerodatne-odchylky
+#| echo: false
+#| output: true
+# Hidden chunks switch to the decimal comma; keep R's own output here so the
+#   line matches the summary() printout above.
+withr::with_options(
+  new = list(OutDec = "."),
+  code = capture.output(summary(object = mod_krabi))
+) |>
+  stringr::str_subset(pattern = "^Residual standard error") |>
+  cat(sep = "\n")
+```
+
+Je to obdoba `r render_glossary_term("smerodatna-odchylka", display = "směrodatné odchylky")`: neměří ale vzdálenosti hodnot od průměru, nýbrž vzdálenosti bodů od přímky, tedy velikost residuí. U krabího modelu vychází přibližně `r format_cz(sigma(mod_krabi), digits = 2)` mm. Průměr typického slaniska tedy leží zhruba `r format_cz(sigma(mod_krabi), digits = 2)` mm nad přímkou nebo pod ní; blíž než tato hodnota leží `r pocet_blizko_primky` z `r pocet_lokalit` lokalit.
 
 Právě tato simulovaná residua způsobí, že přímka odhadnutá z jednoho náhodného výběru nemusí vyjít přesně vodorovná — stejně jako skutečná residua způsobují, že pozorované body neleží přesně na odhadnuté přímce.
 
@@ -1525,7 +1533,7 @@ b-0
 }.
 $$
 
-Symbol $b$ označuje stejně jako v lekci o lineárním modelu `r render_glossary_term("odhad", display = "odhadnutý")` sklon, zde z řádku `zemepisna_sirka`; ve vzorcích lekce o nejistotě jsme stejný odhad psali $\hat{\beta}_1$. Nula je hodnota sklonu v populaci podle `r render_glossary_term("nulova-hypoteza", display = "nulové hypotézy")` a $\operatorname{SE}(b)$ standardní chyba odhadu sklonu. Výslednému číslu se říká **`r render_glossary_term("t-statistika", display = "t-statistika")`**. Je to **`r render_glossary_term("testova-statistika", display = "testová statistika")`**: číslo vypočtené z dat, které porovnáme s hodnotami, jaké by vznikaly, kdyby platila nulová hypotéza.
+Symbol $b$ označuje stejně jako v předchozích lekcích `r render_glossary_term("odhad", display = "odhadnutý")` sklon, zde z řádku `zemepisna_sirka`. Nula je hodnota sklonu v populaci podle `r render_glossary_term("nulova-hypoteza", display = "nulové hypotézy")` a $\operatorname{SE}(b)$ standardní chyba odhadu sklonu. Výslednému číslu se říká **`r render_glossary_term("t-statistika", display = "t-statistika")`**. Je to **`r render_glossary_term("testova-statistika", display = "testová statistika")`**: číslo vypočtené z dat, které porovnáme s hodnotami, jaké by vznikaly, kdyby platila nulová hypotéza.
 
 ::: {.box-question title="Zkuste si — Co by se s t stalo?"}
 

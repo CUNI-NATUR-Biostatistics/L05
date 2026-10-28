@@ -3378,19 +3378,11 @@ Tři až čtyři minuty psaní, pak výměna se sousedem. Hlídám pořadí: efe
 ## Jedna možná odpověď
 
 ::: {.slide-margin-top-15}
-**Efekt:** Na `r nrow(data_lokality)` sledovaných slaniskách se průměrná šířka krunýře směrem k severu zvětšovala asi o **`r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")` mm na 1°**.
-
-**Nejistota:** 95% interval spolehlivosti byl **[`r formatC(interval_sklonu[[1]], format = "f", digits = 3, decimal.mark = ",")`; `r formatC(interval_sklonu[[2]], format = "f", digits = 3, decimal.mark = ",")`] mm/°**.
-
-**Biologický význam:** Přes celé sledované pobřeží to odpovídá změně asi `r formatC(odhad_sklonu * diff(range(data_lokality$zemepisna_sirka)), format = "f", digits = 1, decimal.mark = ",")` mm, tedy znatelnému rozdílu ve velikosti krabů.
-
-**Statistická významnost:** Výsledek je při $\alpha=`r format_cz_math(alfa)`$ statisticky významný; $t=`r format_cz_math(t_pozorovane, digits = 2, nsmall = 2)`$, $df=`r stupne_volnosti`$, $`r p_text_zaver`$.
-
-**Limitace:** Studie podporuje kladný vztah na sledovaných lokalitách, ale sama neodhaluje příčinu ani přesný vztah v celé populaci.
+Na `r nrow(data_lokality)` sledovaných slaniskách byla průměrná šířka krunýře tím větší, čím severněji slanisko leželo. Podle jednoduchého lineárního modelu se zvětšovala o **`r formatC(odhad_sklonu, format = "f", digits = 3, decimal.mark = ",")` mm na 1°** zeměpisné šířky (95% interval spolehlivosti [`r formatC(interval_sklonu[[1]], format = "f", digits = 3, decimal.mark = ",")`; `r formatC(interval_sklonu[[2]], format = "f", digits = 3, decimal.mark = ",")`] mm/°). Kladný vztah byl statisticky významný ($t=`r format_cz_math(t_pozorovane, digits = 2, nsmall = 2)`$, $df=`r stupne_volnosti`$, $`r p_text_zaver`$; $\alpha=`r format_cz_math(alfa)`$). Přes celé sledované pobřeží odpovídá odhadnutý sklon rozdílu asi `r formatC(odhad_sklonu * diff(range(data_lokality$zemepisna_sirka)), format = "f", digits = 1, decimal.mark = ",")` mm, tedy znatelnému rozdílu ve velikosti krabů. Jde však o observační studii, takže výsledek sám neodhaluje příčinu vztahu ani jeho přesnou velikost na dalších lokalitách.
 :::
 
 ::: {.notes}
-Jedna z mnoha možných správných odpovědí. Porovnáme ji s tím, co studenti napsali.
+Jedna z mnoha možných správných odpovědí, napsaná tak, jak by stála v oddílu Výsledky vědeckého článku. Pořadí vět: efekt, nejistota, test, biologický význam, limitace; statistické údaje jsou v závorkách za tvrzením, které dokládají. Porovnáme ji s tím, co studenti napsali.
 :::
 
 ## Co nám studie ukázala?

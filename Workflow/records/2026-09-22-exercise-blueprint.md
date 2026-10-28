@@ -10,6 +10,8 @@
 
 The 90-minute practical has a 68-minute direct-work core: 12 minutes for project and file preparation, then 56 minutes for U01–U08. This leaves about 22 minutes for discussion and slower groups. The script is a student worksheet for classroom and self-study use. Presentation-to-demo rhythm and teaching cues remain here.
 
+Timing revision (2026-10-26): current `exercises.md` sets a 120-minute practical with an 85–95 minute direct-work budget. The 68-minute figure above is an optimistic author estimate; the 2026-10-26 independent review estimated about 80–95 minutes for a slower beginner group (setup 15–18, U01 8–10, U02 10–12, U03 7–8, U04 8–10, U05 9–10, U06 7–8, U07 5–6, U08 10–12), which still fits the budget. Setup and U08 are the likeliest overruns; keep the optional bank optional. See the revision section at the end.
+
 ## Outcomes, prerequisites, starting states, and timing
 
 | Segment | Purpose and approved L05 outcome | Starting state and knowledge | Direct work |
@@ -73,3 +75,18 @@ Before human review: parse and check UTF-8 without BOM; run the unfilled script 
 - The release YAML parsed under the available Czech UTF-8 locale and its exercise, site-means, and individual-data paths exist locally. Stable download links require a later public release; a live beginner RStudio pacing trial has not been performed. The 68-minute core is an author estimate.
 - A separate read-only exercise reviewer read the complete worksheet and blueprint against the canonical rules, L05 approved materials and outcomes, and the L04 practical. Result: No findings. A focused re-review of student-created data_lokality and mod_krabi, downstream prerequisites, unfilled sourcing, and timing also found no findings.
 - Human exercise approval is complete. A public release remains pending.
+
+## Revision 2026-10-26 (pre-teaching review)
+
+- Post-approval wording changes already in the worksheet before this revision (2026-10-21 terminology alignment): new title, "trychtýř" -> "vějíř" in U03, "p < alfa" -> "p ≤ alfa" in N06. These were not part of the 2026-09-22 approval or review.
+- Changes from the 2026-10-26 independent exercise review: the script now explains model assumptions and site independence before U03 and defines an observational study before U08; it states that the site is the observational unit in the df paragraph before U05; it adds how to reopen the project and a File > Open Project hint in the preflight error; it replaces the restating `Nápověda 1` in U05 and U08 with new guidance; U08 asks for 6–8 sentences instead of 4–6; the supplied explanations for N11 and N12 now stand before the task headings; comment lines over 80 characters are re-wrapped (except the unbreakable URL).
+- Validation after the revision: UTF-8 without BOM, CRLF, parse OK; the unfilled script sources cleanly in a mirrored L05_praktikum folder under R 4.5.1 and creates only `soubor_lokality`; the missing-file message is correct. No task code, data or expected result changed, so the 2026-10-26 reference-harness results (all 21 tasks match) still apply.
+- The live `/L05/current/cviceni.R` predates the 2026-10-21 and 2026-10-26 changes; students get them only after the next release.
+- Focused re-review (same independent reviewer, 2026-10-26): all six findings resolved, ready for human review. Its two optional nits were then applied: the assumptions paragraph now names intervals and p-values, the U03 `Interpretace` asks why a clean residual plot does not guarantee independence, and the moved N11/N12 notes start with "K úloze L05-N11/N12:". Re-checked: parse OK, UTF-8, CRLF, clean unfilled run.
+- Human approval of the 2026-10-21 and 2026-10-26 wording changes is still required before the next release (`exercises.md`).
+
+## Revision 2026-10-28 (decisions D1 and D2)
+
+- Changes are recorded in `2026-10-26-pre-teaching-review.md` (revision 2026-10-28): U03 adds a Q–Q plot and Cook's distance, a worked example before U04 draws the confidence band, U06 reads `Pr(>|t|)` from `summary()`, `pt()` has its own worked example before optional N05, and U08 and N12 use the U03 influence result.
+- Estimated core timing after these additions: 95–110 min against the 85–95 min budget (U03 +8–12 min, U04 +5 min).
+- Ondřej Mottl approved the exercise, including the 2026-10-21, 2026-10-26 and 2026-10-28 changes (2026-10-28).

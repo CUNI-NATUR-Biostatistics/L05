@@ -35,11 +35,17 @@ These rules follow the established series (L01 animals, L02 penguins, L03 botani
 
 ### `mesic_ze_syra.png`: cheese Moon (slides 2, 3, 4 and 53)
 
-- Status: approved and in use. The AI disclosure is visible on slide 2. Provenance is recorded in `Workflow/records/2026-09-16-presentation-standards.md`.
+- Status: approved and in use. The AI disclosure is visible on slide 2 (standard `.text-size-tiny .text-right` caption since 2026-10-26) and on the slide 4 montage. Provenance is recorded in `Workflow/records/2026-09-16-presentation-standards.md`.
 
 ### `chyba_i_falesne_pozitivni.jpg`, `chyba_ii_falesne_negativni.jpg`: Type I/II mnemonics (slide 45)
 
-- Status: retained in use. These are deliberately absurd pregnancy-test illustrations, as in the learning materials. No original generation tool, prompt or date was found in the local workflow records; these fields remain unknown. SHA-256: `chyba_i_falesne_pozitivni.jpg` = `C4473F17924C95D164C13D1C82F374540A74CCCB1FC6B0EAA00AD1E127260228`; `chyba_ii_falesne_negativni.jpg` = `B049E40223501B264D64CCA6324792CDC85557AAC4B853734E4F3F35EC9D9068`.
+- Status: retained in use. These are deliberately absurd pregnancy-test illustrations, as in the learning materials. AI-generated per the instructor, confirmed 2026-10-26; the visible disclosure „Ilustrace vytvořená pomocí AI.“ is shown on slide 45. Tool, prompt and date: not recorded. SHA-256: `chyba_i_falesne_pozitivni.jpg` = `C4473F17924C95D164C13D1C82F374540A74CCCB1FC6B0EAA00AD1E127260228`; `chyba_ii_falesne_negativni.jpg` = `B049E40223501B264D64CCA6324792CDC85557AAC4B853734E4F3F35EC9D9068`.
+
+### `tvrzeni_labute.png`, `tvrzeni_holub_stehovavy.png`, `tvrzeni_nejkrasnejsi_ptak.png`: claim montage (slide 4)
+
+- Status: in use since the 2026-08-03 deck rebuild (four-column claim montage with the cropped cheese Moon `tvrzeni_mesic.png`, which the deck derives from `mesic_ze_syra.png`). AI-generated per the instructor, confirmed 2026-10-26; the visible disclosure „Ilustrace vytvořená pomocí AI.“ is shown below the montage on slide 4. Tool, prompt and date: not recorded.
+- Teaching role: concrete claims for sorting testable statements (white swans, extinct passenger pigeon) from a value judgement (the most beautiful bird).
+- SHA-256: `tvrzeni_labute.png` = `6BCA58BE47488C0B0B8680EF5C801DEBF8C574AC4730979A9DAD2D7C3544D4F0`; `tvrzeni_holub_stehovavy.png` = `27208E43490E3FE2E8D87A1ADEC627A9B7075BBA284D9658B47D878F45DDE946`; `tvrzeni_nejkrasnejsi_ptak.png` = `6D027C0C8883CB6539AF3470F081E85D7E019C41EDD37A99A6C60720D118ABE2`.
 
 ## Reserved slots in the deck
 

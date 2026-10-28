@@ -130,3 +130,13 @@
 - Moodle: re-review `t-graf`, `kriticka-hodnota`, `t-rozdeleni-df` and `h0-zapis` (changed in substance; locked selections kept); L06 `ci-rozdilu` still uses `L05.qt-pt`; L06 knowledge duplicates the Q–Q promotions now made in L05.
 - Glossary `sila-testu` defines power as "1 − β", which students meet in L10 without β as a type II error rate.
 - Presentation needs a synchronized PollsLive render once the branch is pushed.
+
+## Revision 2026-10-28 (skripta sign-off comments)
+
+- Ondřej Mottl's comments on the skripta, applied: `dfbeta()` removed from "Nestojí přímka na jedné lokalitě?" (the leave-one-out slope range now comes from hidden refits, and the text says the model is refitted once without each site); the residual standard error in "Co kdyby ve skutečnosti žádný trend nebyl?" now points to its line in the `summary(mod_krabi)` printout and shows that line; the $b$ paragraph in "Jak daleko jsme od vodorovné přímky?" no longer refers to the L04 symbol (L04 is being changed to $b$).
+- Ondřej Mottl: after these fixes the skripta is accepted (2026-10-28).
+- Deck rendered in PollsLive sync mode after commit aedf4b8 was pushed (58 slides). Skripta re-rendered (49 pages). Moodle `L05.fn-dfbeta` removed and the knowledge stamp moved to aedf4b8; knowledge check OK, build 73 questions.
+- L06 (branch `fix/l06-coefficient-notation-reference`): the notation sentence now says that L03, L04 and L05 all wrote $a$ and $b$, and that $\beta$ is used from L06 on; it no longer mentions $\hat{\beta}_1$ in L04.
+- Presentation: "Jedna možná odpověď" rewritten as one Results-style paragraph (effect, uncertainty, test, biological meaning, limitation; statistics in brackets after the claim); deck re-rendered in PollsLive sync mode (58 slides).
+- Ondřej Mottl approved the presentation (2026-10-28).
+- Still open: human approval of the exercise (wording changes since 2026-10-21 and the D1/D2 additions) and the core-timing decision.
